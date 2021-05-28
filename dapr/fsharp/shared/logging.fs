@@ -1,21 +1,25 @@
 ﻿namespace Shared
 
+open Microsoft.Extensions.Configuration
+
 [<AutoOpen>]
 module Logging =
 
+    open Microsoft.AspNetCore.Hosting    
     open System
     open Serilog
     open Serilog.Sinks.Elasticsearch
     open Serilog.Enrichers.Span
     
-    let createSerilogLogger () =
+    let createSerilogLogger (configuration: IConfiguration) (webHostBuilder: IWebHostBuilder) =
+        let elasticHost = configuration.Item("ElasticHost")
+        
         let logger = 
             LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.WithProperty("ApplicationContext", "app")
+                .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithSpan()
-                .WriteTo.Console()
-                .WriteTo.Elasticsearch(ElasticsearchSinkOptions(Uri "http://localhost:9200"))
+                .WriteTo.Elasticsearch(ElasticsearchSinkOptions(Uri elasticHost))
                 .CreateLogger()
         Log.Logger <- logger                    
+        webHostBuilder.UseSerilog()

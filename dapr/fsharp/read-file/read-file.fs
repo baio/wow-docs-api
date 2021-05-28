@@ -1,6 +1,7 @@
 module ReadFile
 
 open Dapr.Client
+open Microsoft.Extensions.Configuration
 open Saturn
 open Giraffe
 open FSharp.Control.Tasks
@@ -8,13 +9,11 @@ open Microsoft.AspNetCore.Http
 open System.IO
 open Shared
 open Microsoft.Extensions.Logging
-open Serilog
-
 
 let fileUploadHandler =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         let logger = ctx.GetLogger()
-        logger.LogError("test {ver}", 1)
+        logger.LogInformation("test {ver}", 1)
 
         task {
             match ctx.Request.HasFormContentType with
@@ -37,18 +36,26 @@ let fileUploadHandler =
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx
         }
 
-let app =
-    createSerilogLogger ()
+let app  =
     let dapr = DaprClientBuilder().Build()
+    
+    let config =
+        ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddEnvironmentVariables()
+            .Build()
+            
+    printfn "++++ %s" (config.Item("ElasticHost"))            
 
     application {
+        use_config(fun _ -> config)
         use_router (router { post "/upload" (fileUploadHandler dapr) })
         url (getAppUrl 5000)
         use_gzip
-        webhost_config (fun builder -> builder.UseSerilog())
-    }
+        webhost_config (createSerilogLogger config)
+    } 
 
 [<EntryPoint>]
-let main _ =
-    run app
+let main args =
+    run app 
     0 // return an integer exit code
