@@ -30,7 +30,7 @@ docker run -d --name elastic --net elastic --restart unless-stopped --link elast
 ## DAPR docs
 
 ### Usefull links
-
++ [Observability](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/observability)
 + [Service invocation API](https://docs.dapr.io/reference/api/service_invocation_api/)
 + [Pub Sub API](https://docs.dapr.io/reference/api/pubsub_api/)
 + [Pub Sub](https://docs.dapr.io/developing-applications/building-blocks/pubsub/howto-publish-subscribe/)
