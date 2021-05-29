@@ -13,9 +13,9 @@ module CloudEvent =
           Source: string
           Type: string
           DataContentType: string
-          PubSubName: string
-          TraceId: string
-          Topic: string
+          PubSubName: string option
+          TraceId: string option
+          Topic: string option
           DataSchema: string option
           Subject: string option
           Time: string option

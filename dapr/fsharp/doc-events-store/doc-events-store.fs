@@ -7,37 +7,8 @@ open Giraffe
 open FSharp.Control.Tasks
 open Microsoft.AspNetCore.Http
 open Shared
+open Domain
 
-
-type CloudEvent<'a> =
-    { Id: string
-      SpecVersion: string
-      Source: string
-      Type: string
-      DataContentType: string
-      PubSubName: string
-      TraceId: string
-      Topic: string
-      DataSchema: string option
-      Subject: string option
-      Time: string option
-      Data: 'a
-      DataBase64: string option }
-
-//
-type DocStoreProvider =
-    | YaCloud
-
-[<CLIMutable>]
-type DocStore = {
-    Url: string
-    Provider: DocStoreProvider
-}
-
-//
-type DocRead = { DocKey: string; DocContent: string; }
-[<CLIMutable>]
-type DocStored = { DocKey: string; DocStore: DocStore; }
 
 //
 type DocEntity = {
@@ -56,14 +27,15 @@ let docRead =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         task {
             let logger = ctx.GetLogger()
+            //let! body = ctx.ReadBodyFromRequestAsync()
+            //printfn "333 %s" body
             let! data = bindCloudEventDataAsync<DocRead> ctx
             let docEntry = createDocEntry data.DocKey
-            let! res = tryCreateStateAsync dapr "statestore" data.DocKey docEntry
+            let! res = tryCreateStateAsync dapr DAPR_DOC_STATE_STORE data.DocKey docEntry
             match res with
             | true -> logger.LogDebug("{statestore} updated with new {document}", "statestore", docEntry)
             | false -> logger.LogDebug("{statestore} failed to update, {document} already exists", "statestore", docEntry)
-            return! json res next ctx
-            
+            return! json res next ctx            
         }
 
 let docStored =
@@ -74,7 +46,7 @@ let docStored =
             let! res = 
                 tryUpdateOrCreateStateAsync 
                     dapr 
-                    "statestore" 
+                    DAPR_DOC_STATE_STORE
                     data.DocKey 
                     (fun id -> createDocEntry id) 
                     (fun doc -> { doc with Store = Some data.DocStore })
@@ -92,13 +64,13 @@ let routes dapr =
         get
             "/dapr/subscribe"
             (json (
-                [ {| pubsubname = "pubsub"
-                     topic = "doc-read"
-                     route = "doc-read" |}
+                [ {| pubsubname = DAPR_DOC_PUB_SUB
+                     topic = DAPR_TOPIC_DOC_READ
+                     route = DAPR_TOPIC_DOC_READ |}
                   {| 
-                    pubsubname = "pubsub"
-                    topic = "doc-stored"
-                    route = "doc-stored" |}                                          
+                    pubsubname = DAPR_DOC_PUB_SUB
+                    topic = DAPR_TOPIC_DOC_STORED
+                    route = DAPR_TOPIC_DOC_STORED |}                                          
                 ]
             ))
 

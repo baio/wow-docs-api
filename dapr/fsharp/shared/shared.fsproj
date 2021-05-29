@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="DAPR_CONSTANTS.fs" />
         <Compile Include="CloudEvent.fs" />
         <Compile Include="utils.fs" />
         <Compile Include="logging.fs" />

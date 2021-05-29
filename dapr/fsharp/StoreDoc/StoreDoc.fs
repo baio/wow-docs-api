@@ -25,82 +25,34 @@ type DocRead = { DocKey: string; DocContent: string; }
 type DocStored = { DocKey: string; DocStore: DocStore; }
 
 //
-type DocEntity = {
-    DocId: string
-    Store: DocStore option
-}
-
-let createDocEntry docId =
-    {
-        DocId = docId
-        Store = None
-    }
-    
 
 let docRead =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         task {
-            let logger = ctx.GetLogger()
-            let! event = ctx.BindJsonAsync<CloudEvent<DocRead>>()
-            let data = event.Data
-
-            let docEntry = createDocEntry data.DocKey
-
-            // TODO : tryCreateStateAsync
-            let! res = dapr.TrySaveStateAsync("statestore", docEntry.DocId, docEntry, "-1")
-            match res with
-            | true -> logger.LogDebug("{statestore} updated with new {document}", "statestore", docEntry)
-            | false -> logger.LogDebug("{statestore} failed to update, {document} already exists", "statestore", docEntry)
-            return! json docEntry next ctx
-            
+            let! doc = bindCloudEventDataAsync<DocRead> ctx            
+            do! System.Threading.Tasks.Task.Delay(1000)
+            let storedEvent: DocStored = 
+                { 
+                    DocKey = doc.DocKey; 
+                    DocStore = { Url = "http://kek.com/123"; Provider = DocStoreProvider.YaCloud} 
+                }
+            do! dapr.PublishEventAsync(DAPR_DOC_PUB_SUB, DAPR_TOPIC_DOC_STORED, storedEvent)
+            return! json storedEvent next ctx            
         }
 
-let docStored =
-    fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
-        task {
-            let logger = ctx.GetLogger()
-            logger.LogInformation("+++")
-            let! event = ctx.BindJsonAsync<CloudEvent<DocStored>>()
-            printfn "111 %O" event
-            let data = event.Data
-
-            // TODO : tryGetOrCreateState
-            let! docEntry = dapr.GetStateEntryAsync<DocEntity>("statestore", data.DocKey)
-            let (etag, doc) =
-                match box docEntry.Value with
-                | null -> 
-                    // document still not created
-                    ("-1", createDocEntry data.DocKey)
-                | _  -> (docEntry.ETag, docEntry.Value)
-                        
-            let doc = { doc with Store = Some data.DocStore; }
-            printfn "2222 %s %O" etag doc
-            let! res = dapr.TrySaveStateAsync("statestore", doc.DocId, doc, etag)
-            match res with
-            | true -> logger.LogDebug("{statestore} updated with new {document}", "statestore", docEntry)
-            | false -> logger.LogWarning("{statestore} failed to update doument {doc}, wrong {etag}", "statestore", doc, etag)
-                        
-            return! json {| OK = true |} next ctx
-            
-        }
 
 let routes dapr =
     router {
         get
             "/dapr/subscribe"
             (json (
-                [ {| pubsubname = "pubsub"
-                     topic = "doc-read"
-                     route = "doc-read" |}
-                  {| 
-                    pubsubname = "pubsub"
-                    topic = "doc-stored"
-                    route = "doc-stored" |}                                          
+                [ {| pubsubname = DAPR_DOC_PUB_SUB
+                     topic = DAPR_TOPIC_DOC_READ
+                     route = DAPR_TOPIC_DOC_READ |}                                  
                 ]
             ))
 
-        post "/doc-read" (docRead dapr)
-        post "/doc-stored" (docStored dapr)
+        post $"/{DAPR_TOPIC_DOC_READ}" (docRead dapr)
     }
 
 let app = daprApp 5003 routes
