@@ -1,51 +1,35 @@
 version: '3'
 services:
   ############################
-  # Node app + Dapr sidecar
+  # read-file + Dapr sidecar
   ############################
-  nodeapp:
-    build: ./node
+  read-file:
+    build:
+      context: ./fsharp
+      dockerfile: ReadFile/Dockerfile         
     ports:
-      - "50002:50002"
+      - "50001:50001"        
+      - "3000:3000"
+    environment: 
+      - "PORT:3000"
     depends_on:
       - redis
       - placement
     networks:
-      - hello-dapr
-  nodeapp-dapr:
+      - vow-dapr
+  read-file-dapr:
     image: "daprio/daprd:edge"
     command: ["./daprd",
-     "-app-id", "nodeapp",
+     "-app-id", "read-file",
      "-app-port", "3000",
      "-placement-host-address", "placement:50006",
-     "-dapr-grpc-port", "50002",
+     "-dapr-grpc-port", "50001",
      "-components-path", "/components"]
     volumes:
         - "./components/:/components"
     depends_on:
-      - nodeapp
-    network_mode: "service:nodeapp"
-  ############################
-  # Python app + Dapr sidecar
-  ############################
-  pythonapp:
-    build: ./python
-    depends_on:
-      - redis
-      - placement
-    networks:
-      - hello-dapr
-  pythonapp-dapr:
-    image: "daprio/daprd:edge"
-    command: ["./daprd",
-    "-app-id", "pythonapp",
-    "-placement-host-address", "placement:50006",
-     "-components-path", "/components"]
-    volumes:
-      - "./components/:/components"
-    depends_on:
-      - pythonapp
-    network_mode: "service:pythonapp"
+      - read-file
+    network_mode: "service:read-file"
   ############################
   # Dapr placement service
   ############################
@@ -55,7 +39,7 @@ services:
     ports:
       - "50006:50006"
     networks:
-      - hello-dapr
+      - vow-dapr
   ############################
   # Redis state store
   ############################
@@ -64,6 +48,6 @@ services:
     ports:
       - "6380:6379"
     networks:
-      - hello-dapr
+      - vow-dapr
 networks:
     vow-dapr:
