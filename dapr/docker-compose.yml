@@ -8,28 +8,55 @@ services:
       context: ./fsharp
       dockerfile: ReadFile/Dockerfile         
     ports:
-      - "50001:50001"        
-      - "3000:3000"
+      - "3001:3000"
     environment: 
-      - "PORT:3000"
+      - PORT=3000
     depends_on:
       - redis
       - placement
     networks:
       - vow-dapr
   read-file-dapr:
-    image: "daprio/daprd:edge"
+    image: "daprio/daprd:1.2.0"
     command: ["./daprd",
      "-app-id", "read-file",
      "-app-port", "3000",
      "-placement-host-address", "placement:50006",
-     "-dapr-grpc-port", "50001",
      "-components-path", "/components"]
     volumes:
         - "./components/:/components"
     depends_on:
       - read-file
     network_mode: "service:read-file"
+
+  ############################
+  # events-store + Dapr sidecar
+  ############################
+  events-store:
+    build:
+      context: ./fsharp
+      dockerfile: EventsStore/Dockerfile         
+    ports:
+      - "3002:3000"
+    environment: 
+      - PORT=3000
+    depends_on:
+      - redis
+      - placement
+    networks:
+      - vow-dapr
+  events-store-dapr:
+    image: "daprio/daprd:1.2.0"
+    command: ["./daprd",
+     "-app-id", "events-store",
+     "-app-port", "3000",
+     "-placement-host-address", "placement:50006",
+     "-components-path", "/components"]
+    volumes:
+        - "./components/:/components"
+    depends_on:
+      - events-store
+    network_mode: "service:events-store"
   ############################
   # Dapr placement service
   ############################
