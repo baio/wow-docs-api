@@ -12,10 +12,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="YaOCR.fs" />
   </ItemGroup>
 
+  <ItemGroup />
+
   <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.fsproj" />
     <ProjectReference Include="..\shared\Shared.fsproj" />
   </ItemGroup>
 

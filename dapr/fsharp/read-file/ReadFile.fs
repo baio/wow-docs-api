@@ -33,7 +33,9 @@ let fileUploadHandler =
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx
         }
 
-let app = daprApp 3000 (fun dapr -> router { post "/upload" (fileUploadHandler dapr) })
+let router = fun dapr -> router { post "/upload" (fileUploadHandler dapr) }
+
+let app = daprApp 3000 (DaprRouter router)
 
 [<EntryPoint>]
 let main _ =

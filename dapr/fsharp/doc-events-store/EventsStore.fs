@@ -100,26 +100,14 @@ let docTextLabeled =
             return! json res next ctx            
         }
 
-let routes dapr =
-    router {
-        get
-            "/dapr/subscribe"
-            (json (
-                [ {| pubsubname = DAPR_DOC_PUB_SUB
-                     topic = DAPR_TOPIC_DOC_READ
-                     route = DAPR_TOPIC_DOC_READ |}
-                  {| 
-                    pubsubname = DAPR_DOC_PUB_SUB
-                    topic = DAPR_TOPIC_DOC_STORED
-                    route = DAPR_TOPIC_DOC_STORED |}                                          
-                ]
-            ))
+let subs = [
+    (DAPR_TOPIC_DOC_READ, docRead)
+    (DAPR_TOPIC_DOC_STORED, docStored)
+    (DAPR_TOPIC_DOC_TEXT_EXTRACTED, docTextExtracted)
+    (DAPR_TOPIC_DOC_LABELED, docTextLabeled)
+]
 
-        post "/doc-read" (docRead dapr)
-        post "/doc-stored" (docStored dapr)
-    }
-
-let app = daprApp 5002 routes
+let app = daprApp 5002 (DaprSubs (DAPR_DOC_PUB_SUB, subs))
 
 [<EntryPoint>]
 let main _ =

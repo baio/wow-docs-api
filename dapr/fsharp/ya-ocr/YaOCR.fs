@@ -1,39 +1,37 @@
-module ReadFile
+module StoreDoc
 
 open Dapr.Client
+open Microsoft.Extensions.Logging
 open Saturn
 open Giraffe
 open FSharp.Control.Tasks
 open Microsoft.AspNetCore.Http
-open System.IO
 open Shared
+open Domain
 
-let fileRead =
-    fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) -> json {| ok = true |} next ctx
+//
 
-let routes dapr =
-    router {
-        get
-            "/dapr/subscribe"
-            (json (
-                [ {| pubsubname = "pubsub"
-                     topic = "file-read"
-                     route = "file-read" |} ]
-            ))
+let docRead =
+    fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
+        task {
+            let! doc = bindCloudEventDataAsync<DocTextExtractedEvent> ctx            
+            do! System.Threading.Tasks.Task.Delay(1000)
+            let storedEvent: DocLabeledEvent = 
+                { 
+                    DocKey = doc.DocKey; 
+                    DocLabeled = { Label = Passport; Provider = DocLabeledProvider.CustomPy} 
+                }
+            do! dapr.PublishEventAsync(DAPR_DOC_PUB_SUB, DAPR_TOPIC_DOC_LABELED, storedEvent)
+            return! json storedEvent next ctx            
+        }
 
-        post "/file-read" (fileRead dapr)
-    }
 
-let app =
-    let dapr = DaprClientBuilder().Build()
+let subs = [(DAPR_TOPIC_DOC_TEXT_EXTRACTED, docRead)]
 
-    application {
-        use_router (routes dapr)
-        url (getAppUrl 5001)
-        use_gzip
-    }
+let app = daprApp 5003 (DaprSubs (DAPR_DOC_PUB_SUB, subs))
 
 [<EntryPoint>]
 let main _ =
     run app
     0 // return an integer exit code
+
