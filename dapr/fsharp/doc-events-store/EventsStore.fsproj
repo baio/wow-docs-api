@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="doc-events-store.fs" />
+        <Compile Include="EventsStore.fs" />
         <Content Include="appsettings.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
@@ -22,7 +22,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.fsproj" />
-      <ProjectReference Include="..\shared\shared.fsproj" />
+      <ProjectReference Include="..\shared\Shared.fsproj" />
     </ItemGroup>
 
 </Project>

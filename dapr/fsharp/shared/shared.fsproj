@@ -9,9 +9,8 @@
     <ItemGroup>
         <Compile Include="DAPR_CONSTANTS.fs" />
         <Compile Include="CloudEvent.fs" />
-        <Compile Include="utils.fs" />
-        <Compile Include="logging.fs" />
-        <Compile Include="fix-json-serializer.fs" />
+        <Compile Include="Utils.fs" />
+        <Compile Include="Logging.fs" />
         <Compile Include="DaprState.fs" />
         <Compile Include="DaprApp.fs" />
     </ItemGroup>

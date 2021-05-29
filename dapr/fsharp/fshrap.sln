@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "read-file", "read-file\read-file.fsproj", "{3E7F2CDF-AC45-4C8C-8DED-225C9FA844D4}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ReadFile", "read-file\ReadFile.fsproj", "{3E7F2CDF-AC45-4C8C-8DED-225C9FA844D4}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ya-ocr", "ya-ocr\ya-ocr.fsproj", "{10B0BD88-7F6F-48DE-8FF2-BB8F1C92C2C7}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "YaOcr", "ya-ocr\YaOcr.fsproj", "{10B0BD88-7F6F-48DE-8FF2-BB8F1C92C2C7}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "shared", "shared\shared.fsproj", "{2C6961C3-FB54-485B-88DC-FF1BDB090379}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Shared", "shared\Shared.fsproj", "{2C6961C3-FB54-485B-88DC-FF1BDB090379}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "doc-events-store", "doc-events-store\doc-events-store.fsproj", "{849A022A-F88E-4F1F-902E-49EF2EBFEAEB}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EventsStore", "doc-events-store\EventsStore.fsproj", "{849A022A-F88E-4F1F-902E-49EF2EBFEAEB}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StoreDoc", "StoreDoc\StoreDoc.fsproj", "{5D766C7D-6A02-4E2D-8B97-730791639B80}"
 EndProject
