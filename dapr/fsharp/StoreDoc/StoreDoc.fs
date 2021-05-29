@@ -1,4 +1,4 @@
-﻿module ReadFile
+﻿module StoreDoc
 
 open Dapr.Client
 open Microsoft.Extensions.Logging
@@ -8,21 +8,6 @@ open FSharp.Control.Tasks
 open Microsoft.AspNetCore.Http
 open Shared
 
-
-type CloudEvent<'a> =
-    { Id: string
-      SpecVersion: string
-      Source: string
-      Type: string
-      DataContentType: string
-      PubSubName: string
-      TraceId: string
-      Topic: string
-      DataSchema: string option
-      Subject: string option
-      Time: string option
-      Data: 'a
-      DataBase64: string option }
 
 //
 type DocStoreProvider =
@@ -56,34 +41,46 @@ let docRead =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         task {
             let logger = ctx.GetLogger()
-            let! data = bindCloudEventDataAsync<DocRead> ctx
+            let! event = ctx.BindJsonAsync<CloudEvent<DocRead>>()
+            let data = event.Data
+
             let docEntry = createDocEntry data.DocKey
-            let! res = tryCreateStateAsync dapr "statestore" data.DocKey docEntry
+
+            // TODO : tryCreateStateAsync
+            let! res = dapr.TrySaveStateAsync("statestore", docEntry.DocId, docEntry, "-1")
             match res with
             | true -> logger.LogDebug("{statestore} updated with new {document}", "statestore", docEntry)
             | false -> logger.LogDebug("{statestore} failed to update, {document} already exists", "statestore", docEntry)
-            return! json res next ctx
+            return! json docEntry next ctx
             
         }
 
 let docStored =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         task {
-            let logger = ctx.GetLogger()            
-            let! data = bindCloudEventDataAsync<DocStored> ctx
-            let! res = 
-                tryUpdateOrCreateStateAsync 
-                    dapr 
-                    "statestore" 
-                    data.DocKey 
-                    (fun id -> createDocEntry id) 
-                    (fun doc -> { doc with Store = Some data.DocStore })
+            let logger = ctx.GetLogger()
+            logger.LogInformation("+++")
+            let! event = ctx.BindJsonAsync<CloudEvent<DocStored>>()
+            printfn "111 %O" event
+            let data = event.Data
 
-            match res.IsSuccess with
-            | true -> logger.LogDebug("{statestore} document with {documentId} is updated with {result}", "statestore", data.DocKey, res)
-            | false -> logger.LogWarning("{statestore} document with {documentId} fail to update with {result}", "statestore", data.DocKey, res)
+            // TODO : tryGetOrCreateState
+            let! docEntry = dapr.GetStateEntryAsync<DocEntity>("statestore", data.DocKey)
+            let (etag, doc) =
+                match box docEntry.Value with
+                | null -> 
+                    // document still not created
+                    ("-1", createDocEntry data.DocKey)
+                | _  -> (docEntry.ETag, docEntry.Value)
                         
-            return! json res next ctx
+            let doc = { doc with Store = Some data.DocStore; }
+            printfn "2222 %s %O" etag doc
+            let! res = dapr.TrySaveStateAsync("statestore", doc.DocId, doc, etag)
+            match res with
+            | true -> logger.LogDebug("{statestore} updated with new {document}", "statestore", docEntry)
+            | false -> logger.LogWarning("{statestore} failed to update doument {doc}, wrong {etag}", "statestore", doc, etag)
+                        
+            return! json {| OK = true |} next ctx
             
         }
 
@@ -106,7 +103,7 @@ let routes dapr =
         post "/doc-stored" (docStored dapr)
     }
 
-let app = daprApp 5002 routes
+let app = daprApp 5003 routes
 
 [<EntryPoint>]
 let main _ =
