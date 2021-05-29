@@ -26,29 +26,14 @@ let fileUploadHandler =
                     do! fileStream.CopyToAsync(memoryStream)
                     let bytes = memoryStream.ToArray()
                     let fileBase64 = System.Convert.ToBase64String bytes
-                    let result = {| DocContent = "xxx"; DocKey = "1111" |}
+                    let result = {| DocContent = "xxx"; DocKey = fileBase64.Substring(0, System.Random(100).Next(1, 300)) |}
                     do! dapr.PublishEventAsync("pubsub", "doc-read", result)
                     return! json result next ctx
                 | None -> return! RequestErrors.BAD_REQUEST {| file = "Missed file with name file" |} next ctx
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx
         }
 
-let app  =
-    let dapr = DaprClientBuilder().Build()
-    
-    let config =
-        ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .AddEnvironmentVariables()
-            .Build()                        
-
-    application {
-        use_config(fun _ -> config)
-        use_router (router { post "/upload" (fileUploadHandler dapr) })
-        url (getAppUrl 5000)
-        use_gzip
-        webhost_config (createSerilogLogger config)
-    } 
+let app = daprApp 3000 (fun dapr -> router { post "/upload" (fileUploadHandler dapr) })
 
 [<EntryPoint>]
 let main _ =
