@@ -3,16 +3,10 @@
 [<AutoOpen>]
 module Events = 
 
-    type DocStoreProvider =
-        | YaCloud
+    type DocReadEvent = { DocKey: string; DocContent: string; }
 
-    type DocStore = {
-        Url: string
-        Provider: DocStoreProvider
-    }
+    type DocStoredEvent = { DocKey: string; DocStore: DocStore; }
+    
+    type DocTextExtractedEvent = { DocKey: string; DocExtractedText: DocExtarctedText; }
 
-    type DocStored = { DocKey: string; DocStore: DocStore; }
-
-    type DocRead = { DocKey: string; DocContent: string; }
-
-
+    type DocLabeledEvent = { DocKey: string; DocLabeled: DocLabeled; }

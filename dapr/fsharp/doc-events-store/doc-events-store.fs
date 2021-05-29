@@ -14,22 +14,23 @@ open Domain
 type DocEntity = {
     DocId: string
     Store: DocStore option
+    ExtractedText: DocExtarctedText option
+    Label: DocLabeled option
 }
 
 let createDocEntry docId =
     {
         DocId = docId
         Store = None
+        ExtractedText = None
+        Label = None
     }
     
-
 let docRead =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         task {
             let logger = ctx.GetLogger()
-            //let! body = ctx.ReadBodyFromRequestAsync()
-            //printfn "333 %s" body
-            let! data = bindCloudEventDataAsync<DocRead> ctx
+            let! data = bindCloudEventDataAsync<DocReadEvent> ctx
             let docEntry = createDocEntry data.DocKey
             let! res = tryCreateStateAsync dapr DAPR_DOC_STATE_STORE data.DocKey docEntry
             match res with
@@ -42,7 +43,7 @@ let docStored =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         task {
             let logger = ctx.GetLogger()            
-            let! data = bindCloudEventDataAsync<DocStored> ctx
+            let! data = bindCloudEventDataAsync<DocStoredEvent> ctx
             let! res = 
                 tryUpdateOrCreateStateAsync 
                     dapr 
@@ -57,6 +58,46 @@ let docStored =
                         
             return! json res next ctx
             
+        }
+
+let docTextExtracted =
+    fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
+        task {
+            let logger = ctx.GetLogger()            
+            let! data = bindCloudEventDataAsync<DocTextExtractedEvent> ctx
+            let! res = 
+                tryUpdateOrCreateStateAsync 
+                    dapr 
+                    DAPR_DOC_STATE_STORE
+                    data.DocKey 
+                    (fun id -> createDocEntry id) 
+                    (fun doc -> { doc with ExtractedText = Some data.DocExtractedText })
+
+            match res.IsSuccess with
+            | true -> logger.LogDebug("{statestore} document with {documentId} is updated with {result}", "statestore", data.DocKey, res)
+            | false -> logger.LogWarning("{statestore} document with {documentId} fail to update with {result}", "statestore", data.DocKey, res)
+                        
+            return! json res next ctx            
+        }
+
+let docTextLabeled =
+    fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
+        task {
+            let logger = ctx.GetLogger()            
+            let! data = bindCloudEventDataAsync<DocLabeledEvent> ctx
+            let! res = 
+                tryUpdateOrCreateStateAsync 
+                    dapr 
+                    DAPR_DOC_STATE_STORE
+                    data.DocKey 
+                    (fun id -> createDocEntry id) 
+                    (fun doc -> { doc with Label = Some data.DocLabeled })
+
+            match res.IsSuccess with
+            | true -> logger.LogDebug("{statestore} document with {documentId} is updated with {result}", "statestore", data.DocKey, res)
+            | false -> logger.LogWarning("{statestore} document with {documentId} fail to update with {result}", "statestore", data.DocKey, res)
+                        
+            return! json res next ctx            
         }
 
 let routes dapr =
