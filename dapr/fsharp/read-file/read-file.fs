@@ -12,9 +12,6 @@ open Microsoft.Extensions.Logging
 
 let fileUploadHandler =
     fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
-        let logger = ctx.GetLogger()
-        logger.LogInformation("test {ver}", 1)
-
         task {
             match ctx.Request.HasFormContentType with
             | true ->
@@ -29,8 +26,8 @@ let fileUploadHandler =
                     do! fileStream.CopyToAsync(memoryStream)
                     let bytes = memoryStream.ToArray()
                     let fileBase64 = System.Convert.ToBase64String bytes
-                    let result = {| FileBase64 = fileBase64 |}
-                    do! dapr.PublishEventAsync("pubsub", "file-read", result)
+                    let result = {| DocContent = "xxx"; DocKey = "1111" |}
+                    do! dapr.PublishEventAsync("pubsub", "doc-read", result)
                     return! json result next ctx
                 | None -> return! RequestErrors.BAD_REQUEST {| file = "Missed file with name file" |} next ctx
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx
@@ -43,9 +40,7 @@ let app  =
         ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .AddEnvironmentVariables()
-            .Build()
-            
-    printfn "++++ %s" (config.Item("ElasticHost"))            
+            .Build()                        
 
     application {
         use_config(fun _ -> config)
@@ -56,6 +51,6 @@ let app  =
     } 
 
 [<EntryPoint>]
-let main args =
+let main _ =
     run app 
     0 // return an integer exit code

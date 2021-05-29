@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>doc_events_store</RootNamespace>
+        <WarnOn>3390;$(WarnOn)</WarnOn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="doc-events-store.fs" />
+        <Content Include="appsettings.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapr.Client" Version="1.2.0" />
+      <PackageReference Include="FSharp.SystemTextJson" Version="0.17.4" />
+      <PackageReference Include="Saturn" Version="0.15.0-preview03" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\shared\shared.fsproj" />
+    </ItemGroup>
+
+</Project>

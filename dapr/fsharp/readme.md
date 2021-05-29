@@ -10,8 +10,8 @@ Be aware Windows env example, use analog for unix
 ```
 $Env:PORT=3000
 dapr run --app-id read-file --app-port $Env:Port -- dotnet watch run --project read-file
-$Env:PORT=3001
-dapr run --app-id ya-ocr --app-port $Env:Port -- dotnet watch run --project ya-ocr
+$Env:PORT=3002
+dapr run --app-id doc-events-store --app-port $Env:Port -- dotnet watch run --project doc-events-store
 ```
 
 ## Local env
@@ -30,6 +30,7 @@ docker run -d --name elastic --net elastic --restart unless-stopped --link elast
 ## DAPR docs
 
 ### Usefull links
++ [dotnet-sdk](https://github.com/dapr/dotnet-sdk)
 + [Observability](https://docs.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/observability)
 + [Service invocation API](https://docs.dapr.io/reference/api/service_invocation_api/)
 + [Pub Sub API](https://docs.dapr.io/reference/api/pubsub_api/)
