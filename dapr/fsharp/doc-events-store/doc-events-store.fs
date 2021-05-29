@@ -1,14 +1,12 @@
 ﻿module ReadFile
 
 open Dapr.Client
-open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Logging
 open Saturn
 open Giraffe
 open FSharp.Control.Tasks
 open Microsoft.AspNetCore.Http
 open Shared
-open System.Text.Json.Serialization
 
 
 type CloudEvent<'a> =
@@ -120,25 +118,7 @@ let routes dapr =
         post "/doc-stored" (docStored dapr)
     }
 
-let app =
-    let dapr = DaprClientBuilder().Build()
-    let converter = JsonFSharpConverter()
-    dapr.JsonSerializerOptions.Converters.Add(converter)
-
-    let config =
-        ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .AddEnvironmentVariables()
-            .Build()
-
-    application {
-        use_config (fun _ -> config)
-        use_router (routes dapr)
-        url (getAppUrl 5002)
-        use_gzip
-        use_json_serializer(getFixedJsonSerializer())
-        webhost_config (createSerilogLogger config)        
-    }
+let app = daprApp 5002 routes
 
 [<EntryPoint>]
 let main _ =
