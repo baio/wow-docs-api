@@ -6,12 +6,16 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - "5340:80"
-
+    networks:
+      - vow-dapr
+  
   zipkin:
     image: openzipkin/zipkin-slim
     ports:
       - "5411:9411"
-
+    networks:
+      - vow-dapr
+  
   ############################
   # read-file + Dapr sidecar
   ############################
@@ -23,6 +27,8 @@ services:
       - "3001:3000"
     environment: 
       - PORT=3000
+      - SeqHost=http://seq
+      - ElasticHost=
     depends_on:
       - redis
       - placement
@@ -53,6 +59,8 @@ services:
       - "3002:3000"
     environment: 
       - PORT=3000
+      - SeqHost=http://seq
+      - ElasticHost=
     depends_on:
       - redis
       - placement
@@ -82,6 +90,8 @@ services:
       - "3003:3000"
     environment: 
       - PORT=3000
+      - SeqHost=http://seq
+      - ElasticHost=
     depends_on:
       - redis
       - placement
@@ -111,6 +121,8 @@ services:
       - "3004:3000"
     environment: 
       - PORT=3000
+      - SeqHost=http://seq
+      - ElasticHost=
     depends_on:
       - redis
       - placement
