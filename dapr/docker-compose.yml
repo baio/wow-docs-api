@@ -6,15 +6,11 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - "5340:80"
-    networks:
-      - vow-dapr
-  
+
   zipkin:
     image: openzipkin/zipkin-slim
     ports:
-      - "5411:9411"
-    networks:
-      - vow-dapr
+    - "5411:9411"
   
   ############################
   # read-file + Dapr sidecar
@@ -32,8 +28,6 @@ services:
     depends_on:
       - redis
       - placement
-    networks:
-      - vow-dapr
   read-file-dapr:
     image: "daprio/daprd:1.2.0"
     command: ["./daprd",
@@ -64,8 +58,6 @@ services:
     depends_on:
       - redis
       - placement
-    networks:
-      - vow-dapr
   events-store-dapr:
     image: "daprio/daprd:1.2.0"
     command: ["./daprd",
@@ -95,8 +87,6 @@ services:
     depends_on:
       - redis
       - placement
-    networks:
-      - vow-dapr
   store-doc-dapr:
     image: "daprio/daprd:1.2.0"
     command: ["./daprd",
@@ -126,8 +116,6 @@ services:
     depends_on:
       - redis
       - placement
-    networks:
-      - vow-dapr
   ya-ocr-dapr:
     image: "daprio/daprd:1.2.0"
     command: ["./daprd",
@@ -150,8 +138,6 @@ services:
     command: ["./placement", "-port", "50006"]
     ports:
       - "50006:50006"
-    networks:
-      - vow-dapr
   ############################
   # Redis state store
   ############################
@@ -159,7 +145,3 @@ services:
     image: "redis:alpine"
     ports:
       - "6380:6379"
-    networks:
-      - vow-dapr
-networks:
-    vow-dapr:

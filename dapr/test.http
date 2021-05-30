@@ -1,0 +1,13 @@
+@BASE_URL=http://localhost:3001
+
+
+POST {{BASE_URL}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+file
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="passport-1.jpg"
+Content-Type: image/jpg
+
+< ./images/passport-1.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
