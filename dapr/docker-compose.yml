@@ -1,5 +1,17 @@
 version: '3'
 services:
+  seq:
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"
+
+  zipkin:
+    image: openzipkin/zipkin-slim
+    ports:
+      - "5411:9411"
+
   ############################
   # read-file + Dapr sidecar
   ############################
@@ -22,9 +34,10 @@ services:
      "-app-id", "read-file",
      "-app-port", "3000",
      "-placement-host-address", "placement:50006",
-     "-components-path", "/components"]
+     "-components-path", "/dapr/components",
+     "-config", "/dapr/config.yaml"]
     volumes:
-        - "./components/:/components"
+        - "./dapr/:/dapr"
     depends_on:
       - read-file
     network_mode: "service:read-file"
@@ -51,12 +64,72 @@ services:
      "-app-id", "events-store",
      "-app-port", "3000",
      "-placement-host-address", "placement:50006",
-     "-components-path", "/components"]
+     "-components-path", "/dapr/components",
+     "-config", "/dapr/config.yaml"]
     volumes:
-        - "./components/:/components"
+        - "./dapr/:/dapr"
     depends_on:
       - events-store
     network_mode: "service:events-store"
+  ############################
+  # store-doc + Dapr sidecar
+  ############################
+  store-doc:
+    build:
+      context: ./fsharp
+      dockerfile: StoreDoc/Dockerfile         
+    ports:
+      - "3003:3000"
+    environment: 
+      - PORT=3000
+    depends_on:
+      - redis
+      - placement
+    networks:
+      - vow-dapr
+  store-doc-dapr:
+    image: "daprio/daprd:1.2.0"
+    command: ["./daprd",
+      "-app-id", "store-doc",
+      "-app-port", "3000",
+      "-placement-host-address", "placement:50006",
+      "-components-path", "/dapr/components",
+      "-config", "/dapr/config.yaml"]
+    volumes:
+      - "./dapr/:/dapr"
+    depends_on:
+      - store-doc
+    network_mode: "service:store-doc"
+  ############################
+  # ya-ocr + Dapr sidecar
+  ############################
+  ya-ocr:
+    build:
+      context: ./fsharp
+      dockerfile: YaOCR/Dockerfile         
+    ports:
+      - "3004:3000"
+    environment: 
+      - PORT=3000
+    depends_on:
+      - redis
+      - placement
+    networks:
+      - vow-dapr
+  ya-ocr-dapr:
+    image: "daprio/daprd:1.2.0"
+    command: ["./daprd",
+      "-app-id", "ya-ocr",
+      "-app-port", "3000",
+      "-placement-host-address", "placement:50006",
+      "-components-path", "/dapr/components",
+      "-config", "/dapr/config.yaml"]
+    volumes:
+      - "./dapr/:/dapr"
+    depends_on:
+      - ya-ocr
+    network_mode: "service:ya-ocr"
+    
   ############################
   # Dapr placement service
   ############################
