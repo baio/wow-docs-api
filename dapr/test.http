@@ -1,6 +1,8 @@
 @BASE_URL=http://localhost:3001
 
 
+## upload
+
 POST {{BASE_URL}}/upload
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
@@ -11,3 +13,7 @@ Content-Type: image/jpg
 
 < ./images/passport-1.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+///
+{"docKey": "111", "docContent": "111a222"}
