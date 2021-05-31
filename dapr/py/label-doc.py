@@ -36,7 +36,7 @@ def docTextExtracted(event: v1.Event) -> None:
             data_content_type='application/json',
         )
 
-port = os.environ['PORT']
+port = os.getenv('PORT')
 port = port if port else 5001
 print(f'Start doc-text-extracted on port {port}', flush=True)
 app.run(port)

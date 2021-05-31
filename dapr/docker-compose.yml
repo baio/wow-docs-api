@@ -129,6 +129,37 @@ services:
     depends_on:
       - ya-ocr
     network_mode: "service:ya-ocr"
+
+  ############################
+  # label-doc + Dapr sidecar
+  ############################
+  label-doc:
+    build:
+      context: ./py
+      dockerfile: label-doc.Dockerfile         
+    ports:
+      - "3005:3000"
+    environment: 
+      - PORT=3000
+      - SeqHost=http://seq
+      - ElasticHost=
+    depends_on:
+      - redis
+      - placement
+  label-doc-dapr:
+    image: "daprio/daprd:1.2.0"
+    command: ["./daprd",
+      "-app-id", "label-doc",
+      "-app-port", "3000",
+      "-placement-host-address", "placement:50006",
+      "-components-path", "/dapr/components",
+      "-app-protocol", "grpc",
+      "-config", "/dapr/config.yaml"]
+    volumes:
+      - "./dapr/:/dapr"
+    depends_on:
+      - label-doc
+    network_mode: "service:label-doc"
     
   ############################
   # Dapr placement service
