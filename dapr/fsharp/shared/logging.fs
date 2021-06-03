@@ -1,10 +1,9 @@
 ﻿namespace Shared
 
-open Microsoft.Extensions.Configuration
-
 [<AutoOpen>]
 module Logging =
 
+    open Microsoft.Extensions.Configuration
     open Microsoft.AspNetCore.Hosting    
     open System
     open Serilog

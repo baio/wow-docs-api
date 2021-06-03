@@ -11,13 +11,13 @@ module Events =
 
     open Dapr.Client
 
-    type SubscribeHttpHandler = DaprClient -> HttpHandler
+    type SubscribeHttpHandler<'x> = 'x -> HttpHandler
 
     let publishDocRead (dapr: DaprClient) (event: DocReadEvent) =
         dapr.PublishEventAsync(DAPR_DOC_PUB_SUB, DAPR_TOPIC_DOC_READ, event)
         
     
-    let subscribeDapr'<'e> (topicName: string) (handler: 'e -> SubscribeHttpHandler) =
+    let subscribeDapr'<'x, 'e> (topicName: string) (handler: 'e -> SubscribeHttpHandler<'x>) =
         topicName,
         fun dapr next ctx ->
             task {
@@ -25,8 +25,8 @@ module Events =
                 return! handler event dapr next ctx
             }
             
-    let subscribeDapr<'e, 'r> topicName (handler: 'e -> DaprClient -> Task<'r>) =
-        subscribeDapr'<'e>
+    let subscribeDapr<'x, 'e, 'r> topicName (handler: 'e -> 'x -> Task<'r>) =
+        subscribeDapr'<'x, 'e>
             topicName
             (fun event dapr next ctx ->
                 task {
@@ -34,7 +34,7 @@ module Events =
                     return! json resultEvent next ctx
                 })
             
-    let subscribeDocRead x = x |> subscribeDapr<DocReadEvent, bool> DAPR_TOPIC_DOC_READ
+    let subscribeDocRead x = x |> subscribeDapr<DaprAppEnv, DocReadEvent, bool> DAPR_TOPIC_DOC_READ
     
     (*       
     let subscribeDocRead' (handler: DocReadEvent -> SubscribeHttpHandler) =

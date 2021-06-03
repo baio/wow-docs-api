@@ -1,5 +1,8 @@
 ﻿namespace Shared
 
+open Microsoft.AspNetCore.Http
+open Microsoft.Extensions.Logging
+
 [<AutoOpen>]
 module DaprApp =
 
@@ -15,57 +18,77 @@ module DaprApp =
 
     type TopicName = string
 
-    type TopicHandler = DaprClient -> HttpHandler
+    type TopicHandler<'x> = 'x -> HttpHandler
 
-    type DaprSubs = (TopicName * TopicHandler) List
+    type DaprSubs<'x> = (TopicName * TopicHandler<'x>) List
 
-    type DaprApp =
-    | DaprSubs of PubSubName * DaprSubs
-    | DaprRouter of TopicHandler
+    type DaprApp<'x> =
+        | DaprSubs of PubSubName * DaprSubs<'x>
+        | DaprRouter of TopicHandler<'x>
 
-    let private subToHandler dapr (topicName, topicHandler: TopicHandler) =
-        POST >=> route $"/{topicName}" >=> topicHandler dapr
+    let private subToHandler envFactory (topicName, topicHandler: TopicHandler<'x>) =
+        POST
+        >=> route $"/{topicName}"
+        >=> (fun next ctx -> topicHandler (envFactory ctx) next ctx)
 
-    let private getDaprSubscribeHandler pubSubName (subs: DaprSubs) = 
+    let private getDaprSubscribeHandler pubSubName (subs: DaprSubs<'x>) =
         subs
         |> List.map fst
-        |> List.map (fun topic -> 
-            {| 
-                pubsubname = pubSubName
-                topic = topic
-                route = topic |}        
-        ) |> json
+        |> List.map
+            (fun topic ->
+                {| pubsubname = pubSubName
+                   topic = topic
+                   route = topic |})
+        |> json
 
-    let private getDaprSubscribeRouter pubSubName (subs: DaprSubs) = 
-        GET >=> route "/dapr/subscribe" >=> getDaprSubscribeHandler pubSubName subs
+    let private getDaprSubscribeRouter pubSubName (subs: DaprSubs<'x>) =
+        GET
+        >=> route "/dapr/subscribe"
+        >=> getDaprSubscribeHandler pubSubName subs
 
-    let private subsToHandler dapr pubSubName (subs: DaprSubs) =
+    let private subsToHandler dapr pubSubName (subs: DaprSubs<'x>) =
         let subscribeRouter = getDaprSubscribeRouter pubSubName subs
-        let subToHandler = subToHandler dapr 
-        let routers = subs |> List.map(subToHandler)         
-        subscribeRouter::routers |> choose
+        let subToHandler = subToHandler dapr
+        let routers = subs |> List.map (subToHandler)
+        subscribeRouter :: routers |> choose
 
-    let daprApp (defaultAppPort) (app: DaprApp) =
+    type DaprAppEnv = { Logger: ILogger; Dapr: DaprClient }
+
+    let daprApp' (envFactory: DaprAppEnv * HttpContext -> 'x) (defaultAppPort) (app: DaprApp<'x>) =
 
         let dapr = DaprClientBuilder().Build()
+
+        let envFactory' (httpContext: HttpContext) =
+            envFactory (
+                { Logger = httpContext.GetLogger()
+                  Dapr = dapr },
+                httpContext
+            )
+
         let routes =
             match app with
-            | DaprSubs (pubSubName, subs) -> subsToHandler dapr pubSubName subs
-            | DaprRouter router -> router dapr
-                
-        // Make all parts to talk same json 
+            | DaprSubs (pubSubName, subs) -> subsToHandler envFactory' pubSubName subs
+            | DaprRouter router -> fun next ctx -> router (envFactory' ctx) next ctx
+
+        // Make all parts to talk same json
 
         // https://giraffe.wiki/docs#json
         // https://github.com/Tarmil/FSharp.SystemTextJson
         // set json converter for dapr https://github.com/dapr/dotnet-sdk/issues/362
 
         //
-        let converter = JsonFSharpConverter(JsonUnionEncoding.FSharpLuLike)
+        let converter =
+            JsonFSharpConverter(JsonUnionEncoding.FSharpLuLike)
+
         dapr.JsonSerializerOptions.Converters.Add(converter)
         //
-        let serializationOptions = JsonSerializerOptions(PropertyNameCaseInsensitive = true)
+        let serializationOptions =
+            JsonSerializerOptions(PropertyNameCaseInsensitive = true)
+
         serializationOptions.Converters.Add(converter)
-        let serializer = SystemTextJson.Serializer(serializationOptions)
+
+        let serializer =
+            SystemTextJson.Serializer(serializationOptions)
         //
         let config =
             ConfigurationBuilder()
@@ -78,6 +101,8 @@ module DaprApp =
             use_router routes
             url (getAppUrl defaultAppPort)
             use_gzip
-            use_json_serializer(serializer)
-            webhost_config (createSerilogLogger config)   
+            use_json_serializer (serializer)
+            webhost_config (createSerilogLogger config)
         }
+
+    let daprApp x = x |> daprApp' fst

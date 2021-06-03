@@ -11,7 +11,7 @@ open Domain
 
 //
 let docRead =
-    fun (event: DocReadEvent) (dapr: DaprClient) ->
+    fun (event: DocReadEvent) (env: DaprAppEnv) ->
         task {            
             do! System.Threading.Tasks.Task.Delay(1000)
             let storedEvent: DocStoredEvent = 
@@ -19,7 +19,7 @@ let docRead =
                     DocKey = event.DocKey; 
                     DocStore = { Url = "http://kek.com/123"; Provider = DocStoreProvider.YaCloud} 
                 }
-            do! dapr.PublishEventAsync(DAPR_DOC_PUB_SUB, DAPR_TOPIC_DOC_STORED, storedEvent)
+            do! env.Dapr.PublishEventAsync(DAPR_DOC_PUB_SUB, DAPR_TOPIC_DOC_STORED, storedEvent)
             return true            
         }
 
