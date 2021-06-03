@@ -12,13 +12,13 @@ open Domain
 //
 
 let docRead =
-    fun (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
+    fun (event: DocReadEvent) (dapr: DaprClient) (next: HttpFunc) (ctx: HttpContext) ->
         task {
-            let! doc = bindCloudEventDataAsync<DocReadEvent> ctx            
+            //let! doc = bindCloudEventDataAsync<DocReadEvent> ctx            
             do! System.Threading.Tasks.Task.Delay(1000)
             let storedEvent: DocStoredEvent = 
                 { 
-                    DocKey = doc.DocKey; 
+                    DocKey = event.DocKey; 
                     DocStore = { Url = "http://kek.com/123"; Provider = DocStoreProvider.YaCloud} 
                 }
             do! dapr.PublishEventAsync(DAPR_DOC_PUB_SUB, DAPR_TOPIC_DOC_STORED, storedEvent)
@@ -26,7 +26,10 @@ let docRead =
         }
 
 
-let subs = [(DAPR_TOPIC_DOC_READ, docRead)]
+let subs = [
+    // (DAPR_TOPIC_DOC_READ, docRead)
+    subscribeDocRead docRead
+]
 
 let app = daprApp 5003 (DaprSubs (DAPR_DOC_PUB_SUB, subs))
 

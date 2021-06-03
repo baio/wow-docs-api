@@ -9,7 +9,7 @@ Be aware Windows env example, use analog for unix
 
 ```
 $Env:PORT=3000
-dapr run --app-id read-file --app-port $Env:Port -- dotnet watch run --project read-file
+dapr run --app-id read-file --app-port $Env:Port -- dotnet watch run --project ReadFile
 $Env:PORT=3001
 dapr run --app-id store-doc --app-port $Env:Port -- dotnet watch run --project StoreDoc
 $Env:PORT=3002
