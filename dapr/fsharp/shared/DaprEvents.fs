@@ -14,6 +14,26 @@ module DaprEvents =
         x
         |> publishEventAsync<DocStoredEvent> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_STORED
 
+    let publishDocTextExtracted x =
+        x
+        |> publishEventAsync<DocTextExtractedEvent> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_TEXT_EXTRACTED
+
+    let publishDocLabeled x =
+        x
+        |> publishEventAsync<DocLabeledEvent> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_LABELED
+
     let subscribeDocRead x =
         x
         |> subscribeDapr<DaprAppEnv, DocReadEvent, bool> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_READ
+
+    let subscribeDocStored x =
+        x
+        |> subscribeDapr<DaprAppEnv, DocStoredEvent, bool> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_STORED
+
+    let subscribeDocTextExtracted x =
+        x
+        |> subscribeDapr<DaprAppEnv, DocTextExtractedEvent, bool> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_TEXT_EXTRACTED
+
+    let subscribeDocLabeled x =
+        x
+        |> subscribeDapr<DaprAppEnv, DocLabeledEvent, bool> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_LABELED
