@@ -20,34 +20,33 @@ module DaprApp =
 
     type TopicHandler<'x> = 'x -> HttpHandler
 
-    type DaprSubs<'x> = (TopicName * TopicHandler<'x>) List
+    type DaprSubs<'x> = (PubSubName * TopicName * TopicHandler<'x>) List
 
     type DaprApp<'x> =
-        | DaprSubs of PubSubName * DaprSubs<'x>
+        | DaprSubs of DaprSubs<'x>
         | DaprRouter of TopicHandler<'x>
 
-    let private subToHandler envFactory (topicName, topicHandler: TopicHandler<'x>) =
+    let private subToHandler envFactory (pubSubName, topicName, topicHandler: TopicHandler<'x>) =
         POST
-        >=> route $"/{topicName}"
+        >=> route $"/${pubSubName}/{topicName}"
         >=> (fun next ctx -> topicHandler (envFactory ctx) next ctx)
 
-    let private getDaprSubscribeHandler pubSubName (subs: DaprSubs<'x>) =
+    let private getDaprSubscribeHandler (subs: DaprSubs<'x>) =
         subs
-        |> List.map fst
         |> List.map
-            (fun topic ->
-                {| pubsubname = pubSubName
+            (fun (pubSub, topic, _) ->
+                {| pubsubname = pubSub
                    topic = topic
-                   route = topic |})
+                   route = $"/${pubSub}/{topic}" |})
         |> json
 
-    let private getDaprSubscribeRouter pubSubName (subs: DaprSubs<'x>) =
+    let private getDaprSubscribeRouter (subs: DaprSubs<'x>) =
         GET
         >=> route "/dapr/subscribe"
-        >=> getDaprSubscribeHandler pubSubName subs
+        >=> getDaprSubscribeHandler subs
 
-    let private subsToHandler dapr pubSubName (subs: DaprSubs<'x>) =
-        let subscribeRouter = getDaprSubscribeRouter pubSubName subs
+    let private subsToHandler dapr (subs: DaprSubs<'x>) =
+        let subscribeRouter = getDaprSubscribeRouter subs
         let subToHandler = subToHandler dapr
         let routers = subs |> List.map (subToHandler)
         subscribeRouter :: routers |> choose
@@ -67,7 +66,7 @@ module DaprApp =
 
         let routes =
             match app with
-            | DaprSubs (pubSubName, subs) -> subsToHandler envFactory' pubSubName subs
+            | DaprSubs subs -> subsToHandler envFactory' subs
             | DaprRouter router -> fun next ctx -> router (envFactory' ctx) next ctx
 
         // Make all parts to talk same json
