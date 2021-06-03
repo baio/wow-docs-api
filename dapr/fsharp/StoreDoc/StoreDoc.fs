@@ -20,7 +20,7 @@ let docRead =
                     DocStore = { Url = "http://kek.com/123"; Provider = DocStoreProvider.YaCloud} 
                 }
             do! dapr.PublishEventAsync(DAPR_DOC_PUB_SUB, DAPR_TOPIC_DOC_STORED, storedEvent)
-            return storedEvent            
+            return true            
         }
 
 let subs = [
