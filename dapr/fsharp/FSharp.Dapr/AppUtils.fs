@@ -1,7 +1,7 @@
-﻿namespace Shared
+﻿namespace FSharp.Dapr
 
-[<AutoOpenAttribute>]
-module Utils =
+[<AutoOpen>]
+module private AppUtils =
     let getAppPort (defaultPort: int) =
         match System.Environment.GetEnvironmentVariable("PORT") with        
         | null -> defaultPort.ToString()

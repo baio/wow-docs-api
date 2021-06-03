@@ -1,4 +1,4 @@
-﻿namespace Shared
+﻿namespace FSharp.Dapr
 
 [<AutoOpen>]
 module CloudEvent = 
@@ -21,7 +21,6 @@ module CloudEvent =
           Time: string option
           Data: 'a
           DataBase64: string option }
-
 
     let bindCloudEventAsync<'a> (httpContext: HttpContext) = 
         httpContext.BindJsonAsync<CloudEvent<'a>>()

@@ -1,13 +1,10 @@
 ﻿module StoreDoc
 
-open Dapr.Client
-open Microsoft.Extensions.Logging
 open Saturn
-open Giraffe
 open FSharp.Control.Tasks
-open Microsoft.AspNetCore.Http
 open Shared
 open Domain
+open FSharp.Dapr
 
 //
 let docRead =
@@ -27,9 +24,5 @@ let docRead =
 
 let subs = [ subscribeDocRead docRead ]
 
-let app = daprApp 5003 (DaprSubs subs)
-
 [<EntryPoint>]
-let main _ =
-    run app
-    0 // return an integer exit code
+let main _ = runDaprApp 5003 (DaprSubs subs)

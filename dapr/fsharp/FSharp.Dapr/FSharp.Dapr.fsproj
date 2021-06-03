@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <WarnOn>3390;$(WarnOn)</WarnOn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="CloudEvent.fs" />
+        <Compile Include="PubSub.fs" />
+        <Compile Include="State.fs" />
+        <Compile Include="AppUtils.fs" />
+        <Compile Include="App.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapr.Client" Version="1.2.0" />
+      <PackageReference Include="FSharp.SystemTextJson" Version="0.17.4" />
+      <PackageReference Include="Giraffe" Version="5.0.0" />
+      <PackageReference Include="Saturn" Version="0.15.0-preview03" />
+    </ItemGroup>
+
+</Project>

@@ -8,12 +8,9 @@
 
     <ItemGroup>
         <Compile Include="DAPR_CONSTANTS.fs" />
-        <Compile Include="CloudEvent.fs" />
-        <Compile Include="Utils.fs" />
-        <Compile Include="Logging.fs" />
-        <Compile Include="DaprState.fs" />
+        <Compile Include="DaprEvents.fs" />
+        <Compile Include="DaprLogging.fs" />
         <Compile Include="DaprApp.fs" />
-        <Compile Include="Events.fs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,6 +30,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.fsproj" />
+      <ProjectReference Include="..\FSharp.Dapr\FSharp.Dapr.fsproj" />
     </ItemGroup>
 
 </Project>
