@@ -15,12 +15,22 @@ module State =
     let private NEW_ETAG = "-1"
 
     /// Create new item or fail if already exists
-    let tryCreateStateAsync (dapr: DaprClient) storeName id doc =
-        dapr.TrySaveStateAsync(storeName, id, doc, NEW_ETAG)
+    let tryCreateStateAsync { Dapr = dapr; Logger = logger } storeName id doc =
+        task {
+            let! res = dapr.TrySaveStateAsync(storeName, id, doc, NEW_ETAG)
+
+            match res with
+            | true -> logTrace2 logger "{stateStore} updated with new {document}" storeName doc
+            | false ->
+                logWarn2 logger "{stateStore} failed to update, {docKey} already exists" storeName id
+                logTrace2 logger "{stateStore} failed to update, {document} already exists" storeName doc
+
+            return res
+        }
 
     /// Find item and update it if exists
     /// If item is not exists then create new and then update it
-    let tryUpdateOrCreateStateAsync<'a> (dapr: DaprClient) storeName id createFun (updateFun: 'a -> 'a) =
+    let tryUpdateOrCreateStateAsync<'a> { Dapr = dapr; Logger = logger } storeName id createFun (updateFun: 'a -> 'a) =
         task {
             let! docEntry = dapr.GetStateEntryAsync<'a>(storeName, id)
 
@@ -35,9 +45,15 @@ module State =
 
             let! res = dapr.TrySaveStateAsync(storeName, id, doc, etag)
 
-            return
+            let res =
                 { IsSuccess = res
                   ETag = etag
                   Id = id
                   Doc = doc }
+
+            match res.IsSuccess with
+            | true -> logTrace3 logger "{stateStore} document with {docKey} is updated with {result}" storeName id res
+            | false ->
+                logWarn3 logger "{stateStore} document with {docKey} fail to update with {etag}" storeName id etag
+                logTrace3 logger "{stateStore} document with {docKey} fail to update with {result}" storeName id res
         }

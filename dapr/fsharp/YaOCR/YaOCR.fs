@@ -6,7 +6,7 @@ open Domain
 open FSharp.Dapr
 
 //
-let docRead (event: DocReadEvent) { Dapr = dapr } =
+let docRead (event: DocReadEvent) env =
     task {
         do! System.Threading.Tasks.Task.Delay(2000)
 
@@ -18,7 +18,7 @@ let docRead (event: DocReadEvent) { Dapr = dapr } =
             { DocKey = event.DocKey
               DocExtractedText = docExtractedText }
 
-        do! publishDocTextExtracted dapr docTextExtractedEvent
+        do! publishDocTextExtracted env docTextExtractedEvent
         return true
     }
 

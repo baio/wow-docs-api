@@ -48,9 +48,7 @@ module App =
         let subscribeRouter = getDaprSubscribeRouter subs
         let subToHandler = subToHandler dapr
         let routers = subs |> List.map (subToHandler)
-        subscribeRouter :: routers |> choose
-
-    type DaprAppEnv = { Logger: ILogger; Dapr: DaprClient }
+        subscribeRouter :: routers |> choose    
 
     let daprApp'
         (webhostConfig: IConfiguration -> IWebHostBuilder -> IWebHostBuilder)

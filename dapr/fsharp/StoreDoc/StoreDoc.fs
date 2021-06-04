@@ -18,7 +18,7 @@ let docRead =
                       { Url = "http://kek.com/123"
                         Provider = DocStoreProvider.YaCloud } }
 
-            do! publishDocStored env.Dapr storedEvent
+            do! publishDocStored env storedEvent
             return true
         }
 

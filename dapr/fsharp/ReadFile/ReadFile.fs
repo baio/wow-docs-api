@@ -30,7 +30,7 @@ let fileUploadHandler =
                         { DocContent = "xxx"
                           DocKey = fileBase64.Substring(0, System.Random(100).Next(1, 300)) }
 
-                    do! publishDocRead env.Dapr event
+                    do! publishDocRead env event
                     return! json event next ctx
                 | None -> return! RequestErrors.BAD_REQUEST {| file = "Missed file with name file" |} next ctx
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx

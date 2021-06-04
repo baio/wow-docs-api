@@ -8,6 +8,8 @@
 
     <ItemGroup>
         <Compile Include="CloudEvent.fs" />
+        <Compile Include="DaprAppEnv.fs" />
+        <Compile Include="Logger.fs" />
         <Compile Include="PubSub.fs" />
         <Compile Include="State.fs" />
         <Compile Include="AppUtils.fs" />
