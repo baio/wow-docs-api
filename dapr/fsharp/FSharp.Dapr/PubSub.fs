@@ -34,6 +34,14 @@ module PubSub =
                     bodyStr
 #endif
                 let! event = bindCloudEventDataAsync<'e> ctx
+#if TRACE
+                logTrace3
+                    (ctx.GetLogger())
+                    "Subscription {pubSubName} {topicName} called with parsed {event}"
+                    pubSubName
+                    topicName
+                    event
+#endif
                 return! handler event env next ctx
             }
 
