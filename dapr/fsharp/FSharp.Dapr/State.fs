@@ -20,10 +20,15 @@ module State =
             let! res = dapr.TrySaveStateAsync(storeName, id, doc, NEW_ETAG)
 
             match res with
-            | true -> logTrace2 logger "{stateStore} updated with new {document}" storeName doc
+            | true ->
+#if TRACE                
+                logTrace2 logger "{stateStore} updated with new {document}" storeName doc
+#endif                
             | false ->
                 logWarn2 logger "{stateStore} failed to update, {docKey} already exists" storeName id
+#if TRACE                
                 logTrace2 logger "{stateStore} failed to update, {document} already exists" storeName doc
+#endif                
 
             return res
         }
@@ -52,8 +57,13 @@ module State =
                   Doc = doc }
 
             match res.IsSuccess with
-            | true -> logTrace3 logger "{stateStore} document with {docKey} is updated with {result}" storeName id res
+            | true ->
+#if TRACE
+                logTrace3 logger "{stateStore} document with {docKey} is updated with {result}" storeName id res
+#endif                
             | false ->
                 logWarn3 logger "{stateStore} document with {docKey} fail to update with {etag}" storeName id etag
+#if TRACE                
                 logTrace3 logger "{stateStore} document with {docKey} fail to update with {result}" storeName id res
+#endif                
         }
