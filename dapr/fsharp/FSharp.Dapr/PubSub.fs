@@ -1,5 +1,7 @@
 ﻿namespace FSharp.Dapr
 
+open System.IO
+open System.Text
 open Microsoft.AspNetCore.Http
 
 [<AutoOpen>]
@@ -9,6 +11,28 @@ module PubSub =
     open System.Threading.Tasks
 
     type SubscribeHttpHandler<'x> = 'x -> HttpHandler
+
+    let private REQUEST_BUFFER_SIZE = 99999999
+
+    let private readStream stream =
+        let reader =
+            new StreamReader(
+                stream,
+                encoding = Encoding.UTF8,
+                detectEncodingFromByteOrderMarks = false,
+                bufferSize = REQUEST_BUFFER_SIZE,
+                leaveOpen = true
+            )
+
+        task {
+            let! res = reader.ReadToEndAsync()
+            stream.Position <- int64 0
+            return res
+        }
+
+    let private readRequestBody (request: HttpRequest) =
+        request.EnableBuffering(REQUEST_BUFFER_SIZE)
+        readStream request.Body
 
     let publishEventAsync<'a> pubSubName topicName { Dapr = dapr; Logger = logger } (event: 'a) =
 #if TRACE
@@ -22,9 +46,7 @@ module PubSub =
         fun env next (ctx: HttpContext) ->
             task {
 #if TRACE
-                ctx.Request.EnableBuffering()
-
-                let! bodyStr = ctx.ReadBodyFromRequestAsync()
+                let! bodyStr = readRequestBody ctx.Request
 
                 logTrace3
                     (ctx.GetLogger())

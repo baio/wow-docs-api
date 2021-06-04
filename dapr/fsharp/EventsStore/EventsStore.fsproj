@@ -7,6 +7,10 @@
         <WarnOn>3390;$(WarnOn)</WarnOn>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACECOREAPP;TRACE</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
         <Compile Include="EventsStore.fs" />
         <Content Include="appsettings.json">

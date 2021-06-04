@@ -97,13 +97,15 @@ module App =
                 .AddEnvironmentVariables()
                 .Build()
 
-        application {
-            use_config (fun _ -> config)
-            use_router routes
-            url (getAppUrl defaultAppPort)
-            use_gzip
-            use_json_serializer (serializer)
-            webhost_config (webhostConfig config)
-        }
+        let appBuilder = 
+            application {
+                use_config (fun _ -> config)
+                use_router routes
+                url (getAppUrl defaultAppPort)
+                use_gzip
+                use_json_serializer (serializer)
+                webhost_config (webhostConfig config)
+            }
+        appBuilder            
 
     let daprApp webhostConfig = daprApp' webhostConfig (fst)
