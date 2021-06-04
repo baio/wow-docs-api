@@ -11,6 +11,10 @@
       <DefineConstants>TRACECOREAPP;TRACE</DefineConstants>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DefineConstants>TRACECOREAPP;TRACE</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
         <Compile Include="EventsStore.fs" />
         <Content Include="appsettings.json">

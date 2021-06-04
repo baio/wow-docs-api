@@ -7,6 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:${NET_IMAGE} AS build
 WORKDIR /src
 
+COPY ["FSharp.Dapr/", "FSharp.Dapr/"]
 COPY ["Shared/", "Shared/"]
 COPY ["Domain/", "Domain/"]
 COPY ["ReadFile/", "ReadFile/"]

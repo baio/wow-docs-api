@@ -9,6 +9,10 @@
     <DefineConstants>TRACECOREAPP;TRACE</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>TRACECOREAPP;TRACE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Dapr.Client" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

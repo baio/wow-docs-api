@@ -9,6 +9,10 @@
     <DefineConstants>TRACECOREAPP;TRACE</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>TRACECOREAPP;TRACE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="ReadFile.fs" />
     <Content Include="appsettings.json">

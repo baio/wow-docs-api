@@ -25,13 +25,13 @@ def docTextExtracted(event: v1.Event) -> None:
         'docKey': data["docKey"],
         'docLabeled': {
             'label': 'Passport',
-            'provider': 'custom-py'
+            'provider': 'CustomPy'
         }
     }
     with DaprClient() as d:
         d.publish_event(
             pubsub_name='pubsub',
-            topic_name='doc-text-extracted',
+            topic_name='doc-text-labeled',
             data=json.dumps(doc_labeled_event),
             data_content_type='application/json',
         )
