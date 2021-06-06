@@ -8,5 +8,5 @@ export interface YaAuthState {
 export type AuthState = YaAuthState;
 
 export interface UserAuthState {
-    authState: AuthState;
+    authState: AuthState | null;
 }

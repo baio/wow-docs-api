@@ -2,20 +2,23 @@ import {
     ChangeDetectionStrategy,
     Component,
     EventEmitter,
+    Input,
     Output,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthProvider } from '../../models';
+import { AuthState } from '../../models';
 import { login } from '../../ngrx/actions';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: 'login.component.html',
-    styleUrls: ['login.component.scss'],
+    selector: 'app-profile',
+    templateUrl: 'profile.component.html',
+    styleUrls: ['profile.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppLoginComponent {
-    @Output() login = new EventEmitter<AuthProvider>();
+export class AppProfileComponent {
+    @Input() authState: AuthState;
+
+    @Output() logout = new EventEmitter();
 
     constructor() {}
 }

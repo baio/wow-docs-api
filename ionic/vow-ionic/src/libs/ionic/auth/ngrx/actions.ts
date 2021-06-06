@@ -12,6 +12,8 @@ export const rehydrateAuthStateError = createAction(
     '[Auth] Rehydrate Auth State Error'
 );
 
+export const logout = createAction('[Auth] Logout');
+
 export const login = createAction(
     '[Auth] Login',
     props<{ provider: AuthProvider }>()

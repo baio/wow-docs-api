@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
     login,
     loginRedirectSuccess,
+    logout,
     rehydrateAuthState,
     rehydrateAuthStateError,
     rehydrateAuthStateSuccess,
@@ -92,5 +93,17 @@ export class AuthEffects {
                 }
             })
         )
+    );
+
+    logout$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(logout),
+                tap(() => {
+                    localStorage.removeItem(AUTH_TOKEN_KEY);
+                    localStorage.removeItem(AUTH_PROVIDER_KEY);
+                })
+            ),
+        { dispatch: false }
     );
 }

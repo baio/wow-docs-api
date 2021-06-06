@@ -1,0 +1,10 @@
+<ng-container *ngIf="view$ | async as view">
+    <app-profile
+        *ngIf="view.authState; else login"
+        [authState]="view.authState"
+        (logout)="onLogout()"
+    ></app-profile>
+    <ng-template #login>
+        <app-login (login)="onLogin($event)"></app-login>
+    </ng-template>
+</ng-container>

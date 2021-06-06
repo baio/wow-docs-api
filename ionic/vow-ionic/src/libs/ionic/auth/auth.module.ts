@@ -11,6 +11,8 @@ import {
     YaAuthService,
     YA_AUTH_CONFIG,
 } from './services/ya-auth.service';
+import { AppProfileComponent } from './components/profile/profile.component';
+import { AppAuthWorkspaceComponent } from './components/auth-workspace/auth-workspace.component';
 
 export interface AuthConfig {
     yandex: YaAuthConfig;
@@ -23,8 +25,12 @@ export interface AuthConfig {
         StoreModule.forFeature('auth', authReducer),
         EffectsModule.forFeature([AuthEffects]),
     ],
-    declarations: [AppLoginComponent],
-    exports: [AppLoginComponent],
+    declarations: [
+        AppLoginComponent,
+        AppProfileComponent,
+        AppAuthWorkspaceComponent,
+    ],
+    exports: [AppAuthWorkspaceComponent],
     providers: [YaAuthService],
 })
 export class AppAuthModule {

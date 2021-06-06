@@ -1,7 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
-import { UserAuthState } from '../models';
-import { loginRedirectSuccess, rehydrateAuthStateSuccess } from './actions';
 import { assoc } from 'lodash/fp';
+import { UserAuthState } from '../models';
+import {
+    loginRedirectSuccess,
+    logout,
+    rehydrateAuthStateSuccess,
+} from './actions';
 
 export const initialState: UserAuthState = {
     authState: null,
@@ -14,7 +18,8 @@ const _authReducer = createReducer(
     ),
     on(rehydrateAuthStateSuccess, (state, { authState }) =>
         assoc('authState', authState, state)
-    )
+    ),
+    on(logout, (state) => assoc('authState', null as any, state))
 );
 
 export function authReducer(state, action) {
