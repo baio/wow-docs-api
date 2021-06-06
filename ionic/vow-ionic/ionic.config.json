@@ -1,0 +1,7 @@
+{
+  "name": "vow-ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
