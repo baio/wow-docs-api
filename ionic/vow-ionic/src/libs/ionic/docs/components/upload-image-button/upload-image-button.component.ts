@@ -1,0 +1,24 @@
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Output,
+} from '@angular/core';
+import { ImageService } from '../../services/image.service';
+
+@Component({
+    selector: 'app-upload-image-button',
+    templateUrl: 'upload-image-button.component.html',
+    styleUrls: ['upload-image-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AppUploadImageButtonComponent {
+    @Output() fileSelected = new EventEmitter<{ file: File; base64: string }>();
+
+    constructor(private readonly imageService: ImageService) {}
+
+    async onFileSelected(file: File) {
+        const result = await this.imageService.resizeImageMax(file, 1500);
+        this.fileSelected.emit(result);
+    }
+}

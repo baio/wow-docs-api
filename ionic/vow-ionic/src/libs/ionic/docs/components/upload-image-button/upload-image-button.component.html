@@ -1,0 +1,10 @@
+<ion-fab-button (click)="fileInput.click()"
+    ><ion-icon name="camera-outline"></ion-icon
+></ion-fab-button>
+<input
+    type="file"
+    id="file"
+    style="display: none"
+    #fileInput
+    (change)="onFileSelected($event.target['files'][0])"
+/>
