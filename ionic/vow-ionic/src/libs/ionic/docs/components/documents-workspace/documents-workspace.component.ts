@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { selectAuthState } from '../../ngrx/selectors';
 import { v4 } from 'uuid';
 import { uploadImage } from '../../ngrx/actions';
 
@@ -13,13 +10,7 @@ import { uploadImage } from '../../ngrx/actions';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppDocumentsWorkspaceComponent {
-    readonly view$: Observable<any>;
-
-    constructor(private readonly store: Store) {
-        this.view$ = store
-            .select(selectAuthState)
-            .pipe(map((authState) => ({ authState })));
-    }
+    constructor(private readonly store: Store) {}
 
     onFileSelected({ file, base64 }: { file: File; base64: string }) {
         const id = v4();

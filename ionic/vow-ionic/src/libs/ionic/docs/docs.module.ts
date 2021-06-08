@@ -5,6 +5,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { AppDocumentsWorkspaceComponent } from './components/documents-workspace/documents-workspace.component';
 import { AppUploadImageButtonComponent } from './components/upload-image-button/upload-image-button.component';
+import { AppUploadImageProgressWorkspaceComponent } from './components/upload-image-progress-workspace/upload-image-progress-wprkspace.component';
 import { DocsEffects } from './ngrx/effects';
 import { docsReducer } from './ngrx/reducer';
 import { DocsDataAccessService } from './services/docs.data-access.service';
@@ -20,6 +21,7 @@ import { ImageService } from './services/image.service';
     declarations: [
         AppDocumentsWorkspaceComponent,
         AppUploadImageButtonComponent,
+        AppUploadImageProgressWorkspaceComponent,
     ],
     providers: [DocsDataAccessService, ImageService],
     exports: [AppDocumentsWorkspaceComponent],

@@ -1,9 +1,12 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { DocsState } from '../models';
+import { Doc, DocsState } from '../models';
 
-export const selectUserAuthState = createFeatureSelector<DocsState>('docs');
+export const selectDocsState = createFeatureSelector<DocsState>('docs');
 
-export const selectAuthState = createSelector(
-    selectUserAuthState,
+export const selectDocs = createSelector(
+    selectDocsState,
     (state) => state.docs
 );
+
+export const selectDoc = (id: string) =>
+    createSelector(selectDocs, (docs) => docs[id]);
