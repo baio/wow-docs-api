@@ -1,11 +1,28 @@
 <ion-card *ngIf="view$ | async as view">
-    <img [src]="view.img" />
+    <img [src]="view.doc.imgBase64" />
     <ion-card-header>
-        <ion-card-subtitle>Destination</ion-card-subtitle>
-        <ion-card-title>Madison, WI</ion-card-title>
+        <ion-card-subtitle>Uploading</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-        Founded in 1829 on an isthmus between Lake Monona and Lake Mendota,
-        Madison was named the capital of the Wisconsin Territory in 1836.
+        <ul>
+            <li>
+                <ion-icon
+                    name="sync-outline"
+                    *ngIf="view.doc.upload.status === 'progress'"
+                ></ion-icon
+                ><ion-icon
+                    *ngIf="view.doc.upload.status === 'success'"
+                    name="checkmark-circle-outline"
+                ></ion-icon>
+                <ion-icon
+                    name="close-circle-outline"
+                    *ngIf="view.doc.upload.status === 'error'"
+                ></ion-icon
+                >Uploaded
+            </li>
+            <li><ion-icon name="sync-outline"></ion-icon>Stored</li>
+            <li><ion-icon name="sync-outline"></ion-icon>Parsed</li>
+            <li><ion-icon name="sync-outline"></ion-icon>Labeled</li>
+        </ul>
     </ion-card-content>
 </ion-card>

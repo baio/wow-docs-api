@@ -7,11 +7,11 @@ import {
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Doc } from '../../models';
 import { selectDoc } from '../../ngrx/selectors';
 
 export interface UploadImageModalView {
-    id: string;
-    img: string;
+    doc: Doc;
 }
 
 @Component({
@@ -31,8 +31,7 @@ export class AppUploadImageProgressWorkspaceComponent implements OnInit {
         console.log('111', this.documentId);
         this.view$ = this.store.select(selectDoc(this.documentId)).pipe(
             map((doc) => ({
-                id: doc.id,
-                img: doc.imgBase64,
+                doc,
             }))
         );
     }
