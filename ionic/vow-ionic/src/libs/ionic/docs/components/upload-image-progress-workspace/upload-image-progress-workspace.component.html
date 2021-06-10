@@ -6,23 +6,35 @@
     <ion-card-content>
         <ul>
             <li>
-                <ion-icon
-                    name="sync-outline"
-                    *ngIf="view.doc.upload.status === 'progress'"
-                ></ion-icon
-                ><ion-icon
-                    *ngIf="view.doc.upload.status === 'success'"
-                    name="checkmark-circle-outline"
-                ></ion-icon>
-                <ion-icon
-                    name="close-circle-outline"
-                    *ngIf="view.doc.upload.status === 'error'"
-                ></ion-icon
-                >Uploaded
+                <app-progress-item-state
+                    title="Uploaded"
+                    [state]="view.doc.upload.status"
+                ></app-progress-item-state>
             </li>
-            <li><ion-icon name="sync-outline"></ion-icon>Stored</li>
-            <li><ion-icon name="sync-outline"></ion-icon>Parsed</li>
-            <li><ion-icon name="sync-outline"></ion-icon>Labeled</li>
+            <li>
+                <app-progress-item-state
+                    title="Stored"
+                    [state]="nullableToState(view.doc.stored)"
+                ></app-progress-item-state>
+            </li>
+            <li>
+                <app-progress-item-state
+                    title="Parsed"
+                    [state]="nullableToState(view.doc.parsed)"
+                ></app-progress-item-state>
+            </li>
+            <li>
+                <app-progress-item-state
+                    title="Labeled"
+                    [state]="nullableToState(view.doc.labeled)"
+                ></app-progress-item-state>
+            </li>
+            <li>
+                <app-progress-item-state
+                    title="Formatted"
+                    [state]="nullableToState(view.doc.formatted)"
+                ></app-progress-item-state>
+            </li>
         </ul>
     </ion-card-content>
 </ion-card>

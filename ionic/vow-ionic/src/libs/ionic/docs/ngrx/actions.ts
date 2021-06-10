@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { DocState } from '../models';
 
 export const uploadImage = createAction(
     '[Docs] Upload Image',
@@ -11,3 +12,8 @@ export const uploadImageSuccess = createAction(
 );
 
 export const uploadImageError = createAction('[Docs] Upload Image Error');
+
+export const updateDocState = createAction(
+    '[Docs] Update Doc State',
+    props<{ id: string; docState: DocState }>()
+);

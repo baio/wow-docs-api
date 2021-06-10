@@ -1,0 +1,9 @@
+<ng-container [ngSwitch]="state">
+    <ion-icon name="sync-outline" *ngSwitchCase="'progress'"></ion-icon
+    ><ion-icon
+        *ngSwitchCase="'success'"
+        name="checkmark-circle-outline"
+    ></ion-icon>
+    <ion-icon name="close-circle-outline" *ngSwitchCase="'error'"></ion-icon
+    >{{ title }}
+</ng-container>

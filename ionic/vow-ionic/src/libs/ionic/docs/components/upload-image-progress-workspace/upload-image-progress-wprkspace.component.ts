@@ -28,11 +28,14 @@ export class AppUploadImageProgressWorkspaceComponent implements OnInit {
     constructor(private readonly store: Store) {}
 
     ngOnInit() {
-        console.log('111', this.documentId);
         this.view$ = this.store.select(selectDoc(this.documentId)).pipe(
             map((doc) => ({
                 doc,
             }))
         );
+    }
+
+    nullableToState(obj?: any) {
+        return obj ? 'success' : 'progress';
     }
 }
