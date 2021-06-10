@@ -18,7 +18,7 @@ import {
     uploadImageSuccess,
 } from './actions';
 import { ModalController } from '@ionic/angular';
-import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-wprkspace.component';
+import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 
 @Injectable()
 export class DocsEffects {
@@ -45,7 +45,7 @@ export class DocsEffects {
             switchMap(({ id }) => {
                 // poll every 3 seconds 5 times or till state completed
                 const stop$ = new Subject();
-                return timer(1000, 1000).pipe(
+                return timer(100, 100).pipe(
                     takeUntil(stop$),
                     take(5),
                     switchMap(() => this.docsDataAccess.getDocumentState(id)),
@@ -77,7 +77,9 @@ export class DocsEffects {
                             documentId: id,
                         },
                     });
-                    return await modal.present();
+                    await modal.present();
+                    const { data } = await modal.onWillDismiss();
+                    console.log('!!!', data);
                 })
             ),
         { dispatch: false }

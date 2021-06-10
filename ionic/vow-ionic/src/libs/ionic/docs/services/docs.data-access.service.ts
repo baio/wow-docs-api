@@ -6,11 +6,11 @@ import { DocState } from '../models';
 @Injectable()
 export class DocsDataAccessService {
     uploadImage(id: string, file: File) {
-        return timer(5000).pipe(mapTo(null));
+        return timer(50).pipe(mapTo(null));
     }
 
     getDocumentState(id: string) {
-        return timer(1000).pipe(
+        return timer(100).pipe(
             mapTo({
                 stored: {
                     provider: 'yandex',

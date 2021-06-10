@@ -1,9 +1,14 @@
 <ng-container [ngSwitch]="state">
-    <ion-icon name="sync-outline" *ngSwitchCase="'progress'"></ion-icon
-    ><ion-icon
-        *ngSwitchCase="'success'"
-        name="checkmark-circle-outline"
-    ></ion-icon>
-    <ion-icon name="close-circle-outline" *ngSwitchCase="'error'"></ion-icon
-    >{{ title }}
+    <ion-chip color="dark" *ngSwitchCase="'progress'">
+        <ion-icon name="hourglass-outline"></ion-icon>
+        <ion-label>{{ title }}</ion-label>
+    </ion-chip>
+    <ion-chip color="success" *ngSwitchCase="'success'">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <ion-label>{{ title }}</ion-label>
+    </ion-chip>
+    <ion-chip color="danger" *ngSwitchCase="'error'">
+        <ion-icon name="close-circle-outline"></ion-icon>
+        <ion-label>{{ title }}</ion-label>
+    </ion-chip>
 </ng-container>

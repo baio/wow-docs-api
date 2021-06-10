@@ -1,40 +1,60 @@
 <ion-card *ngIf="view$ | async as view">
-    <img [src]="view.doc.imgBase64" />
-    <ion-card-header>
-        <ion-card-subtitle>Uploading</ion-card-subtitle>
-    </ion-card-header>
+    <img class="doc-image" [src]="view.doc.imgBase64" />
     <ion-card-content>
-        <ul>
-            <li>
+        <ion-list>
+            <ion-item>
+                <ion-label position="floating">Тип документа</ion-label>
+                <ion-select
+                    okText="Выбрать"
+                    cancelText="Закрыть"
+                    interface="action-sheet"
+                    #docTypeSelect
+                >
+                    <ion-select-option value="passport"
+                        >Пасспорт</ion-select-option
+                    >
+                    <ion-select-option value="foreign-passport"
+                        >Загран пасспорт</ion-select-option
+                    >
+                    <ion-select-option value="deriver-license"
+                        >Водительские права</ion-select-option
+                    >
+                    <ion-select-option value="visa">Виза</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-textarea placeholder="Коментарий"></ion-textarea>
+            </ion-item>
+            <ion-item>
                 <app-progress-item-state
-                    title="Uploaded"
+                    title="Загрузка"
                     [state]="view.doc.upload.status"
-                ></app-progress-item-state>
-            </li>
-            <li>
+                >
+                </app-progress-item-state>
                 <app-progress-item-state
-                    title="Stored"
+                    title="Сохранение"
                     [state]="nullableToState(view.doc.stored)"
-                ></app-progress-item-state>
-            </li>
-            <li>
+                >
+                </app-progress-item-state>
                 <app-progress-item-state
-                    title="Parsed"
+                    title="Получение текста"
                     [state]="nullableToState(view.doc.parsed)"
-                ></app-progress-item-state>
-            </li>
-            <li>
+                >
+                </app-progress-item-state>
                 <app-progress-item-state
-                    title="Labeled"
+                    title="Определение типа"
                     [state]="nullableToState(view.doc.labeled)"
-                ></app-progress-item-state>
-            </li>
-            <li>
+                >
+                </app-progress-item-state>
                 <app-progress-item-state
-                    title="Formatted"
+                    title="Текст документа"
                     [state]="nullableToState(view.doc.formatted)"
-                ></app-progress-item-state>
-            </li>
-        </ul>
+                >
+                </app-progress-item-state>
+            </ion-item>
+        </ion-list>
     </ion-card-content>
 </ion-card>
+<ion-button color="primary" expand="block" (click)="onContinue()"
+    >Продолжить</ion-button
+>
