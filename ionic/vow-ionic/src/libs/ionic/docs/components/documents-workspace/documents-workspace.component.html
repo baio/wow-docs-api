@@ -1,3 +1,20 @@
-<ion-fab style="margin-bottom: 80px;" slot="fixed" vertical="bottom" horizontal="end">
-    <app-upload-image-button (fileSelected)="onFileSelected($event)"></app-upload-image-button>
+<ion-grid *ngIf="view$ | async as view">
+    <ion-row *ngFor="let row of view.rows; trackBy: trackByRow">
+        <ion-col size="6">
+            <ion-img *ngIf="row.first" [src]="row.first.imgBase64"></ion-img>
+        </ion-col>
+        <ion-col size="6">
+            <ion-img *ngIf="row.second" [src]="row.second.imgBase64"></ion-img>
+        </ion-col>
+    </ion-row>
+</ion-grid>
+<ion-fab
+    style="margin-bottom: 80px"
+    slot="fixed"
+    vertical="bottom"
+    horizontal="end"
+>
+    <app-upload-image-button
+        (fileSelected)="onFileSelected($event)"
+    ></app-upload-image-button>
 </ion-fab>

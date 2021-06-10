@@ -18,7 +18,7 @@ export class AppUploadImageButtonComponent {
     constructor(private readonly imageService: ImageService) {}
 
     async onFileSelected(file: File) {
-        const result = await this.imageService.resizeImageMax(file, 1500);
+        const result = await this.imageService.resizeImageMax(file, 250);
         this.fileSelected.emit(result);
     }
 }
