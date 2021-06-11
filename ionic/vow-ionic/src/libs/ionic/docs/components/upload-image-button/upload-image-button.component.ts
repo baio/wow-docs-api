@@ -13,12 +13,12 @@ import { ImageService } from '../../services/image.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppUploadImageButtonComponent {
-    @Output() fileSelected = new EventEmitter<{ file: File; base64: string }>();
+    @Output() fileSelected = new EventEmitter<File>();
 
     constructor(private readonly imageService: ImageService) {}
 
     async onFileSelected(file: File) {
-        const result = await this.imageService.resizeImageMax(file, 250);
-        this.fileSelected.emit(result);
+        //const result = await this.imageService.resizeImageMax(file, 250);
+        this.fileSelected.emit(file);
     }
 }

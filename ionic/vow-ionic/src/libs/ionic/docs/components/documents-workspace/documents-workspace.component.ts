@@ -37,11 +37,15 @@ export class AppDocumentsWorkspaceComponent {
         this.view$ = rows$.pipe(map((rows) => ({ rows })));
     }
 
-    onFileSelected({ file, base64 }: { file: File; base64: string }) {
+    onFileSelected(file: File) {
         const id = v4();
         this.store.dispatch(
-            uploadImage({ id, file, base64, date: new Date().toUTCString() })
+            uploadImage({ id, file, date: new Date().toUTCString() })
         );
+    }
+
+    onDockClicked(doc: Doc) {
+        console.log('+++ doc clicked', doc);
     }
 
     trackByRow(_, row: DocsRow) {

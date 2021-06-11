@@ -1,31 +1,34 @@
 import { Injectable } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { NEVER, of, Subject, timer } from 'rxjs';
+import { of, Subject, timer } from 'rxjs';
 import {
     catchError,
     map,
     mapTo,
     switchMap,
-    tap,
     take,
     takeUntil,
+    tap,
 } from 'rxjs/operators';
+import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
+import { ImageService } from '../services/image.service';
 import {
+    setImageBase64,
     updateDocState,
     uploadImage,
     uploadImageError,
     uploadImageSuccess,
 } from './actions';
-import { ModalController } from '@ionic/angular';
-import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 
 @Injectable()
 export class DocsEffects {
     constructor(
         private readonly actions$: Actions,
         private readonly docsDataAccess: DocsDataAccessService,
-        private readonly modalController: ModalController
+        private readonly modalController: ModalController,
+        private readonly imageService: ImageService
     ) {}
 
     uploadImageRequest$ = createEffect(() =>
@@ -36,6 +39,19 @@ export class DocsEffects {
             ),
             map((id) => uploadImageSuccess({ id })),
             catchError((_) => of(uploadImageError()))
+        )
+    );
+
+    uploadImageSetBase64$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(uploadImage),
+            switchMap(async ({ id, file }) => {
+                const { base64 } = await this.imageService.resizeImageMax(
+                    file,
+                    200
+                );
+                return setImageBase64({ id, base64 });
+            })
         )
     );
 

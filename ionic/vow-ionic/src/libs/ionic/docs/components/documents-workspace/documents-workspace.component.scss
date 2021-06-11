@@ -2,6 +2,10 @@ ion-col {
     max-height: 150px;
 }
 
+ion-skeleton-text {
+    height: 150px;
+}
+
 ion-img {
     display: initial!important;
     object-fit: cover;
