@@ -48,7 +48,7 @@ export class DocsEffects {
             switchMap(async ({ id, file }) => {
                 const { base64 } = await this.imageService.resizeImageMax(
                     file,
-                    200
+                    250
                 );
                 return setImageBase64({ id, base64 });
             })

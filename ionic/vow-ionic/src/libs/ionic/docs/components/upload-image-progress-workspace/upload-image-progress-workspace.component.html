@@ -1,15 +1,5 @@
 <ion-card *ngIf="view$ | async as view">
-    <img
-        class="doc-image"
-        *ngIf="view.doc.imgBase64 as imgBase64; else imageSkeleton"
-        [src]="imgBase64"
-    />
-    <ng-template #imageSkeleton>
-        <ion-skeleton-text
-            class="doc-image-placeholder"
-            animated
-        ></ion-skeleton-text>
-    </ng-template>
+    <app-doc-image [doc]="view.doc"></app-doc-image>
     <ion-card-content>
         <ion-list>
             <ion-item>

@@ -1,24 +1,13 @@
 <ion-grid *ngIf="view$ | async as view">
     <ion-row *ngFor="let row of view.rows; trackBy: trackByRow">
         <ion-col size="6">
-            <ng-container
-                *ngIf="row.first.imgBase64 as imgBase64; else imageSkeleton"
-            >
-                <ion-img
-                    [src]="imgBase64"
-                    (click)="onDockClicked(row.first)"
-                ></ion-img>
-            </ng-container>
-            <ng-template #imageSkeleton>
-                <ion-skeleton-text animated></ion-skeleton-text>
-            </ng-template>
+            <app-doc-image [doc]="row.first"></app-doc-image>
         </ion-col>
         <ion-col size="6">
-            <ion-img
+            <app-doc-image
                 *ngIf="row.second"
-                [src]="row.second.imgBase64"
-                (click)="onDockClicked(row.second)"
-            ></ion-img>
+                [doc]="row.second"
+            ></app-doc-image>
         </ion-col>
     </ion-row>
 </ion-grid>
