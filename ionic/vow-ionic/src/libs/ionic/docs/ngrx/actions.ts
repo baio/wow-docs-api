@@ -3,7 +3,7 @@ import { DocState } from '../models';
 
 export const uploadImage = createAction(
     '[Docs] Upload Image',
-    props<{ id: string; file: File; date: string }>()
+    props<{ id: string; base64: string; date: string }>()
 );
 
 export const setImageBase64 = createAction(

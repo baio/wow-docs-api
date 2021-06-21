@@ -34,26 +34,22 @@ export class DocsEffects {
     uploadImageRequest$ = createEffect(() =>
         this.actions$.pipe(
             ofType(uploadImage),
-            switchMap(({ id, file }) =>
-                this.docsDataAccess.uploadImage(id, file).pipe(mapTo(id))
+            switchMap(({ id, base64 }) =>
+                this.docsDataAccess.uploadImage(id, base64).pipe(mapTo(id))
             ),
             map((id) => uploadImageSuccess({ id })),
             catchError((_) => of(uploadImageError()))
         )
     );
 
+    /*
     uploadImageSetBase64$ = createEffect(() =>
         this.actions$.pipe(
             ofType(uploadImage),
-            switchMap(async ({ id, file }) => {
-                const { base64 } = await this.imageService.resizeImageMax(
-                    file,
-                    250
-                );
-                return setImageBase64({ id, base64 });
-            })
+            map(({ id, base64 }) => setImageBase64({ id, base64 }))
         )
     );
+    */
 
     pollDocState$ = createEffect(() =>
         this.actions$.pipe(
@@ -95,7 +91,6 @@ export class DocsEffects {
                     });
                     await modal.present();
                     const { data } = await modal.onWillDismiss();
-                    console.log('!!!', data);
                 })
             ),
         { dispatch: false }

@@ -5,7 +5,7 @@ import { DocState } from '../models';
 
 @Injectable()
 export class DocsDataAccessService {
-    uploadImage(id: string, file: File) {
+    uploadImage(id: string, base64: string) {
         return timer(50).pipe(mapTo(null));
     }
 

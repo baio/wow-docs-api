@@ -37,10 +37,10 @@ export class AppDocumentsWorkspaceComponent {
         this.view$ = rows$.pipe(map((rows) => ({ rows })));
     }
 
-    onFileSelected(file: File) {
+    onFileSelected(base64: string) {
         const id = v4();
         this.store.dispatch(
-            uploadImage({ id, file, date: new Date().toUTCString() })
+            uploadImage({ id, base64, date: new Date().toUTCString() })
         );
     }
 
