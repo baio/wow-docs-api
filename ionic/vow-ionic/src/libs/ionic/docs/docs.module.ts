@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { DbModule } from '../db/db.module';
+import { AppDocEditWorkspaceComponent } from './components/doc-edit-workspace/doc-edit-workspace.component';
 import { AppDocImageComponent } from './components/doc-image/doc-image.component';
 import { AppDocumentsWorkspaceComponent } from './components/documents-workspace/documents-workspace.component';
 import { AppProgressItemStateComponent } from './components/progress-item-state/progress-item-state.component';
@@ -29,8 +30,9 @@ import { ImageService } from './services/image.service';
         AppUploadImageProgressWorkspaceComponent,
         AppProgressItemStateComponent,
         AppDocImageComponent,
+        AppDocEditWorkspaceComponent,
     ],
     providers: [DocsDataAccessService, ImageService, DocsRepositoryService],
-    exports: [AppDocumentsWorkspaceComponent],
+    exports: [AppDocumentsWorkspaceComponent, AppDocEditWorkspaceComponent],
 })
 export class AppDocsModule {}

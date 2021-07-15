@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { DbService } from '../../db';
-import { Doc } from '../models';
+import { Doc, DocState } from '../models';
 
 @Injectable()
 export class DocsRepositoryService {
@@ -13,6 +12,21 @@ export class DocsRepositoryService {
         const values = [id, imgBase64];
         const res = await this.db.runCommand(sqlcmd, values);
         console.log('$$$ addDoc result', res);
+    }
+
+    async updateDocState(id: string, docState: DocState) {
+        // add one user with statement and values
+        const sqlcmd =
+            'UPDATE docs SET docStoredProvider = ?, docStoredUrl = ?, docParsedWords = ?, docLabeledLabel = ? WHERE id = ?';
+        const values = [
+            docState.stored?.provider,
+            docState.stored?.url,
+            docState.parsed?.words && docState.parsed?.words.join(','),
+            docState.labeled?.label,
+            id,
+        ];
+        const res = await this.db.runCommand(sqlcmd, values);
+        console.log('$$$ updateDocState result', res);
     }
 
     async getDocs() {

@@ -25,8 +25,12 @@ export const uploadImageSuccess = createAction(
 
 export const uploadImageError = createAction('[Docs] Upload Image Error');
 
-
 export const updateDocState = createAction(
     '[Docs] Update Doc State',
     props<{ id: string; docState: DocState }>()
+);
+
+export const editDoc = createAction(
+    '[Docs] Edit Doc',
+    props<{ id: string }>()
 );

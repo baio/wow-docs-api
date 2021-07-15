@@ -1,12 +1,16 @@
 <ion-grid *ngIf="view$ | async as view">
     <ion-row *ngFor="let row of view.rows; trackBy: trackByRow">
         <ion-col size="6">
-            <app-doc-image [doc]="row.first"></app-doc-image>
+            <app-doc-image
+                [doc]="row.first"
+                (click)="onDocClick(row.first)"
+            ></app-doc-image>
         </ion-col>
         <ion-col size="6">
             <app-doc-image
                 *ngIf="row.second"
                 [doc]="row.second"
+                (click)="onDocClick(row.second)"
             ></app-doc-image>
         </ion-col>
     </ion-row>

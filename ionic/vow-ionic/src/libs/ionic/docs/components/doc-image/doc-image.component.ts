@@ -6,7 +6,6 @@ import {
     Output,
 } from '@angular/core';
 import { Doc } from '../../models';
-import { ImageService } from '../../services/image.service';
 
 @Component({
     selector: 'app-doc-image',

@@ -8,7 +8,6 @@ import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 export class DbService {
     private db: SQLiteDBConnection;
     constructor(private readonly sqLite: SqLiteService) {
-        console.log('+++');
     }
 
     async init() {
@@ -16,6 +15,7 @@ export class DbService {
             throw new Error('Db is already initialized');
         }
         const dbName = 'testEncryption';
+        await this.sqLite.deleteOldDatabases();
         await this.sqLite.checkConnectionsConsistency();
         this.db = await this.sqLite.createConnection(
             dbName,

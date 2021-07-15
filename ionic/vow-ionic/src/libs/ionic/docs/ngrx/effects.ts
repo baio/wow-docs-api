@@ -11,11 +11,13 @@ import {
     takeUntil,
     tap,
 } from 'rxjs/operators';
+import { AppDocEditWorkspaceComponent } from '../components/doc-edit-workspace/doc-edit-workspace.component';
 import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
 import { ImageService } from '../services/image.service';
 import {
+    editDoc,
     rehydrateDocs,
     rehydrateDocsSuccess,
     setImageBase64,
@@ -64,14 +66,16 @@ export class DocsEffects {
         { dispatch: false }
     );
 
-    /*
-    uploadImageSetBase64$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(uploadImage),
-            map(({ id, base64 }) => setImageBase64({ id, base64 }))
-        )
+    updateDocDb$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(uploadImage),
+                switchMap(({ id, base64 }) =>
+                    this.docRepository.addDoc(id, base64)
+                )
+            ),
+        { dispatch: false }
     );
-    */
 
     pollDocState$ = createEffect(() =>
         this.actions$.pipe(
@@ -100,13 +104,13 @@ export class DocsEffects {
         )
     );
 
-    uploadImageShowProgressModal$ = createEffect(
+    docEditShowModal$ = createEffect(
         () =>
             this.actions$.pipe(
-                ofType(uploadImage),
+                ofType(uploadImage, editDoc),
                 tap(async ({ id }) => {
                     const modal = await this.modalController.create({
-                        component: AppUploadImageProgressWorkspaceComponent,
+                        component: AppDocEditWorkspaceComponent,
                         componentProps: {
                             documentId: id,
                         },
@@ -114,6 +118,17 @@ export class DocsEffects {
                     await modal.present();
                     const { data } = await modal.onWillDismiss();
                 })
+            ),
+        { dispatch: false }
+    );
+
+    updateDocState$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(updateDocState),
+                tap(({ id, docState }) =>
+                    this.docRepository.updateDocState(id, docState)
+                )
             ),
         { dispatch: false }
     );
