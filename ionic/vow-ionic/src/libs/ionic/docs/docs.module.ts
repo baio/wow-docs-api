@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { DbModule } from '../db/db.module';
 import { AppDocImageComponent } from './components/doc-image/doc-image.component';
 import { AppDocumentsWorkspaceComponent } from './components/documents-workspace/documents-workspace.component';
 import { AppProgressItemStateComponent } from './components/progress-item-state/progress-item-state.component';
@@ -10,6 +11,7 @@ import { AppUploadImageButtonComponent } from './components/upload-image-button/
 import { AppUploadImageProgressWorkspaceComponent } from './components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 import { DocsEffects } from './ngrx/effects';
 import { docsReducer } from './ngrx/reducer';
+import { DocsRepositoryService } from './repository/docs.repository';
 import { DocsDataAccessService } from './services/docs.data-access.service';
 import { ImageService } from './services/image.service';
 
@@ -19,6 +21,7 @@ import { ImageService } from './services/image.service';
         CommonModule,
         StoreModule.forFeature('docs', docsReducer),
         EffectsModule.forFeature([DocsEffects]),
+        DbModule,
     ],
     declarations: [
         AppDocumentsWorkspaceComponent,
@@ -27,7 +30,7 @@ import { ImageService } from './services/image.service';
         AppProgressItemStateComponent,
         AppDocImageComponent,
     ],
-    providers: [DocsDataAccessService, ImageService],
+    providers: [DocsDataAccessService, ImageService, DocsRepositoryService],
     exports: [AppDocumentsWorkspaceComponent],
 })
 export class AppDocsModule {}

@@ -1,5 +1,12 @@
 import { createAction, props } from '@ngrx/store';
-import { DocState } from '../models';
+import { Doc, DocState } from '../models';
+
+export const rehydrateDocs = createAction('[Docs] Rehydrate Docs');
+
+export const rehydrateDocsSuccess = createAction(
+    '[Docs] Rehydrate Docs Success',
+    props<{ docs: Doc[] }>()
+);
 
 export const uploadImage = createAction(
     '[Docs] Upload Image',
@@ -17,6 +24,7 @@ export const uploadImageSuccess = createAction(
 );
 
 export const uploadImageError = createAction('[Docs] Upload Image Error');
+
 
 export const updateDocState = createAction(
     '[Docs] Update Doc State',

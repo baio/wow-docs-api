@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { chunk } from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { Doc } from '../../models';
-import { uploadImage } from '../../ngrx/actions';
+import { rehydrateDocs, uploadImage } from '../../ngrx/actions';
 import { selectDocs, selectDocsAsSortedList } from '../../ngrx/selectors';
 
 export interface DocsRow {
@@ -23,7 +23,7 @@ export interface DocumentsWorkspaceView {
     styleUrls: ['documents-workspace.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppDocumentsWorkspaceComponent {
+export class AppDocumentsWorkspaceComponent implements OnInit {
     readonly view$: Observable<DocumentsWorkspaceView>;
 
     constructor(private readonly store: Store) {
@@ -35,6 +35,10 @@ export class AppDocumentsWorkspaceComponent {
                 )
             );
         this.view$ = rows$.pipe(map((rows) => ({ rows })));
+    }
+
+    ngOnInit() {
+        setTimeout(() => this.store.dispatch(rehydrateDocs()), 1000);
     }
 
     onFileSelected(base64: string) {

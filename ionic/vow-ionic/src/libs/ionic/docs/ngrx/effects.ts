@@ -12,9 +12,12 @@ import {
     tap,
 } from 'rxjs/operators';
 import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
+import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
 import { ImageService } from '../services/image.service';
 import {
+    rehydrateDocs,
+    rehydrateDocsSuccess,
     setImageBase64,
     updateDocState,
     uploadImage,
@@ -28,8 +31,16 @@ export class DocsEffects {
         private readonly actions$: Actions,
         private readonly docsDataAccess: DocsDataAccessService,
         private readonly modalController: ModalController,
-        private readonly imageService: ImageService
+        private readonly docRepository: DocsRepositoryService
     ) {}
+
+    loadDocs$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(rehydrateDocs),
+            switchMap(() => this.docRepository.getDocs()),
+            map((docs) => rehydrateDocsSuccess({ docs }))
+        )
+    );
 
     uploadImageRequest$ = createEffect(() =>
         this.actions$.pipe(
@@ -40,6 +51,17 @@ export class DocsEffects {
             map((id) => uploadImageSuccess({ id })),
             catchError((_) => of(uploadImageError()))
         )
+    );
+
+    storeToDb$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(uploadImage),
+                switchMap(({ id, base64 }) =>
+                    this.docRepository.addDoc(id, base64)
+                )
+            ),
+        { dispatch: false }
     );
 
     /*

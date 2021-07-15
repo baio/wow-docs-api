@@ -7,7 +7,9 @@ import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 @Injectable()
 export class DbService {
     private db: SQLiteDBConnection;
-    constructor(private readonly sqLite: SqLiteService) {}
+    constructor(private readonly sqLite: SqLiteService) {
+        console.log('+++');
+    }
 
     async init() {
         if (this.db) {
@@ -40,11 +42,11 @@ export class DbService {
         }
     }
 
-    async addDoc(id: string, imgBase64: string) {
-        // add one user with statement and values
-        const sqlcmd = 'INSERT INTO users (id,imgBase64) VALUES (?,?)';
-        const values = [id, imgBase64];
-        const res = await this.db.run(sqlcmd, values);
-        console.log('$$$ addDoc result', res);
+    runCommand(command: string, params: any[]) {
+        return this.db.run(command, params);
+    }
+
+    runQuery(command: string) {
+        return this.db.query(command);
     }
 }

@@ -6,7 +6,6 @@ import { DbService, SqLiteService } from 'src/libs/ionic/db';
     selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss'],
-    providers: [SqLiteService, DbService],
 })
 export class AppComponent implements OnDestroy {
     constructor(
