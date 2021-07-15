@@ -1,60 +1,62 @@
-<ion-card *ngIf="view$ | async as view">
-    <app-doc-image [doc]="view.doc"></app-doc-image>
-    <ion-card-content>
-        <ion-list>
-            <ion-item>
-                <ion-label position="floating">Тип документа</ion-label>
-                <ion-select
-                    okText="Выбрать"
-                    cancelText="Закрыть"
-                    interface="action-sheet"
-                    #docTypeSelect
-                >
-                    <ion-select-option value="passport"
-                        >Пасспорт</ion-select-option
+<ng-container *ngIf="view$ | async as view">
+    <ion-card>
+        <app-doc-image [doc]="view.doc"></app-doc-image>
+        <ion-card-content>
+            <ion-list>
+                <ion-item>
+                    <ion-label position="floating">Тип документа</ion-label>
+                    <ion-select
+                        okText="Выбрать"
+                        cancelText="Закрыть"
+                        interface="action-sheet"
+                        #docTypeSelect
                     >
-                    <ion-select-option value="foreign-passport"
-                        >Загран пасспорт</ion-select-option
-                    >
-                    <ion-select-option value="deriver-license"
-                        >Водительские права</ion-select-option
-                    >
-                    <ion-select-option value="visa">Виза</ion-select-option>
-                </ion-select>
-            </ion-item>
-            <ion-item>
-                <ion-textarea placeholder="Коментарий"></ion-textarea>
-            </ion-item>
-            <ion-item>
-                <app-progress-item-state
-                    title="Загрузка"
-                    [state]="view.doc.upload.status"
-                >
-                </app-progress-item-state>
-                <app-progress-item-state
-                    title="Сохранение"
-                    [state]="nullableToState(view.doc.stored)"
-                >
-                </app-progress-item-state>
-                <app-progress-item-state
-                    title="Получение текста"
-                    [state]="nullableToState(view.doc.parsed)"
-                >
-                </app-progress-item-state>
-                <app-progress-item-state
-                    title="Определение типа"
-                    [state]="nullableToState(view.doc.labeled)"
-                >
-                </app-progress-item-state>
-                <app-progress-item-state
-                    title="Текст документа"
-                    [state]="nullableToState(view.doc.formatted)"
-                >
-                </app-progress-item-state>
-            </ion-item>
-        </ion-list>
-    </ion-card-content>
-</ion-card>
-<ion-button color="primary" expand="block" (click)="onContinue()"
-    >Продолжить</ion-button
->
+                        <ion-select-option value="passport"
+                            >Пасспорт</ion-select-option
+                        >
+                        <ion-select-option value="foreign-passport"
+                            >Загран пасспорт</ion-select-option
+                        >
+                        <ion-select-option value="deriver-license"
+                            >Водительские права</ion-select-option
+                        >
+                        <ion-select-option value="visa">Виза</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-textarea placeholder="Коментарий"></ion-textarea>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+    <ion-button color="danger" expand="block" (click)="onDelete(view.doc)"
+        >Удалить</ion-button
+    >
+
+    <!--
+<ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="schedule">
+        <ion-icon name="calendar"></ion-icon>
+        <ion-label>Schedule</ion-label>
+        <ion-badge>6</ion-badge>
+      </ion-tab-button>
+  
+      <ion-tab-button tab="speakers">
+        <ion-icon name="person-circle"></ion-icon>
+        <ion-label>Speakers</ion-label>
+      </ion-tab-button>
+  
+      <ion-tab-button tab="map">
+        <ion-icon name="map"></ion-icon>
+        <ion-label>Map</ion-label>
+      </ion-tab-button>
+  
+      <ion-tab-button tab="about">
+        <ion-icon name="information-circle"></ion-icon>
+        <ion-label>About</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+-->
+</ng-container>

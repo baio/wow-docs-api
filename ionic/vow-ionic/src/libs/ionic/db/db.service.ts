@@ -15,7 +15,7 @@ export class DbService {
             throw new Error('Db is already initialized');
         }
         const dbName = 'testEncryption';
-        await this.sqLite.deleteOldDatabases();
+        
         await this.sqLite.checkConnectionsConsistency();
         this.db = await this.sqLite.createConnection(
             dbName,
@@ -24,6 +24,7 @@ export class DbService {
             1
         );
 
+        // await this.db.delete();
         // open db testEncryption
         await this.db.open();
 

@@ -16,8 +16,7 @@ export class DocsRepositoryService {
 
     async updateDocState(id: string, docState: DocState) {
         // add one user with statement and values
-        const sqlcmd =
-            'UPDATE docs SET docStoredProvider = ?, docStoredUrl = ?, docParsedWords = ?, docLabeledLabel = ? WHERE id = ?';
+        const sqlcmd = `UPDATE docs SET docStoredProvider = ?, docStoredUrl = ?, docParsedWords = ?, docLabeledLabel = ? WHERE id = ?`;
         const values = [
             docState.stored?.provider,
             docState.stored?.url,
@@ -25,8 +24,17 @@ export class DocsRepositoryService {
             docState.labeled?.label,
             id,
         ];
+
         const res = await this.db.runCommand(sqlcmd, values);
         console.log('$$$ updateDocState result', res);
+    }
+
+    async deleteDoc(id: string) {
+        // add one user with statement and values
+        const sqlcmd = 'DELETE FROM docs WHERE id = ?';
+        const values = [id];
+        const res = await this.db.runCommand(sqlcmd, values);
+        console.log('$$$ deleteDoc result', res);
     }
 
     async getDocs() {
@@ -42,6 +50,22 @@ export class DocsRepositoryService {
                     imgBase64: m.imgBase64,
                     date: new Date().toISOString(),
                     upload: {},
+                    stored: m.docStoredProvider
+                        ? {
+                              provider: m.docStoredProvider,
+                              url: m.docStoredUrl,
+                          }
+                        : null,
+                    parsed: m.docParsedWords
+                        ? {
+                              words: m.docParsedWords.split(','),
+                          }
+                        : null,
+                    labeled: m.docLabeledLabel
+                        ? {
+                              label: m.docLabeledLabel,
+                          }
+                        : null,
                 } as Doc)
         );
     }

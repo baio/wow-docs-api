@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { fromPairs } from 'lodash';
-import { assocPath } from 'lodash/fp';
+import { assocPath, fromPairs, omit } from 'lodash/fp';
 import { DocsState } from '../models';
 import {
+    deleteDoc,
     rehydrateDocsSuccess,
     setImageBase64,
     updateDocState,
@@ -35,5 +35,8 @@ export const docsReducer = createReducer(
     on(rehydrateDocsSuccess, (state, { docs }) => {
         const hash = fromPairs(docs.map((m) => [m.id, m]));
         return assocPath(['docs'], hash, state);
-    })
+    }),
+    on(deleteDoc, (state, { id }) =>
+        assocPath(['docs'], omit(id, state.docs), state)
+    )
 );

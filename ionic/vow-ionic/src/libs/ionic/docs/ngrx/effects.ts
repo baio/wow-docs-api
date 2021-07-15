@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of, Subject, timer } from 'rxjs';
@@ -15,12 +16,11 @@ import { AppDocEditWorkspaceComponent } from '../components/doc-edit-workspace/d
 import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
-import { ImageService } from '../services/image.service';
 import {
+    deleteDoc,
     editDoc,
     rehydrateDocs,
     rehydrateDocsSuccess,
-    setImageBase64,
     updateDocState,
     uploadImage,
     uploadImageError,
@@ -33,7 +33,8 @@ export class DocsEffects {
         private readonly actions$: Actions,
         private readonly docsDataAccess: DocsDataAccessService,
         private readonly modalController: ModalController,
-        private readonly docRepository: DocsRepositoryService
+        private readonly docRepository: DocsRepositoryService,
+        private readonly router: Router
     ) {}
 
     loadDocs$ = createEffect(() =>
@@ -56,17 +57,6 @@ export class DocsEffects {
     );
 
     storeToDb$ = createEffect(
-        () =>
-            this.actions$.pipe(
-                ofType(uploadImage),
-                switchMap(({ id, base64 }) =>
-                    this.docRepository.addDoc(id, base64)
-                )
-            ),
-        { dispatch: false }
-    );
-
-    updateDocDb$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(uploadImage),
@@ -104,11 +94,31 @@ export class DocsEffects {
         )
     );
 
-    docEditShowModal$ = createEffect(
+    newDocShowModal$ = createEffect(
         () =>
             this.actions$.pipe(
-                ofType(uploadImage, editDoc),
+                ofType(uploadImage),
                 tap(async ({ id }) => {
+                    const modal = await this.modalController.create({
+                        component: AppUploadImageProgressWorkspaceComponent,
+                        componentProps: {
+                            documentId: id,
+                        },
+                    });
+                    await modal.present();
+                    const { data } = await modal.onWillDismiss();
+                })
+            ),
+        { dispatch: false }
+    );
+
+    editDocShowModal$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(editDoc),
+                tap(async ({ id }) => {
+                    //this.router.navigate(['/tabs', 'docs', id]);
+
                     const modal = await this.modalController.create({
                         component: AppDocEditWorkspaceComponent,
                         componentProps: {
@@ -129,6 +139,18 @@ export class DocsEffects {
                 tap(({ id, docState }) =>
                     this.docRepository.updateDocState(id, docState)
                 )
+            ),
+        { dispatch: false }
+    );
+
+    deleteDoc$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(deleteDoc),
+                tap(({ id }) => {
+                    this.router.navigate(['/tabs', 'docs']);
+                    this.docRepository.deleteDoc(id);
+                })
             ),
         { dispatch: false }
     );

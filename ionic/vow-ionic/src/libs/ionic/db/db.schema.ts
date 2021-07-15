@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS docs (
 );
 CREATE TABLE IF NOT EXISTS parsedPassportDocs (
     id TEXT PRIMARY KEY NOT NULL,
-    firstName: TEXT,
-    issueDate: TEXT
+    firstName TEXT,
+    issueDate TEXT
 );
 
 PRAGMA user_version = 1;

@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { routes as docsRoutes } from '../tab1/tab1-routing.module';
 import { TabsPage } from './tabs.page';
-import { routes as tab1Routes } from '../tab1/tab1-routing.module';
 export const routes: Routes = [
     {
         path: 'tabs',
         component: TabsPage,
         children: [
             {
-                path: 'tab1',
-                children: tab1Routes,
+                path: 'docs',
+                children: docsRoutes,
                 //loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
             },
             {
@@ -24,14 +24,14 @@ export const routes: Routes = [
             },
             {
                 path: '',
-                redirectTo: '/tabs/tab1',
+                redirectTo: '/tabs/docs',
                 pathMatch: 'full',
             },
         ],
     },
     {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/docs',
         pathMatch: 'full',
     },
 ];

@@ -30,7 +30,9 @@ export const updateDocState = createAction(
     props<{ id: string; docState: DocState }>()
 );
 
-export const editDoc = createAction(
-    '[Docs] Edit Doc',
+export const editDoc = createAction('[Docs] Edit Doc', props<{ id: string }>());
+
+export const deleteDoc = createAction(
+    '[Docs] Delete Doc',
     props<{ id: string }>()
 );

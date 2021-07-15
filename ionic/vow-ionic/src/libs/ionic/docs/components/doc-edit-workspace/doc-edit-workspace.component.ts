@@ -7,11 +7,13 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { IonSelect, IonTextarea, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
-import { map, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Doc } from '../../models';
+import { deleteDoc } from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
 
 export interface UploadImageModalView {
@@ -37,12 +39,15 @@ export class AppDocEditWorkspaceComponent
 
     constructor(
         private readonly store: Store,
-        private readonly modalController: ModalController
+        private readonly modalController: ModalController,
+        private readonly activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
-        this.view$ = this.store.select(selectDoc(this.documentId)).pipe(
-            tap((doc) => console.log('+++', doc)),
+        const id$ = of(this.documentId); //this.activatedRoute.params.pipe(map(({ id }) => id));
+        this.view$ = id$.pipe(
+            switchMap((id) => this.store.select(selectDoc(id))),
+            tap((doc) => console.log('---', doc)),
             map((doc) => ({
                 doc,
             }))
@@ -72,7 +77,9 @@ export class AppDocEditWorkspaceComponent
         return obj ? 'success' : 'progress';
     }
 
-    onContinue() {
+    onDelete(doc: Doc) {
+        this.store.dispatch(deleteDoc({ id: doc.id }));
+
         this.modalController.dismiss({
             docType: this.docTypeSelect.value,
             comment: this.commentTextArea.value,
