@@ -20,12 +20,19 @@ export class DocsDataAccessService {
                     words: ['lol', 'kek'],
                 },
                 labeled: {
-                    label: 'passport',
+                    label: 'passport-rf-main-page',
                 },
                 formatted: {
-                    kind: 'doc-passport-formatted',
-                    name: 'max max',
-                    issueDate: '10/10/2021',
+                    kind: 'passport-rf-main-page',
+                    lastName: 'putilov',
+                    firstName: 'max',
+                    middleName: 'alexandrovich',
+                    identifier: '1111 123456',
+                    issuer: 'kek lol',
+                    issueDate: '11.03.1980',
+                    sex: 'male',
+                    dateOfBirth: '11.05.1980',
+                    placeOfBirth: 'russia',
                 },
             } as DocState)
         );

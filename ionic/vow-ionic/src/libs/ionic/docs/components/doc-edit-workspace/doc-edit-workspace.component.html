@@ -1,58 +1,25 @@
 <ng-container *ngIf="view$ | async as view">
-    <ion-content fullscreen>
-        <ion-list>
-            <ion-item>
-                <app-doc-image [doc]="view.doc"></app-doc-image>
-            </ion-item>
-            <ion-item>
-                <ion-segment
-                    [value]="segment"
-                    (ionChange)="onSegmentChanged($event)"
-                >
-                    <ion-segment-button value="main">
-                        <ion-label>Main</ion-label>
-                    </ion-segment-button>
-                    <ion-segment-button value="data">
-                        <ion-label>Data</ion-label>
-                    </ion-segment-button>
-                </ion-segment>
-            </ion-item>
-            <ng-container *ngIf="segment === 'main'">
-                <ion-item>
-                    <ion-label position="floating">Тип документа</ion-label>
-                    <ion-select
-                        okText="Выбрать"
-                        cancelText="Закрыть"
-                        interface="action-sheet"
-                        #docTypeSelect
-                    >
-                        <ion-select-option value="passport"
-                            >Пасспорт</ion-select-option
-                        >
-                        <ion-select-option value="foreign-passport"
-                            >Загран пасспорт</ion-select-option
-                        >
-                        <ion-select-option value="deriver-license"
-                            >Водительские права</ion-select-option
-                        >
-                        <ion-select-option value="visa">Виза</ion-select-option>
-                    </ion-select>
-                </ion-item>
-                <ion-item>
-                    <ion-textarea placeholder="Коментарий"></ion-textarea>
-                </ion-item>
-                <ion-item>
-                    <ion-button
-                        color="danger"
-                        expand="block"
-                        (click)="onDelete(view.doc)"
-                        >Удалить</ion-button
-                    >
-                </ion-item>
-            </ng-container>
-            <ng-container *ngIf="segment === 'data'">
-                <app-doc-edit-passport-form></app-doc-edit-passport-form>
-            </ng-container>
-        </ion-list>
-    </ion-content>
+    <ion-item>
+        <ion-label position="floating">Тип Документа</ion-label>
+        <ion-select [value]="view.activeDocLabel" (ionChange)="onDocTypeChanged($event)">
+            <ion-select-option
+                *ngFor="let optItem of formTypes; trackBy: trackByOptItem"
+                [value]="optItem.key"
+                >{{ optItem.label }}</ion-select-option
+            >
+        </ion-select>
+    </ion-item>
+    <app-doc-edit-form
+        #editForm
+        [docFormatted]="view.activeDocFormatted"
+        [docLabel]="view.activeDocLabel"
+    >
+    </app-doc-edit-form>
+    <ion-button
+        color="primary"
+        (click)="
+            onSave(view.doc, view.activeDocLabel, editForm.formGroup.value)
+        "
+        >Сохранить</ion-button
+    >
 </ng-container>

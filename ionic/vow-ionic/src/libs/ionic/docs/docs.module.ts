@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { DbModule } from '../db/db.module';
 import { AppDocDisplayComponent } from './components/doc-display/doc-display.component';
+import { AppDocEditFormComponent } from './components/doc-edit-form/doc-edit-form.component';
 import { AppDocEditPassportFormComponent } from './components/doc-edit-passport-form/doc-edit-passport-form.component';
 import { AppDocEditWorkspaceComponent } from './components/doc-edit-workspace/doc-edit-workspace.component';
 import { AppDocImageComponent } from './components/doc-image/doc-image.component';
@@ -26,6 +28,8 @@ import { ImageService } from './services/image.service';
         StoreModule.forFeature('docs', docsReducer),
         EffectsModule.forFeature([DocsEffects]),
         DbModule,
+        FormsModule,
+        ReactiveFormsModule,
     ],
     declarations: [
         AppDocumentsWorkspaceComponent,
@@ -37,6 +41,7 @@ import { ImageService } from './services/image.service';
         AppDocEditPassportFormComponent,
         AppDocDisplayComponent,
         AppDocWorkspaceComponent,
+        AppDocEditFormComponent,
     ],
     providers: [DocsDataAccessService, ImageService, DocsRepositoryService],
     exports: [AppDocumentsWorkspaceComponent, AppDocEditWorkspaceComponent],

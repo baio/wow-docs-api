@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Doc } from '../docs/models';
+import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { schemaV1 } from './db.schema';
 import { SqLiteService } from './sq-lite.service';
-import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 
 @Injectable()
 export class DbService {
     private db: SQLiteDBConnection;
-    constructor(private readonly sqLite: SqLiteService) {
-    }
+    constructor(private readonly sqLite: SqLiteService) {}
 
     async init() {
         if (this.db) {
             throw new Error('Db is already initialized');
         }
         const dbName = 'testEncryption';
-        
+
         await this.sqLite.checkConnectionsConsistency();
         this.db = await this.sqLite.createConnection(
             dbName,

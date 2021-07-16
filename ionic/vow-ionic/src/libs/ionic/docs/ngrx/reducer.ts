@@ -1,10 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
-import { assocPath, fromPairs, omit } from 'lodash/fp';
-import { DocsState } from '../models';
+import { assocPath, fromPairs, omit, pipe } from 'lodash/fp';
+import { DocsState, DocState } from '../models';
 import {
     deleteDoc,
     rehydrateDocsSuccess,
     setImageBase64,
+    updateDocFormatted,
     updateDocState,
     uploadImage,
     uploadImageSuccess,
@@ -38,5 +39,16 @@ export const docsReducer = createReducer(
     }),
     on(deleteDoc, (state, { id }) =>
         assocPath(['docs'], omit(id, state.docs), state)
+    ),
+    on(
+        updateDocFormatted,
+        (state, { id, docFormatted }) =>
+            pipe(
+                assocPath(['docs', id, 'formatted'], docFormatted),
+                assocPath(
+                    ['docs', id, 'labeled', 'label'],
+                    docFormatted ? docFormatted.kind : null
+                )
+            )(state) as any
     )
 );

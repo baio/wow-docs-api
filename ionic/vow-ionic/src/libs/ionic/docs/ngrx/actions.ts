@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Doc, DocState } from '../models';
+import { Doc, DocFormatted, DocState } from '../models';
 
 export const rehydrateDocs = createAction('[Docs] Rehydrate Docs');
 
@@ -40,4 +40,9 @@ export const editDoc = createAction('[Docs] Edit Doc', props<{ id: string }>());
 export const deleteDoc = createAction(
     '[Docs] Delete Doc',
     props<{ id: string }>()
+);
+
+export const updateDocFormatted = createAction(
+    '[Docs] Update Doc Formatted',
+    props<{ id: string; docFormatted: DocFormatted }>()
 );

@@ -1,22 +1,41 @@
 import { Injectable } from '@angular/core';
 import { DbService } from '../../db';
-import { Doc, DocState } from '../models';
+import { Doc, DocFormatted, DocPassportRFMainPage, DocState } from '../models';
 
+const getDocFormattedPassportRFMainPageUpdateValues = (
+    data: DocPassportRFMainPage
+) => ({
+    lastName: data.lastName,
+    firstMiddleName:
+        data.firstName || data.middleName
+            ? [data.firstName, data.middleName].join()
+            : null,
+});
+
+const getDocFormattedUpdateValues = (docFormatted: DocFormatted) => {
+    switch (docFormatted.kind) {
+        case 'passport-rf-main-page':
+            return getDocFormattedPassportRFMainPageUpdateValues(docFormatted);
+        default:
+            return null;
+    }
+};
 @Injectable()
 export class DocsRepositoryService {
     constructor(private readonly db: DbService) {}
 
     async addDoc(id: string, imgBase64: string) {
         // add one user with statement and values
-        const sqlcmd = 'INSERT INTO docs (id,imgBase64) VALUES (?,?)';
-        const values = [id, imgBase64];
+        const sqlcmd =
+            'INSERT INTO docs (id,imgBase64,createDate) VALUES (?,?,?)';
+        const values = [id, imgBase64, new Date().getTime()];
         const res = await this.db.runCommand(sqlcmd, values);
         console.log('$$$ addDoc result', res);
     }
 
     async updateDocState(id: string, docState: DocState) {
         // add one user with statement and values
-        const sqlcmd = `UPDATE docs SET docStoredProvider = ?, docStoredUrl = ?, docParsedWords = ?, docLabeledLabel = ? WHERE id = ?`;
+        const sqlcmd = `UPDATE docs SET storedProvider = ?, storedUrl = ?, parsedWords = ?, labeledLabel = ? WHERE id = ?`;
         const values = [
             docState.stored?.provider,
             docState.stored?.url,
@@ -27,6 +46,36 @@ export class DocsRepositoryService {
 
         const res = await this.db.runCommand(sqlcmd, values);
         console.log('$$$ updateDocState result', res);
+    }
+
+    async updateDocFormatted(id: string, docFormatted: DocFormatted) {
+        if (!docFormatted) {
+            const sqlCmd =
+                'UPDATE docs SET lastName = null, firstMiddleName = null, content = null, labeledLabel = null  WHERE id = ?';
+            const res = await this.db.runCommand(sqlCmd, [id]);
+            console.log('$$$ updateDocState result', res);
+        } else {
+            const values = getDocFormattedUpdateValues(docFormatted);
+            if (values) {
+                const content = JSON.stringify(docFormatted);
+                const sqlCmd =
+                    'UPDATE docs SET lastName = ?, firstMiddleName = ?, content = ?, labeledLabel = ?  WHERE id = ?';
+                const cmdValues = [
+                    values.lastName,
+                    values.firstMiddleName,
+                    content,
+                    docFormatted && docFormatted.kind,
+                    id,
+                ];
+                const res = await this.db.runCommand(sqlCmd, cmdValues);
+                console.log('$$$ updateDocState result', res);
+            } else {
+                console.warn(
+                    'updateDocFormatted values not found !!!',
+                    docFormatted
+                );
+            }
+        }
     }
 
     async deleteDoc(id: string) {
@@ -50,22 +99,23 @@ export class DocsRepositoryService {
                     imgBase64: m.imgBase64,
                     date: new Date().toISOString(),
                     upload: {},
-                    stored: m.docStoredProvider
+                    stored: m.storedProvider
                         ? {
-                              provider: m.docStoredProvider,
-                              url: m.docStoredUrl,
+                              provider: m.storedProvider,
+                              url: m.storedUrl,
                           }
                         : null,
-                    parsed: m.docParsedWords
+                    parsed: m.parsedWords
                         ? {
-                              words: m.docParsedWords.split(','),
+                              words: m.parsedWords.split(','),
                           }
                         : null,
-                    labeled: m.docLabeledLabel
+                    labeled: m.labeledLabel
                         ? {
-                              label: m.docLabeledLabel,
+                              label: m.labeledLabel,
                           }
                         : null,
+                    formatted: m.content ? JSON.parse(m.content) : null,
                 } as Doc)
         );
     }

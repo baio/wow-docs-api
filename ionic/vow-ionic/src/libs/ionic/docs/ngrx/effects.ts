@@ -24,6 +24,7 @@ import {
     editDoc,
     rehydrateDocs,
     rehydrateDocsSuccess,
+    updateDocFormatted,
     updateDocState,
     uploadImage,
     uploadImageError,
@@ -170,6 +171,17 @@ export class DocsEffects {
                     this.router.navigate(['/tabs', 'docs']);
                     this.docRepository.deleteDoc(id);
                 })
+            ),
+        { dispatch: false }
+    );
+
+    updateDocFormatted$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(updateDocFormatted),
+                tap(({ id, docFormatted }) =>
+                    this.docRepository.updateDocFormatted(id, docFormatted)
+                )
             ),
         { dispatch: false }
     );

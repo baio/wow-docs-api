@@ -12,19 +12,26 @@ export interface DocParsed {
     words: string[];
 }
 
-export type DocLabel = 'passport';
+export type DocLabel = 'passport-rf-main-page';
 
 export interface DocLabeled {
     label: DocLabel;
 }
 
-export interface DocPassportFormatted {
-    kind: 'doc-passport-formatted';
-    name: string;
+export interface DocPassportRFMainPage {
+    kind: 'passport-rf-main-page';
+    lastName: string;
+    firstName: string;
+    middleName: string;
+    identifier: string;
+    issuer: string;
     issueDate: string;
+    sex: string;
+    dateOfBirth: string;
+    placeOfBirth: string;
 }
 
-export type DocFormatted = DocPassportFormatted;
+export type DocFormatted = DocPassportRFMainPage;
 
 export interface DocState {
     stored?: DocStored;
@@ -38,6 +45,11 @@ export interface Doc extends DocState {
     imgBase64: string;
     upload: DocUpload;
     date: string;
+}
+
+export interface OptItem {
+    key: string;
+    label: string;
 }
 
 export interface DocsState {

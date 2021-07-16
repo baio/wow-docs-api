@@ -1,6 +1,7 @@
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     Input,
     OnDestroy,
@@ -10,14 +11,25 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { IonSelect, IonTextarea, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable, of, Subject } from 'rxjs';
-import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
-import { Doc } from '../../models';
-import { deleteDoc } from '../../ngrx/actions';
+import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
+import {
+    map,
+    reduce,
+    scan,
+    switchMap,
+    takeUntil,
+    takeWhile,
+    tap,
+    withLatestFrom,
+} from 'rxjs/operators';
+import { Doc, DocFormatted, DocLabel, OptItem } from '../../models';
+import { deleteDoc, updateDocFormatted } from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
 
 export interface UploadImageModalView {
     doc: Doc;
+    activeDocLabel: DocLabel;
+    activeDocFormatted: DocFormatted;
 }
 
 @Component({
@@ -26,17 +38,18 @@ export interface UploadImageModalView {
     styleUrls: ['doc-edit-workspace.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppDocEditWorkspaceComponent
-    implements OnInit, OnDestroy, AfterViewInit
-{
-    private readonly destroy$ = new Subject();
+export class AppDocEditWorkspaceComponent implements OnInit {
     view$: Observable<UploadImageModalView>;
-    segment = 'main';
+    activeDocLabel$ = new BehaviorSubject<DocLabel>(null);
 
     @Input() documentId: string;
 
-    @ViewChild(IonSelect) docTypeSelect: IonSelect;
-    @ViewChild(IonTextarea) commentTextArea: IonTextarea;
+    readonly formTypes: OptItem[] = [
+        {
+            key: 'passport-rf-main-page',
+            label: 'Гражданский Пасспорт РФ (главная)',
+        },
+    ];
 
     constructor(
         private readonly store: Store,
@@ -45,47 +58,44 @@ export class AppDocEditWorkspaceComponent
 
     ngOnInit() {
         const id$ = of(this.documentId); //this.activatedRoute.params.pipe(map(({ id }) => id));
-        this.view$ = id$.pipe(
-            switchMap((id) => this.store.select(selectDoc(id))),
-            map((doc) => ({
+        const doc$ = id$.pipe(
+            switchMap((id) => this.store.select(selectDoc(id)))
+        );
+        this.view$ = combineLatest([doc$, this.activeDocLabel$]).pipe(
+            tap(console.log),
+            map(([doc, activeDocLabel]) => ({
                 doc,
-            }))
+                activeDocLabel: !activeDocLabel
+                    ? doc.labeled?.label
+                    : activeDocLabel,
+                activeDocFormatted: doc.formatted,
+            })),
+            tap(console.log)
         );
-    }
-
-    ngAfterViewInit() {
-        const sysDocType$ = this.view$.pipe(
-            map((m) => m.doc && m.doc.labeled && m.doc.labeled.label)
-        );
-
-        sysDocType$
-            .pipe(
-                takeUntil(this.destroy$),
-                takeWhile(() => !this.docTypeSelect.value)
-            )
-            .subscribe((docType) => {
-                this.docTypeSelect.value = docType;
-            });
-    }
-
-    ngOnDestroy() {
-        this.destroy$.next();
-    }
-
-    nullableToState(obj?: any) {
-        return obj ? 'success' : 'progress';
     }
 
     onDelete(doc: Doc) {
         this.store.dispatch(deleteDoc({ id: doc.id }));
-
-        this.modalController.dismiss({
-            docType: this.docTypeSelect.value,
-            comment: this.commentTextArea.value,
-        });
+        this.modalController.dismiss();
     }
 
-    onSegmentChanged(ev: any) {
-        this.segment = ev.detail.value;
+    trackByOptItem(_, optItem: OptItem) {
+        return optItem.key;
+    }
+
+    onSave(doc: Doc, docLabel: DocLabel, docFormatted: DocFormatted) {
+        this.store.dispatch(
+            updateDocFormatted({
+                id: doc.id,
+                docFormatted: { ...docFormatted, kind: docLabel },
+            })
+        );
+
+        this.modalController.dismiss();
+    }
+
+    onDocTypeChanged(docType: any) {
+        console.log('!!!', docType);
+        this.activeDocLabel$.next(docType.detail.value);
     }
 }
