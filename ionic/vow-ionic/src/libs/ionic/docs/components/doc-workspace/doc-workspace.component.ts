@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Doc } from '../../models';
-import { deleteDoc } from '../../ngrx/actions';
+import { deleteDoc, editDoc } from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
 
 export interface UploadImageModalView {
@@ -26,10 +26,7 @@ export interface UploadImageModalView {
     styleUrls: ['doc-workspace.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppDocWorkspaceComponent
-    implements OnInit, OnDestroy, AfterViewInit
-{
-    private readonly destroy$ = new Subject();
+export class AppDocWorkspaceComponent implements OnInit {
     view$: Observable<UploadImageModalView>;
     segment = 'main';
 
@@ -44,37 +41,13 @@ export class AppDocWorkspaceComponent
     ) {}
 
     ngOnInit() {
-        console.log('777', this.documentId);
-        const id$ = of(this.documentId); //this.activatedRoute.params.pipe(map(({ id }) => id));
+        const id$ = of(this.documentId);
         this.view$ = id$.pipe(
             switchMap((id) => this.store.select(selectDoc(id))),
             map((doc) => ({
                 doc,
             }))
         );
-    }
-
-    ngAfterViewInit() {
-        const sysDocType$ = this.view$.pipe(
-            map((m) => m.doc && m.doc.labeled && m.doc.labeled.label)
-        );
-
-        sysDocType$
-            .pipe(
-                takeUntil(this.destroy$),
-                takeWhile(() => !this.docTypeSelect.value)
-            )
-            .subscribe((docType) => {
-                this.docTypeSelect.value = docType;
-            });
-    }
-
-    ngOnDestroy() {
-        this.destroy$.next();
-    }
-
-    nullableToState(obj?: any) {
-        return obj ? 'success' : 'progress';
     }
 
     onDelete(doc: Doc) {
@@ -86,7 +59,7 @@ export class AppDocWorkspaceComponent
         });
     }
 
-    onSegmentChanged(ev: any) {
-        this.segment = ev.detail.value;
+    onEdit(doc: Doc) {
+        this.store.dispatch(editDoc({ id: doc.id }));
     }
 }
