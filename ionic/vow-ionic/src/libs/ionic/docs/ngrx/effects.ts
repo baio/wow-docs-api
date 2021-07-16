@@ -12,12 +12,15 @@ import {
     takeUntil,
     tap,
 } from 'rxjs/operators';
+import { AppDocDisplayComponent } from '../components/doc-display/doc-display.component';
 import { AppDocEditWorkspaceComponent } from '../components/doc-edit-workspace/doc-edit-workspace.component';
+import { AppDocWorkspaceComponent } from '../components/doc-workspace/doc-workspace.component';
 import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
 import {
     deleteDoc,
+    displayDoc,
     editDoc,
     rehydrateDocs,
     rehydrateDocsSuccess,
@@ -112,13 +115,29 @@ export class DocsEffects {
         { dispatch: false }
     );
 
+    displayDocShowModal$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(displayDoc),
+                tap(async ({ id }) => {
+                    const modal = await this.modalController.create({
+                        component: AppDocWorkspaceComponent,
+                        componentProps: {
+                            documentId: id,
+                        },
+                    });
+                    await modal.present();
+                    const { data } = await modal.onWillDismiss();
+                })
+            ),
+        { dispatch: false }
+    );
+
     editDocShowModal$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(editDoc),
                 tap(async ({ id }) => {
-                    //this.router.navigate(['/tabs', 'docs', id]);
-
                     const modal = await this.modalController.create({
                         component: AppDocEditWorkspaceComponent,
                         componentProps: {

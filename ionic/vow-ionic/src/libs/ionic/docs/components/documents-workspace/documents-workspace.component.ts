@@ -5,7 +5,12 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { Doc } from '../../models';
-import { editDoc, rehydrateDocs, uploadImage } from '../../ngrx/actions';
+import {
+    displayDoc,
+    editDoc,
+    rehydrateDocs,
+    uploadImage,
+} from '../../ngrx/actions';
 import { selectDocsAsSortedList } from '../../ngrx/selectors';
 
 export interface DocsRow {
@@ -49,7 +54,7 @@ export class AppDocumentsWorkspaceComponent implements OnInit {
     }
 
     onDocClick(doc: Doc) {
-        this.store.dispatch(editDoc({ id: doc.id }));
+        this.store.dispatch(displayDoc({ id: doc.id }));
     }
 
     trackByRow(_, row: DocsRow) {
