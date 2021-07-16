@@ -31,6 +31,7 @@ export class AppDocEditWorkspaceComponent
 {
     private readonly destroy$ = new Subject();
     view$: Observable<UploadImageModalView>;
+    segment = 'main';
 
     @Input() documentId: string;
 
@@ -39,15 +40,13 @@ export class AppDocEditWorkspaceComponent
 
     constructor(
         private readonly store: Store,
-        private readonly modalController: ModalController,
-        private readonly activatedRoute: ActivatedRoute
+        private readonly modalController: ModalController
     ) {}
 
     ngOnInit() {
         const id$ = of(this.documentId); //this.activatedRoute.params.pipe(map(({ id }) => id));
         this.view$ = id$.pipe(
             switchMap((id) => this.store.select(selectDoc(id))),
-            tap((doc) => console.log('---', doc)),
             map((doc) => ({
                 doc,
             }))
@@ -84,5 +83,9 @@ export class AppDocEditWorkspaceComponent
             docType: this.docTypeSelect.value,
             comment: this.commentTextArea.value,
         });
+    }
+
+    onSegmentChanged(ev: any) {
+        this.segment = ev.detail.value;
     }
 }

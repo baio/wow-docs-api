@@ -1,8 +1,23 @@
 <ng-container *ngIf="view$ | async as view">
-    <ion-card>
-        <app-doc-image [doc]="view.doc"></app-doc-image>
-        <ion-card-content>
-            <ion-list>
+    <ion-content fullscreen>
+        <ion-list>
+            <ion-item>
+                <app-doc-image [doc]="view.doc"></app-doc-image>
+            </ion-item>
+            <ion-item>
+                <ion-segment
+                    [value]="segment"
+                    (ionChange)="onSegmentChanged($event)"
+                >
+                    <ion-segment-button value="main">
+                        <ion-label>Main</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="data">
+                        <ion-label>Data</ion-label>
+                    </ion-segment-button>
+                </ion-segment>
+            </ion-item>
+            <ng-container *ngIf="segment === 'main'">
                 <ion-item>
                     <ion-label position="floating">Тип документа</ion-label>
                     <ion-select
@@ -26,37 +41,18 @@
                 <ion-item>
                     <ion-textarea placeholder="Коментарий"></ion-textarea>
                 </ion-item>
-            </ion-list>
-        </ion-card-content>
-    </ion-card>
-    <ion-button color="danger" expand="block" (click)="onDelete(view.doc)"
-        >Удалить</ion-button
-    >
-
-    <!--
-<ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="schedule">
-        <ion-icon name="calendar"></ion-icon>
-        <ion-label>Schedule</ion-label>
-        <ion-badge>6</ion-badge>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="speakers">
-        <ion-icon name="person-circle"></ion-icon>
-        <ion-label>Speakers</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="map">
-        <ion-icon name="map"></ion-icon>
-        <ion-label>Map</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="about">
-        <ion-icon name="information-circle"></ion-icon>
-        <ion-label>About</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
--->
+                <ion-item>
+                    <ion-button
+                        color="danger"
+                        expand="block"
+                        (click)="onDelete(view.doc)"
+                        >Удалить</ion-button
+                    >
+                </ion-item>
+            </ng-container>
+            <ng-container *ngIf="segment === 'data'">
+                <app-doc-edit-passport-form></app-doc-edit-passport-form>
+            </ng-container>
+        </ion-list>
+    </ion-content>
 </ng-container>

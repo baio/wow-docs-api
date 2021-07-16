@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { DbModule } from '../db/db.module';
+import { AppDocEditPassportFormComponent } from './components/doc-edit-passport-form/doc-edit-passport-form.component';
 import { AppDocEditWorkspaceComponent } from './components/doc-edit-workspace/doc-edit-workspace.component';
 import { AppDocImageComponent } from './components/doc-image/doc-image.component';
 import { AppDocumentsWorkspaceComponent } from './components/documents-workspace/documents-workspace.component';
@@ -31,6 +32,7 @@ import { ImageService } from './services/image.service';
         AppProgressItemStateComponent,
         AppDocImageComponent,
         AppDocEditWorkspaceComponent,
+        AppDocEditPassportFormComponent,
     ],
     providers: [DocsDataAccessService, ImageService, DocsRepositoryService],
     exports: [AppDocumentsWorkspaceComponent, AppDocEditWorkspaceComponent],
