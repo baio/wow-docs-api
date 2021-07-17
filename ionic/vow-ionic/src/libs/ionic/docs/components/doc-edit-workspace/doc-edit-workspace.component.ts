@@ -1,29 +1,19 @@
 import {
-    AfterViewInit,
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     Input,
-    OnDestroy,
     OnInit,
-    ViewChild,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IonSelect, IonTextarea, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
-import {
-    map,
-    reduce,
-    scan,
-    switchMap,
-    takeUntil,
-    takeWhile,
-    tap,
-    withLatestFrom,
-} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { Doc, DocFormatted, DocLabel, OptItem } from '../../models';
-import { deleteDoc, updateDocFormatted } from '../../ngrx/actions';
+import {
+    deleteDoc,
+    showFullScreenImage,
+    updateDocFormatted,
+} from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
 
 export interface UploadImageModalView {
@@ -95,7 +85,10 @@ export class AppDocEditWorkspaceComponent implements OnInit {
     }
 
     onDocTypeChanged(docType: any) {
-        console.log('!!!', docType);
         this.activeDocLabel$.next(docType.detail.value);
+    }
+
+    onViewImage(doc: Doc) {
+        this.store.dispatch(showFullScreenImage({ doc }));
     }
 }

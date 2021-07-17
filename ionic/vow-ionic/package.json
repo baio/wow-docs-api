@@ -35,6 +35,7 @@
     "@ngrx/effects": "^12.0.0",
     "@ngrx/store": "^12.0.0",
     "@ngrx/store-devtools": "^12.0.0",
+    "date-fns": "^2.22.1",
     "electron": "^13.1.2",
     "guid-typescript": "^1.0.9",
     "lodash": "^4.17.21",

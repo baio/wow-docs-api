@@ -1,4 +1,5 @@
 import { DocPassportRFMainPage, DocView } from '../../models';
+import { format } from 'date-fns';
 
 export const passportRFMainPage = (doc: DocPassportRFMainPage): DocView => ({
     title: 'Гражданский Пасспорт РФ (главная)',
@@ -21,7 +22,9 @@ export const passportRFMainPage = (doc: DocPassportRFMainPage): DocView => ({
         {
             col1: {
                 label: 'Дата выдачи',
-                value: doc.issueDate,
+                value:
+                    doc.issueDate &&
+                    format(new Date(doc.issueDate), 'dd.MM.yyyy'),
             },
             col2: {
                 label: 'Код подразделения',
@@ -31,11 +34,13 @@ export const passportRFMainPage = (doc: DocPassportRFMainPage): DocView => ({
         {
             col1: {
                 label: 'Пол',
-                value: doc.sex,
+                value: doc.sex === 'male' ? 'мужской' : 'женский',
             },
             col2: {
                 label: 'Дата рождения',
-                value: doc.dateOfBirth,
+                value:
+                    doc.dateOfBirth &&
+                    format(new Date(doc.dateOfBirth), 'dd.MM.yyyy'),
             },
         },
         {

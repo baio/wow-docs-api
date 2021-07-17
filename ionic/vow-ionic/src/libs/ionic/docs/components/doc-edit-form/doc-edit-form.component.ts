@@ -58,11 +58,11 @@ const docFormRFPassportMainPage: DocForm = {
             items: [
                 {
                     key: 'male',
-                    label: 'male',
+                    label: 'мужской',
                 },
                 {
                     key: 'female',
-                    label: 'female',
+                    label: 'женской',
                 },
             ],
         },
@@ -108,6 +108,22 @@ export class AppDocEditFormComponent implements OnInit {
     formGroup: FormGroup;
     docForm: DocForm;
     _docLabel: DocLabel;
+
+    readonly monthShortNames = [
+        'янв',
+        'февр',
+        'март',
+        'апр',
+        'май',
+        'июнь',
+        'июль',
+        'авг',
+        'сент',
+        'окт',
+        'нояб',
+        'дек',
+    ];
+
     @Input() set docLabel(val: DocLabel) {
         if (this._docLabel !== val) {
             this._docLabel = val;

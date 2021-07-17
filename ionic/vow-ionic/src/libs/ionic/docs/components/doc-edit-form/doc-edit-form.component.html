@@ -18,6 +18,9 @@
                 <ion-datetime
                     *ngSwitchCase="'date'"
                     [formControlName]="field.name"
+                    [monthShortNames]="monthShortNames"
+                    cancelText="отмена"
+                    doneText="выбрать"
                 ></ion-datetime>
                 <ion-select
                     *ngSwitchCase="'select'"

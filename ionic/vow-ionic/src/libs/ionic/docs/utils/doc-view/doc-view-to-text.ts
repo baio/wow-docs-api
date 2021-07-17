@@ -1,12 +1,6 @@
 import { flatten } from 'lodash/fp';
-import {
-    Doc,
-    DocFormatted,
-    DocPassportRFMainPage,
-    DocView,
-} from '../../models';
+import { Doc, DocFormatted, DocView } from '../../models';
 import { docFormattedToView } from './doc-formatted-to-view';
-import { passportRFMainPage } from './passport-rf-main-page';
 
 export const docViewToText = (docView: DocView): string => {
     const content = flatten(
