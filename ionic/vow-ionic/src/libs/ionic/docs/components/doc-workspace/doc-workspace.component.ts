@@ -8,12 +8,17 @@ import {
     ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonSelect, IonTextarea, ModalController } from '@ionic/angular';
+import {
+    ActionSheetController,
+    IonSelect,
+    IonTextarea,
+    ModalController,
+} from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Doc, DocView } from '../../models';
-import { deleteDoc, editDoc } from '../../ngrx/actions';
+import { deleteDoc, editDoc, shareDoc } from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
 import { docFormattedToView } from './doc-formatted-to-view';
 
@@ -39,7 +44,8 @@ export class AppDocWorkspaceComponent implements OnInit {
 
     constructor(
         private readonly store: Store,
-        private readonly modalController: ModalController
+        private readonly modalController: ModalController,
+        private readonly actionSheetController: ActionSheetController
     ) {}
 
     ngOnInit() {
@@ -55,16 +61,74 @@ export class AppDocWorkspaceComponent implements OnInit {
         );
     }
 
-    onDelete(doc: Doc) {
-        this.store.dispatch(deleteDoc({ id: doc.id }));
-
-        this.modalController.dismiss({
-            docType: this.docTypeSelect.value,
-            comment: this.commentTextArea.value,
+    async onDelete(doc: Doc) {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Удалить документ',
+            buttons: [
+                {
+                    text: 'Удалить безвозвратно',
+                    icon: 'alert-outline',
+                    handler: () => {
+                        this.store.dispatch(deleteDoc({ id: doc.id }));
+                        this.modalController.dismiss();
+                    },
+                },
+                {
+                    text: 'Отмена',
+                    icon: 'close-outline',
+                    handler: () => {},
+                },
+            ],
         });
+
+        await actionSheet.present();
     }
 
     onEdit(doc: Doc) {
         this.store.dispatch(editDoc({ id: doc.id }));
     }
+
+    async onShare(doc: Doc) {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Поделиться документом',
+            buttons: [
+                {
+                    text: 'Изображение и данные',
+                    icon: 'images-outline',
+                    handler: () => {
+                        this.store.dispatch(
+                            shareDoc({ id: doc.id, share: 'doc-and-image' })
+                        );
+                    },
+                },
+                {
+                    text: 'Только данные',
+                    icon: 'document-outline',
+                    handler: () => {
+                        this.store.dispatch(
+                            shareDoc({ id: doc.id, share: 'doc-only' })
+                        );
+                    },
+                },
+                {
+                    text: 'Только изображение',
+                    icon: 'image-outline',
+                    handler: () => {
+                        this.store.dispatch(
+                            shareDoc({ id: doc.id, share: 'image-only' })
+                        );
+                    },
+                },
+                {
+                    text: 'Отмена',
+                    icon: 'close-outline',
+                    handler: () => {},
+                },
+            ],
+        });
+
+        await actionSheet.present();
+    }
+
+    onViewImage(doc: Doc) {}
 }

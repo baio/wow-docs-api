@@ -4,17 +4,25 @@
             <ion-icon name="flash-outline"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="start">
-            <ion-fab-button color="danger"
+            <ion-fab-button color="success" (click)="onShare(view.doc)"
+                ><ion-icon name="share-social-outline"></ion-icon
+            ></ion-fab-button>
+            <ion-fab-button
+                ><ion-icon
+                    name="copy-outline"
+                    (click)="onViewImage(view.doc)"
+                ></ion-icon
+            ></ion-fab-button>
+            <ion-fab-button color="secondary" (click)="onEdit(view.doc)"
+                ><ion-icon name="eye-outline"></ion-icon
+            ></ion-fab-button>
+        </ion-fab-list>
+        <ion-fab-list side="top">
+            <ion-fab-button color="danger" (click)="onDelete(view.doc)"
                 ><ion-icon name="trash-outline"></ion-icon>
             </ion-fab-button>
             <ion-fab-button color="primary" (click)="onEdit(view.doc)"
                 ><ion-icon name="create-outline"></ion-icon
-            ></ion-fab-button>
-            <ion-fab-button
-                ><ion-icon name="copy-outline"></ion-icon
-            ></ion-fab-button>
-            <ion-fab-button color="success"
-                ><ion-icon name="share-social-outline"></ion-icon
             ></ion-fab-button>
         </ion-fab-list>
     </ion-fab>

@@ -46,3 +46,8 @@ export const updateDocFormatted = createAction(
     '[Docs] Update Doc Formatted',
     props<{ id: string; docFormatted: DocFormatted }>()
 );
+
+export const shareDoc = createAction(
+    '[Docs] Share Doc',
+    props<{ id: string; share: 'doc-only' | 'image-only' | 'doc-and-image' }>()
+);
