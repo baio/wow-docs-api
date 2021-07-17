@@ -56,3 +56,8 @@ export const copyClipboard = createAction(
     '[Docs] Doc Copy Clipboard',
     props<{ doc: Doc }>()
 );
+
+export const showFullScreenImage = createAction(
+    '[Docs] Show Full Screen Image',
+    props<{ doc: Doc }>()
+);

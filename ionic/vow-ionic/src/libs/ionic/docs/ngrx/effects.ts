@@ -28,6 +28,7 @@ import {
     rehydrateDocs,
     rehydrateDocsSuccess,
     shareDoc,
+    showFullScreenImage,
     updateDocFormatted,
     updateDocState,
     uploadImage,
@@ -36,6 +37,7 @@ import {
 } from './actions';
 import { Clipboard } from '@capacitor/clipboard';
 import { ToastController } from '@ionic/angular';
+import { AppFullScreenImageComponent } from '../components/full-screen-image/full-screen-image.component';
 
 @Injectable()
 export class DocsEffects {
@@ -246,6 +248,24 @@ export class DocsEffects {
                         duration: 1000,
                     });
                     await toast.present();
+                })
+            ),
+        { dispatch: false }
+    );
+
+    fullScreenImage$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(showFullScreenImage),
+                tap(async ({ doc }) => {
+                    const modal = await this.modalController.create({
+                        component: AppFullScreenImageComponent,
+                        componentProps: {
+                            imgBase64: doc.imgBase64,
+                        },
+                    });
+                    await modal.present();
+                    const { data } = await modal.onWillDismiss();
                 })
             ),
         { dispatch: false }

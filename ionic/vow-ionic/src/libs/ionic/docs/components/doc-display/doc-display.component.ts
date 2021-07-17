@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+} from '@angular/core';
 import { Doc, DocView, DocViewField, DocViewFieldOrRow } from '../../models';
 
 @Component({
@@ -10,6 +16,8 @@ import { Doc, DocView, DocViewField, DocViewFieldOrRow } from '../../models';
 export class AppDocDisplayComponent {
     @Input() imgBase64: string;
     @Input() docView: DocView;
+
+    @Output() imageClick = new EventEmitter();
 
     getFieldType(field: DocViewFieldOrRow): 'one-col' | 'two-col' {
         if ('col1' in field) {

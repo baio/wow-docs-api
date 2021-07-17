@@ -23,6 +23,7 @@ import {
     deleteDoc,
     editDoc,
     shareDoc,
+    showFullScreenImage,
 } from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
 import { docFormattedToView } from '../../utils';
@@ -135,7 +136,9 @@ export class AppDocWorkspaceComponent implements OnInit {
         await actionSheet.present();
     }
 
-    onViewImage(doc: Doc) {}
+    onViewImage(doc: Doc) {
+        this.store.dispatch(showFullScreenImage({ doc }));
+    }
 
     onCopyClipboard(doc: Doc) {
         this.store.dispatch(copyClipboard({ doc }));

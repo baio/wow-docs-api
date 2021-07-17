@@ -12,6 +12,7 @@ import { AppDocEditWorkspaceComponent } from './components/doc-edit-workspace/do
 import { AppDocImageComponent } from './components/doc-image/doc-image.component';
 import { AppDocWorkspaceComponent } from './components/doc-workspace/doc-workspace.component';
 import { AppDocumentsWorkspaceComponent } from './components/documents-workspace/documents-workspace.component';
+import { AppFullScreenImageComponent } from './components/full-screen-image/full-screen-image.component';
 import { AppProgressItemStateComponent } from './components/progress-item-state/progress-item-state.component';
 import { AppUploadImageButtonComponent } from './components/upload-image-button/upload-image-button.component';
 import { AppUploadImageProgressWorkspaceComponent } from './components/upload-image-progress-workspace/upload-image-progress-workspace.component';
@@ -42,6 +43,7 @@ import { ImageService } from './services/image.service';
         AppDocDisplayComponent,
         AppDocWorkspaceComponent,
         AppDocEditFormComponent,
+        AppFullScreenImageComponent,
     ],
     providers: [DocsDataAccessService, ImageService, DocsRepositoryService],
     exports: [AppDocumentsWorkspaceComponent, AppDocEditWorkspaceComponent],

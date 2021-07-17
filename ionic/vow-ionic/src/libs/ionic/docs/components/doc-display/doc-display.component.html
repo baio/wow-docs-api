@@ -1,6 +1,6 @@
 <ion-card>
     <ion-card-header>{{ docView.title }}</ion-card-header>
-    <app-doc-image [imgBase64]="imgBase64"></app-doc-image>
+    <app-doc-image [imgBase64]="imgBase64" (click)="imageClick.emit()"></app-doc-image>
     <ion-card-content>
         <ng-container *ngFor="let field of docView.fields">
             <ng-container [ngSwitch]="getFieldType(field)">
