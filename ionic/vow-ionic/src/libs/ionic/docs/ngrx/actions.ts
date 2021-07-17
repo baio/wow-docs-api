@@ -51,3 +51,8 @@ export const shareDoc = createAction(
     '[Docs] Share Doc',
     props<{ doc: Doc; share: 'doc-only' | 'image-only' | 'doc-and-image' }>()
 );
+
+export const copyClipboard = createAction(
+    '[Docs] Doc Copy Clipboard',
+    props<{ doc: Doc }>()
+);

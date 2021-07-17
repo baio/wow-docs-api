@@ -18,7 +18,12 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Doc, DocView } from '../../models';
-import { deleteDoc, editDoc, shareDoc } from '../../ngrx/actions';
+import {
+    copyClipboard,
+    deleteDoc,
+    editDoc,
+    shareDoc,
+} from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
 import { docFormattedToView } from '../../utils';
 
@@ -131,4 +136,8 @@ export class AppDocWorkspaceComponent implements OnInit {
     }
 
     onViewImage(doc: Doc) {}
+
+    onCopyClipboard(doc: Doc) {
+        this.store.dispatch(copyClipboard({ doc }));
+    }
 }

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 import { ModalController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of, Subject, timer } from 'rxjs';
@@ -12,16 +14,14 @@ import {
     takeUntil,
     tap,
 } from 'rxjs/operators';
-import { AppDocDisplayComponent } from '../components/doc-display/doc-display.component';
 import { AppDocEditWorkspaceComponent } from '../components/doc-edit-workspace/doc-edit-workspace.component';
 import { AppDocWorkspaceComponent } from '../components/doc-workspace/doc-workspace.component';
 import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
-import { Share } from '@capacitor/share';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
-
+import { docToText } from '../utils';
 import {
+    copyClipboard,
     deleteDoc,
     displayDoc,
     editDoc,
@@ -34,7 +34,8 @@ import {
     uploadImageError,
     uploadImageSuccess,
 } from './actions';
-import { base64Str2Blob, docToText } from '../utils';
+import { Clipboard } from '@capacitor/clipboard';
+import { ToastController } from '@ionic/angular';
 
 @Injectable()
 export class DocsEffects {
@@ -43,7 +44,8 @@ export class DocsEffects {
         private readonly docsDataAccess: DocsDataAccessService,
         private readonly modalController: ModalController,
         private readonly docRepository: DocsRepositoryService,
-        private readonly router: Router
+        private readonly router: Router,
+        private readonly toastController: ToastController
     ) {}
 
     loadDocs$ = createEffect(() =>
@@ -221,6 +223,29 @@ export class DocsEffects {
                             directory: Directory.Cache,
                         });
                     }
+                })
+            ),
+        { dispatch: false }
+    );
+
+    copyClipboard$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(copyClipboard),
+                tap(async ({ doc }) => {
+                    const text = docToText(doc);
+                    await Clipboard.write({
+                        // eslint-disable-next-line id-blacklist
+                        string: text,
+                        image: doc.imgBase64,
+                        label: 'Документ',
+                    });
+                    const toast = await this.toastController.create({
+                        header: 'Скопировано',
+                        position: 'top',
+                        duration: 1000,
+                    });
+                    await toast.present();
                 })
             ),
         { dispatch: false }
