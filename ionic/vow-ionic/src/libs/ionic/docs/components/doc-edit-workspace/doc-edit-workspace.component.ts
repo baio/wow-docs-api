@@ -32,6 +32,7 @@ export class AppDocEditWorkspaceComponent implements OnInit {
     view$: Observable<UploadImageModalView>;
     activeDocLabel$ = new BehaviorSubject<DocLabel>(null);
 
+    @Input() title: string;
     @Input() documentId: string;
 
     readonly formTypes: OptItem[] = [

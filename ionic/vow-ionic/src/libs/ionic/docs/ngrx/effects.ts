@@ -38,6 +38,8 @@ import {
 import { Clipboard } from '@capacitor/clipboard';
 import { ToastController } from '@ionic/angular';
 import { AppFullScreenImageComponent } from '../components/full-screen-image/full-screen-image.component';
+import { Store } from '@ngrx/store';
+import { selectDoc } from './selectors';
 
 @Injectable()
 export class DocsEffects {
@@ -80,6 +82,7 @@ export class DocsEffects {
         { dispatch: false }
     );
 
+    /*
     pollDocState$ = createEffect(() =>
         this.actions$.pipe(
             ofType(uploadImageSuccess),
@@ -106,16 +109,18 @@ export class DocsEffects {
             map((payload) => updateDocState(payload))
         )
     );
+    */
 
-    newDocShowModal$ = createEffect(
+    uploadImage$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(uploadImage),
                 tap(async ({ id }) => {
                     const modal = await this.modalController.create({
-                        component: AppUploadImageProgressWorkspaceComponent,
+                        component: AppDocEditWorkspaceComponent,
                         componentProps: {
                             documentId: id,
+                            title: 'Новый документ',
                         },
                     });
                     await modal.present();
@@ -152,6 +157,7 @@ export class DocsEffects {
                         component: AppDocEditWorkspaceComponent,
                         componentProps: {
                             documentId: id,
+                            title: 'Данные документа',
                         },
                     });
                     await modal.present();
