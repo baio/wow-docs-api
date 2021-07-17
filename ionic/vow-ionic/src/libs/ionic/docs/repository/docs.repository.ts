@@ -88,7 +88,7 @@ export class DocsRepositoryService {
 
     async getDocs() {
         // add one user with statement and values
-        const sqlcmd = 'SELECT * FROM docs;';
+        const sqlcmd = 'SELECT * FROM docs ORDER BY createDate DESC;';
         const res = await this.db.runQuery(sqlcmd);
         console.log('$$$ getDocs result', res);
         const values = res.values;
@@ -97,7 +97,7 @@ export class DocsRepositoryService {
                 ({
                     id: m.id,
                     imgBase64: m.imgBase64,
-                    date: new Date().toISOString(),
+                    date: m.createDate,
                     upload: {},
                     stored: m.storedProvider
                         ? {

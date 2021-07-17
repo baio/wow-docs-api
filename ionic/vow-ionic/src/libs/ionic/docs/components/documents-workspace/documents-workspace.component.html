@@ -1,5 +1,8 @@
 <ion-grid *ngIf="view$ | async as view">
-    <ion-row *ngFor="let row of view.rows; trackBy: trackByRow">
+    <ion-row
+        *ngFor="let row of view.rows; trackBy: trackByRow"
+        class="list-row"
+    >
         <ion-col size="6">
             <ng-container
                 *ngTemplateOutlet="col; context: { $implicit: row.first }"
@@ -21,9 +24,11 @@
 <ng-template #col let-doc>
     <app-doc-image
         [imgBase64]="doc.imgBase64"
+        [title]="
+            doc.caption
+                ? (doc.caption.subTitle || '') + ' ' + (doc.caption.title || '')
+                : null
+        "
         (click)="onDocClick(doc)"
     ></app-doc-image>
-    <ion-label *ngIf="doc.caption?.title" class="doc-caption-title"
-        >{{ doc.caption.title }}, {{ doc.caption?.subTitle }}</ion-label
-    >
 </ng-template>

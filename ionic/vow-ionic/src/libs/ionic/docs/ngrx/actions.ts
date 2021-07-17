@@ -10,7 +10,7 @@ export const rehydrateDocsSuccess = createAction(
 
 export const uploadImage = createAction(
     '[Docs] Upload Image',
-    props<{ id: string; base64: string; date: string }>()
+    props<{ id: string; base64: string; date: number }>()
 );
 
 export const setImageBase64 = createAction(

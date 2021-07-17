@@ -17,10 +17,10 @@ export const initialState: DocsState = {
 
 export const docsReducer = createReducer(
     initialState,
-    on(uploadImage, (state, { id, base64 }) =>
+    on(uploadImage, (state, { id, base64, date }) =>
         assocPath(
             ['docs', id],
-            { id, imgBase64: base64, upload: { status: 'progress' } },
+            { id, imgBase64: base64, date, upload: { status: 'progress' } },
             state
         )
     ),

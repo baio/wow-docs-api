@@ -69,16 +69,14 @@ export class AppDocumentsWorkspaceComponent implements OnInit {
     readonly view$: Observable<DocumentsWorkspaceView>;
 
     constructor(private readonly store: Store) {
-        const rows$ = store
-            .select(selectDocsAsSortedList)
-            .pipe(
-                map((list) =>
-                    chunk(list, 2).map(([first, second]) => ({
-                        first: getDocView(first),
-                        second: second && getDocView(second),
-                    }))
-                )
-            );
+        const rows$ = store.select(selectDocsAsSortedList).pipe(
+            map((list) =>
+                chunk(list, 2).map(([first, second]) => ({
+                    first: getDocView(first),
+                    second: second && getDocView(second),
+                }))
+            )
+        );
         this.view$ = rows$.pipe(map((rows) => ({ rows })));
     }
 
@@ -89,7 +87,7 @@ export class AppDocumentsWorkspaceComponent implements OnInit {
     onFileSelected(base64: string) {
         const id = v4();
         this.store.dispatch(
-            uploadImage({ id, base64, date: new Date().toUTCString() })
+            uploadImage({ id, base64, date: new Date().getTime() })
         );
     }
 

@@ -1,8 +1,13 @@
-<img
-    class="doc-image"
-    *ngIf="imgBase64; else imageSkeleton"
-    [src]="imgBase64"
-/>
+<div class="img-content">
+    <img
+        class="doc-image"
+        *ngIf="imgBase64; else imageSkeleton"
+        [src]="imgBase64"
+    />
+    <div *ngIf="title" class="title-overlay">
+        <div style="margin-left: 5px; font-size: small">{{ title }}</div>
+    </div>
+</div>
 <ng-template #imageSkeleton>
     <ion-skeleton-text
         class="doc-image-placeholder"

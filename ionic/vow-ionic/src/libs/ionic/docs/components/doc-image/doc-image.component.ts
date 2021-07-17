@@ -15,5 +15,6 @@ import { Doc } from '../../models';
 })
 export class AppDocImageComponent {
     @Input() imgBase64: string;
+    @Input() title: string;
     constructor() {}
 }
