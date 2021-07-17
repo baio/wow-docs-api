@@ -49,5 +49,5 @@ export const updateDocFormatted = createAction(
 
 export const shareDoc = createAction(
     '[Docs] Share Doc',
-    props<{ id: string; share: 'doc-only' | 'image-only' | 'doc-and-image' }>()
+    props<{ doc: Doc; share: 'doc-only' | 'image-only' | 'doc-and-image' }>()
 );

@@ -20,7 +20,7 @@ import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Doc, DocView } from '../../models';
 import { deleteDoc, editDoc, shareDoc } from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
-import { docFormattedToView } from './doc-formatted-to-view';
+import { docFormattedToView } from '../../utils';
 
 export interface UploadImageModalView {
     doc: Doc;
@@ -97,7 +97,7 @@ export class AppDocWorkspaceComponent implements OnInit {
                     icon: 'images-outline',
                     handler: () => {
                         this.store.dispatch(
-                            shareDoc({ id: doc.id, share: 'doc-and-image' })
+                            shareDoc({ doc, share: 'doc-and-image' })
                         );
                     },
                 },
@@ -106,7 +106,7 @@ export class AppDocWorkspaceComponent implements OnInit {
                     icon: 'document-outline',
                     handler: () => {
                         this.store.dispatch(
-                            shareDoc({ id: doc.id, share: 'doc-only' })
+                            shareDoc({ doc, share: 'doc-only' })
                         );
                     },
                 },
@@ -115,7 +115,7 @@ export class AppDocWorkspaceComponent implements OnInit {
                     icon: 'image-outline',
                     handler: () => {
                         this.store.dispatch(
-                            shareDoc({ id: doc.id, share: 'image-only' })
+                            shareDoc({ doc, share: 'image-only' })
                         );
                     },
                 },

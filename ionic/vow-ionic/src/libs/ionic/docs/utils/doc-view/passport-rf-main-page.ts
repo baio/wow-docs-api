@@ -1,11 +1,6 @@
-import {
-    Doc,
-    DocFormatted,
-    DocPassportRFMainPage,
-    DocView,
-} from '../../models';
+import { DocPassportRFMainPage, DocView } from '../../models';
 
-const passportRFMainPage = (doc: DocPassportRFMainPage): DocView => ({
+export const passportRFMainPage = (doc: DocPassportRFMainPage): DocView => ({
     title: 'Гражданский Пасспорт РФ (главная)',
     fields: [
         {
@@ -49,11 +44,3 @@ const passportRFMainPage = (doc: DocPassportRFMainPage): DocView => ({
         },
     ],
 });
-
-export const docFormattedToView = (doc: DocFormatted): DocView => {
-    if (doc.kind === 'passport-rf-main-page') {
-        return passportRFMainPage(doc);
-    } else {
-        return null;
-    }
-};

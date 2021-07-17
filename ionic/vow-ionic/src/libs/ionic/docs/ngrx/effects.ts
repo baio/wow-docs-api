@@ -18,18 +18,22 @@ import { AppDocWorkspaceComponent } from '../components/doc-workspace/doc-worksp
 import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-image-progress-workspace/upload-image-progress-workspace.component';
 import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
+import { Share } from '@capacitor/share';
+
 import {
     deleteDoc,
     displayDoc,
     editDoc,
     rehydrateDocs,
     rehydrateDocsSuccess,
+    shareDoc,
     updateDocFormatted,
     updateDocState,
     uploadImage,
     uploadImageError,
     uploadImageSuccess,
 } from './actions';
+import { docToText } from '../utils';
 
 @Injectable()
 export class DocsEffects {
@@ -182,6 +186,23 @@ export class DocsEffects {
                 tap(({ id, docFormatted }) =>
                     this.docRepository.updateDocFormatted(id, docFormatted)
                 )
+            ),
+        { dispatch: false }
+    );
+
+    shareDoc$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(shareDoc),
+                tap(({ doc, share }) => {
+                    const text = docToText(doc);
+                    Share.share({
+                        title: 'Документ',
+                        text: share !== 'image-only' ? text : null,
+                        // url: share !== 'doc-only' ? doc.imgBase64 : null,
+                        dialogTitle: 'Отпраивть данные',
+                    });
+                })
             ),
         { dispatch: false }
     );
