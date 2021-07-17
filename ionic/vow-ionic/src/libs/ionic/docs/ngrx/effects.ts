@@ -19,6 +19,7 @@ import { AppUploadImageProgressWorkspaceComponent } from '../components/upload-i
 import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
 import { Share } from '@capacitor/share';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 import {
     deleteDoc,
@@ -33,7 +34,7 @@ import {
     uploadImageError,
     uploadImageSuccess,
 } from './actions';
-import { docToText } from '../utils';
+import { base64Str2Blob, docToText } from '../utils';
 
 @Injectable()
 export class DocsEffects {
@@ -194,14 +195,32 @@ export class DocsEffects {
         () =>
             this.actions$.pipe(
                 ofType(shareDoc),
-                tap(({ doc, share }) => {
+                tap(async ({ doc, share }) => {
                     const text = docToText(doc);
-                    Share.share({
+                    const base64 = doc.imgBase64.split(',')[1];
+                    let filePath: string;
+                    let url: string;
+                    if (share !== 'doc-only') {
+                        filePath = `vow-doc-${new Date().getTime()}.jpg`;
+                        const res = await Filesystem.writeFile({
+                            path: filePath,
+                            data: base64,
+                            directory: Directory.Cache,
+                        });
+                        url = res.uri;
+                    }
+                    await Share.share({
                         title: 'Документ',
                         text: share !== 'image-only' ? text : null,
-                        // url: share !== 'doc-only' ? doc.imgBase64 : null,
+                        url,
                         dialogTitle: 'Отпраивть данные',
                     });
+                    if (url) {
+                        await Filesystem.deleteFile({
+                            path: filePath,
+                            directory: Directory.Cache,
+                        });
+                    }
                 })
             ),
         { dispatch: false }
