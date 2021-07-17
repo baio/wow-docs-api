@@ -1,34 +1,24 @@
 <ion-card>
-    <ion-card-header>Гражданский Пасспорт РФ (главная)</ion-card-header>
-    <app-doc-image [doc]="doc"></app-doc-image>
+    <ion-card-header>{{ docView.title }}</ion-card-header>
+    <app-doc-image [imgBase64]="imgBase64"></app-doc-image>
     <ion-card-content>
-        <small>Фамилия Имя Очество</small>
-        <p>Путилов Максим Александрович</p>
-        <small>Серия Номер</small>
-        <p>1234 123456</p>
-        <small>Паспорт выдан</small>
-        <p>ОТДЕЛЕНИЕМ УФМС РОССИИ ПО ЧЕЛЯБИНСКОЙ ОБЛАСТИ В ГОР. ТРЕХГОРНЫЙ</p>
-        <ion-row>
-            <ion-col col-6>
-                <small>Дата выдачи</small>
-                <p>23.11.2011</p>
-            </ion-col>
-            <ion-col col-6>
-                <small>Код подразделения</small>
-                <p>740-049</p>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col col-6>
-                <small>Пол</small>
-                <p>Мужской</p>
-            </ion-col>
-            <ion-col col-6>
-                <small>Дата рождения</small>
-                <p>11.03.1980</p>
-            </ion-col>
-        </ion-row>
-        <small>Место рождения</small>
-        <p>ГОР. ЗЛАТОУСТ ЧЕЛЯБИНСКОЙ ОБЛ.</p>
+        <ng-container *ngFor="let field of docView.fields">
+            <ng-container [ngSwitch]="getFieldType(field)">
+                <ng-container *ngSwitchCase="'one-col'">
+                    <small>{{ field["label"] }}</small>
+                    <p>{{ field["value"] }}</p>
+                </ng-container>
+                <ion-row *ngSwitchCase="'two-col'">
+                    <ion-col col-6>
+                        <small>{{ field["col1"].label }}</small>
+                        <p>{{ field["col1"].value }}</p>
+                    </ion-col>
+                    <ion-col col-6>
+                        <small>{{ field["col2"].label }}</small>
+                        <p>{{ field["col2"].value }}</p>
+                    </ion-col>
+                </ion-row>
+            </ng-container>
+        </ng-container>
     </ion-card-content>
 </ion-card>

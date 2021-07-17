@@ -18,5 +18,8 @@
             ></ion-fab-button>
         </ion-fab-list>
     </ion-fab>
-    <app-doc-display [doc]="view.doc"></app-doc-display>
+    <app-doc-display
+        [docView]="view.docView"
+        [imgBase64]="view.doc.imgBase64"
+    ></app-doc-display>
 </ion-content>

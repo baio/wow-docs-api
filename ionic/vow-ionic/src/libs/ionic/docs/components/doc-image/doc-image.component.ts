@@ -14,6 +14,6 @@ import { Doc } from '../../models';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppDocImageComponent {
-    @Input() doc: Doc;
+    @Input() imgBase64: string;
     constructor() {}
 }

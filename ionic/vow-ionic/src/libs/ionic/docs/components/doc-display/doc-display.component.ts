@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Doc } from '../../models';
+import { Doc, DocView, DocViewField, DocViewFieldOrRow } from '../../models';
 
 @Component({
     selector: 'app-doc-display',
@@ -8,5 +8,14 @@ import { Doc } from '../../models';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppDocDisplayComponent {
-    @Input() doc: Doc;
+    @Input() imgBase64: string;
+    @Input() docView: DocView;
+
+    getFieldType(field: DocViewFieldOrRow): 'one-col' | 'two-col' {
+        if ('col1' in field) {
+            return 'two-col';
+        } else {
+            return 'one-col';
+        }
+    }
 }

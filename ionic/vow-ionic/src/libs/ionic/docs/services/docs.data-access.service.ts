@@ -33,6 +33,7 @@ export class DocsDataAccessService {
                     sex: 'male',
                     dateOfBirth: '11.05.1980',
                     placeOfBirth: 'russia',
+                    departmentCode: '111-222'
                 },
             } as DocState)
         );

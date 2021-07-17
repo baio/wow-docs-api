@@ -1,5 +1,5 @@
 <ion-card *ngIf="view$ | async as view">
-    <app-doc-image [doc]="view.doc"></app-doc-image>
+    <app-doc-image [imgBase64]="view.doc.imgBase64"></app-doc-image>
     <ion-card-content>
         <ion-list>
             <ion-item>

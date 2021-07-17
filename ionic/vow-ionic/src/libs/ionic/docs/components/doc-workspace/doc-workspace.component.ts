@@ -12,12 +12,14 @@ import { IonSelect, IonTextarea, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
-import { Doc } from '../../models';
+import { Doc, DocView } from '../../models';
 import { deleteDoc, editDoc } from '../../ngrx/actions';
 import { selectDoc } from '../../ngrx/selectors';
+import { docFormattedToView } from './doc-formatted-to-view';
 
 export interface UploadImageModalView {
     doc: Doc;
+    docView: DocView;
 }
 
 @Component({
@@ -46,6 +48,9 @@ export class AppDocWorkspaceComponent implements OnInit {
             switchMap((id) => this.store.select(selectDoc(id))),
             map((doc) => ({
                 doc,
+                docView: doc.formatted
+                    ? docFormattedToView(doc.formatted)
+                    : null,
             }))
         );
     }

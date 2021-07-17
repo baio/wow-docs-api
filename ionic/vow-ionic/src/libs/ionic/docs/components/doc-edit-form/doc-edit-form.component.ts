@@ -6,47 +6,17 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromPairs } from 'lodash/fp';
-import { Doc, DocFormatted, DocLabel, OptItem } from '../../models';
+import {
+    Doc,
+    DocForm,
+    DocFormatted,
+    DocFormField,
+    DocLabel,
+    OptItem,
+} from '../../models';
 
 export interface UploadImageModalView {
     doc: Doc;
-}
-
-export interface DocFormFieldBase {
-    name: string;
-    label: string;
-}
-
-export interface DocFormTextField extends DocFormFieldBase {
-    kind: 'text';
-}
-
-export interface DocFormNumberField extends DocFormFieldBase {
-    kind: 'number';
-}
-
-export interface DocFormDateField extends DocFormFieldBase {
-    kind: 'date';
-}
-
-export interface DocFormTextAreaField extends DocFormFieldBase {
-    kind: 'text-area';
-}
-
-export interface DocFormSelectField extends DocFormFieldBase {
-    kind: 'select';
-    items: OptItem[];
-}
-
-export type DocFormField =
-    | DocFormTextField
-    | DocFormDateField
-    | DocFormNumberField
-    | DocFormTextAreaField
-    | DocFormSelectField;
-
-export interface DocForm {
-    fields: DocFormField[];
 }
 
 const docFormRFPassportMainPage: DocForm = {
@@ -105,6 +75,11 @@ const docFormRFPassportMainPage: DocForm = {
             kind: 'text-area',
             name: 'placeOfBirth',
             label: 'Место рождения',
+        },
+        {
+            kind: 'text',
+            name: 'departmentCode',
+            label: 'Код департамента',
         },
     ],
 };

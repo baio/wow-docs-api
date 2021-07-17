@@ -29,6 +29,7 @@ export interface DocPassportRFMainPage {
     sex: string;
     dateOfBirth: string;
     placeOfBirth: string;
+    departmentCode: string;
 }
 
 export type DocFormatted = DocPassportRFMainPage;
@@ -45,11 +46,6 @@ export interface Doc extends DocState {
     imgBase64: string;
     upload: DocUpload;
     date: string;
-}
-
-export interface OptItem {
-    key: string;
-    label: string;
 }
 
 export interface DocsState {
