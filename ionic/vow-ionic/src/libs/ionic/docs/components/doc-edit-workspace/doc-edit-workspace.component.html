@@ -1,7 +1,12 @@
 <ng-container *ngIf="view$ | async as view">
     <ion-item>
         <ion-label position="floating">Тип Документа</ion-label>
-        <ion-select [value]="view.activeDocLabel" (ionChange)="onDocTypeChanged($event)">
+        <ion-select
+            [value]="view.activeDocLabel"
+            (ionChange)="onDocTypeChanged($event)"
+            cancelText="Отмена"
+            interface="action-sheet"
+        >
             <ion-select-option
                 *ngFor="let optItem of formTypes; trackBy: trackByOptItem"
                 [value]="optItem.key"

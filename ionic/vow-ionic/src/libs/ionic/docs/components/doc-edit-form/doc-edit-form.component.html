@@ -22,6 +22,8 @@
                 <ion-select
                     *ngSwitchCase="'select'"
                     [formControlName]="field.name"
+                    cancelText="Отмена"
+                    interface="action-sheet"
                 >
                     <ion-select-option
                         *ngFor="
