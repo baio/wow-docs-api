@@ -4,7 +4,7 @@ import { chunk } from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 } from 'uuid';
-import { Doc } from '../../models';
+import { Doc, DocFormatted } from '../../models';
 import {
     displayDoc,
     editDoc,
@@ -13,14 +13,51 @@ import {
 } from '../../ngrx/actions';
 import { selectDocsAsSortedList } from '../../ngrx/selectors';
 
+export interface DocCaption {
+    title: string;
+    subTitle: string;
+}
+
+export interface DocView extends Doc {
+    caption?: DocCaption;
+}
+
 export interface DocsRow {
-    first: Doc;
-    second: Doc;
+    first: DocView;
+    second: DocView;
 }
 
 export interface DocumentsWorkspaceView {
     rows: DocsRow[];
 }
+
+const getCaption = (formatted: DocFormatted): DocCaption => {
+    if (formatted.kind === 'passport-rf-main-page') {
+        return {
+            title:
+                formatted.lastName ||
+                formatted.firstName ||
+                formatted.middleName
+                    ? [
+                          formatted.lastName,
+                          formatted.firstName,
+                          formatted.middleName,
+                      ]
+                          .join(' ')
+                          .trim()
+                    : null,
+            subTitle: 'Паспорт РФ',
+        };
+    }
+};
+
+const getDocView = (doc: Doc): DocView => {
+    const caption = doc.formatted ? getCaption(doc.formatted) : null;
+    return {
+        ...doc,
+        caption,
+    };
+};
 
 @Component({
     selector: 'app-documents-workspace',
@@ -36,7 +73,10 @@ export class AppDocumentsWorkspaceComponent implements OnInit {
             .select(selectDocsAsSortedList)
             .pipe(
                 map((list) =>
-                    chunk(list, 2).map(([first, second]) => ({ first, second }))
+                    chunk(list, 2).map(([first, second]) => ({
+                        first: getDocView(first),
+                        second: second && getDocView(second),
+                    }))
                 )
             );
         this.view$ = rows$.pipe(map((rows) => ({ rows })));
