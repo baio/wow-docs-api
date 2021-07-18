@@ -13,11 +13,11 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppPinKeyboardComponent {
-    pin = '';
-
+    @Input() pin = '';
     @Input() useBiometric = false;
 
     @Output() pinChanged = new EventEmitter<string>();
+    @Output() buttonClick = new EventEmitter<string>();
     @Output() requestBiometric = new EventEmitter<string>();
 
     constructor() {}
@@ -26,13 +26,14 @@ export class AppPinKeyboardComponent {
         if (value === 'backspace') {
             if (this.pin && this.pin.length > 0) {
                 this.pin = this.pin.substr(0, this.pin.length - 1);
-                console.log('????', this.pin);
+                this.pinChanged.emit(this.pin);
             }
         } else {
             if (this.pin.length < 4) {
                 this.pin += value;
+                this.pinChanged.emit(this.pin);
             }
         }
-        this.pinChanged.emit(this.pin);
+        this.buttonClick.emit(value);
     }
 }

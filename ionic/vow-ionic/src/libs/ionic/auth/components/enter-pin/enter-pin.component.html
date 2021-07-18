@@ -1,0 +1,9 @@
+<h1 class="ion-text-center">ВХОД</h1>
+<app-pin-display [pin]="keyboard.pin"></app-pin-display>
+<ion-label *ngIf="pinError" color="danger">Неправильный ПИН</ion-label>
+<app-pin-keyboard
+    [useBiometric]="useBiometric"
+    (requestBiometric)="requestBiometric.emit()"
+    (pinChanged)="onPinChanged($event)"
+    #keyboard
+></app-pin-keyboard>

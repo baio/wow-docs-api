@@ -1,0 +1,8 @@
+<h1 class="ion-text-center">РЕГИСТРАЦИЯ</h1>
+<app-pin-display [pin]="pin1"></app-pin-display>
+<app-pin-display [pin]="pin2"></app-pin-display>
+<app-pin-keyboard
+    [useBiometric]="useBiometric"
+    (requestBiometric)="requestBiometric.emit()"
+    (buttonClick)="onButtonClick($event)"
+></app-pin-keyboard>

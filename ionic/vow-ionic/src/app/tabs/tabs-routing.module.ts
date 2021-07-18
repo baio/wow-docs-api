@@ -10,7 +10,6 @@ export const routes: Routes = [
             {
                 path: 'docs',
                 children: docsRoutes,
-                //loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
             },
             {
                 path: 'tab2',

@@ -1,0 +1,28 @@
+<ng-container *ngIf="view$ | async as view">
+    <ion-content padding class="content-center">
+        <app-enter-pin
+            *ngIf="view.mode === 'login'"
+            [pinError]="view.pinError"
+            [useBiometric]="view.supportsBiometric"
+            (pinEntered)="onPinEntered($event)"
+            (requestBiometric)="authenticateBiometric()"
+        ></app-enter-pin>
+        <app-setup-pin
+            *ngIf="view.mode === 'setup'"
+            [useBiometric]="view.supportsBiometric"
+            (pinSet)="onPinSet($event)"
+            (requestBiometric)="authenticateBiometric()"
+        ></app-setup-pin>
+    </ion-content>
+    <ion-footer>
+        <ion-button
+            shape="round"
+            fill="clear"
+            size="large"
+            color="secondary"
+            expand="full"
+            (click)="onExit()"
+            ><ion-icon name="exit-outline"></ion-icon>ВЫХОД</ion-button
+        >
+    </ion-footer>
+</ng-container>
