@@ -19,7 +19,6 @@ export class AppSetupPinComponent {
     @Output() pinSet = new EventEmitter<string>();
     pin = '';
     constructor() {
-        console.log('111');
     }
 
     onButtonClick(value: string) {

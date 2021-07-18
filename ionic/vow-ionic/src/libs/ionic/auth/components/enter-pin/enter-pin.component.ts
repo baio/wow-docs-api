@@ -18,11 +18,9 @@ export class AppEnterPinComponent {
     @Output() requestBiometric = new EventEmitter();
     @Output() pinEntered = new EventEmitter<string>();
 
-    constructor() {
-    }
+    constructor() {}
 
     onPinChanged(pin: string) {
-        this.pinError = false;
         if (pin.length >= 4) {
             this.pinEntered.emit(pin);
         }

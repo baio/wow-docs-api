@@ -80,6 +80,7 @@ export class AppAuthenticateComponent {
     }
 
     async onPinEntered(pin: string) {
+        this.pinError$.next(false);
         const expectedPin = await this.authService.getPin();
         if (pin !== expectedPin) {
             this.pinError$.next(true);
