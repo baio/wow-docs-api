@@ -34,5 +34,9 @@
 	{
 		"pkg": "@capacitor/status-bar",
 		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
+	},
+	{
+		"pkg": "capacitor-native-biometric",
+		"classpath": "com.epicshaggy.biometric.NativeBiometric"
 	}
 ]

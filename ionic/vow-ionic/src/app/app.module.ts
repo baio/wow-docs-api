@@ -8,6 +8,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeLogger } from 'ngrx-store-logger';
 import { AppAuthModule } from 'src/libs/ionic/auth';
 import { DbModule } from 'src/libs/ionic/db/db.module';
+import { AppGateKeeperModule } from 'src/libs/ionic/gate-keeper';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ export const metaReducers = environment.production ? [] : [logger];
         AppRoutingModule,
         DbModule,
         TabsPageModule,
+        AppGateKeeperModule,
     ],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
     bootstrap: [AppComponent],

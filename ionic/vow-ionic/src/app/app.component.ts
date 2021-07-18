@@ -3,6 +3,7 @@ import { Platform } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { DbService, SqLiteService } from 'src/libs/ionic/db';
 import { rehydrateDocs } from 'src/libs/ionic/docs/ngrx/actions';
+import { GateKeeperService } from 'src/libs/ionic/gate-keeper';
 import { rehydrateTags } from 'src/libs/ionic/tags/ngrx/actions';
 
 @Component({
@@ -15,22 +16,23 @@ export class AppComponent implements OnDestroy {
         private readonly sqLiteService: SqLiteService,
         private readonly dbService: DbService,
         private readonly platform: Platform,
-        private readonly store: Store
+        private readonly store: Store,
+        private readonly gateKeeper: GateKeeperService
     ) {
         this.initializeApp();
     }
 
-    initializeApp() {
-        this.platform.ready().then(async () => {
-            const ret = await this.sqLiteService.initializePlugin();
-            console.log('$$$ in App  this.initPlugin ', ret);
-            const res = await this.sqLiteService.echo('Hello World');
-            console.log('$$$ from Echo ' + res.value);
-            await this.dbService.init();
-            console.log('$$$ db initialized');
-            this.store.dispatch(rehydrateDocs());
-            this.store.dispatch(rehydrateTags());
-        });
+    async initializeApp() {
+        await this.platform.ready();
+        await this.gateKeeper.tryEnter();
+        const ret = await this.sqLiteService.initializePlugin();
+        console.log('$$$ in App  this.initPlugin ', ret);
+        const res = await this.sqLiteService.echo('Hello World');
+        console.log('$$$ from Echo ' + res.value);
+        await this.dbService.init();
+        console.log('$$$ db initialized');
+        this.store.dispatch(rehydrateDocs());
+        this.store.dispatch(rehydrateTags());
     }
 
     ngOnDestroy() {
