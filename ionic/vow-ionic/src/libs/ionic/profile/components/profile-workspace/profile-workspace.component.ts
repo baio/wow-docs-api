@@ -6,18 +6,18 @@ import { AuthProvider, AuthState } from '../../models';
 import { login, logout } from '../../ngrx/actions';
 import { selectAuthState } from '../../ngrx/selectors';
 
-export interface AppAuthWorkspaceView {
+export interface AppProfileWorkspaceView {
     authState: AuthState;
 }
 
 @Component({
-    selector: 'app-auth-workspace',
-    templateUrl: 'auth-workspace.component.html',
-    styleUrls: ['auth-workspace.component.scss'],
+    selector: 'app-profile-workspace',
+    templateUrl: 'profile-workspace.component.html',
+    styleUrls: ['profile-workspace.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppAuthWorkspaceComponent {
-    readonly view$: Observable<AppAuthWorkspaceView>;
+export class AppProfileWorkspaceComponent {
+    readonly view$: Observable<AppProfileWorkspaceView>;
 
     constructor(private readonly store: Store) {
         this.view$ = store

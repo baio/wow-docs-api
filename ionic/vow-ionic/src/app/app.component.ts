@@ -16,27 +16,21 @@ export class AppComponent implements OnDestroy {
         private readonly sqLiteService: SqLiteService,
         private readonly dbService: DbService,
         private readonly platform: Platform,
-        private readonly store: Store,
-        private readonly gateKeeper: GateKeeperService,
-        private readonly alertController: AlertController
+        private readonly store: Store
     ) {
         this.initializeApp();
     }
 
     async initializeApp() {
         await this.platform.ready();
-        const credentials = await this.gateKeeper.tryEnter();
-        if (credentials) {
-            const ret = await this.sqLiteService.initializePlugin();
-            console.log('$$$ in App  this.initPlugin ', ret);
-            const res = await this.sqLiteService.echo('Hello World');
-            console.log('$$$ from Echo ' + res.value);
-            await this.dbService.init();
-            console.log('$$$ db initialized');
-            this.store.dispatch(rehydrateDocs());
-            this.store.dispatch(rehydrateTags());
-        } else {
-        }
+        const ret = await this.sqLiteService.initializePlugin();
+        console.log('$$$ in App  this.initPlugin ', ret);
+        const res = await this.sqLiteService.echo('Hello World');
+        console.log('$$$ from Echo ' + res.value);
+        await this.dbService.init();
+        console.log('$$$ db initialized');
+        this.store.dispatch(rehydrateDocs());
+        this.store.dispatch(rehydrateTags());
     }
 
     ngOnDestroy() {

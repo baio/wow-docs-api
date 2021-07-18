@@ -1,2 +1,2 @@
-export * from './auth.module';
+export * from './profile.module';
 export * from './ngrx/actions';

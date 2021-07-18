@@ -36,6 +36,7 @@
     "@ngrx/store": "^12.0.0",
     "@ngrx/store-devtools": "^12.0.0",
     "capacitor-native-biometric": "^3.0.3",
+    "capacitor-secure-storage-plugin": "^0.6.2",
     "date-fns": "^2.22.1",
     "electron": "^13.1.2",
     "fuse.js": "^6.4.6",

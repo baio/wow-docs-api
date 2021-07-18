@@ -6,13 +6,14 @@ import { EffectsModule } from '@ngrx/effects';
 import { ActionReducer, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeLogger } from 'ngrx-store-logger';
-import { AppAuthModule } from 'src/libs/ionic/profile';
+import { AppProfileModule } from 'src/libs/ionic/profile';
 import { DbModule } from 'src/libs/ionic/db/db.module';
 import { AppGateKeeperModule } from 'src/libs/ionic/gate-keeper';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TabsPageModule } from './tabs/tabs.module';
+import { AppAuthModule } from 'src/libs/ionic/auth';
 
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 export function logger(reducer: ActionReducer<any>): any {
@@ -30,12 +31,13 @@ export const metaReducers = environment.production ? [] : [logger];
         StoreModule.forRoot({}, { metaReducers }),
         StoreDevtoolsModule.instrument(),
         IonicModule.forRoot(),
-        AppAuthModule.forRoot(environment.auth),
+        AppProfileModule.forRoot(environment.auth),
         EffectsModule.forRoot(),
         AppRoutingModule,
         DbModule,
         TabsPageModule,
         AppGateKeeperModule,
+        AppAuthModule,
     ],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
     bootstrap: [AppComponent],

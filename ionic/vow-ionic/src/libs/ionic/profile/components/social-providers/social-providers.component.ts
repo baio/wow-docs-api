@@ -4,17 +4,15 @@ import {
     EventEmitter,
     Output,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { AuthProvider } from '../../models';
-import { login } from '../../ngrx/actions';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: 'login.component.html',
-    styleUrls: ['login.component.scss'],
+    selector: 'app-social-providers',
+    templateUrl: 'social-providers.component.html',
+    styleUrls: ['social-providers.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppLoginComponent {
+export class AppSocialProvidersComponent {
     @Output() login = new EventEmitter<AuthProvider>();
 
     constructor() {}

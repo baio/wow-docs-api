@@ -1,18 +1,18 @@
-import { IonicModule } from '@ionic/angular';
-import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppLoginComponent } from './components/login/login.component';
-import { StoreModule } from '@ngrx/store';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 import { EffectsModule } from '@ngrx/effects';
-import { authReducer } from './ngrx/reducer';
+import { StoreModule } from '@ngrx/store';
+import { AppProfileWorkspaceComponent } from './components/profile-workspace/profile-workspace.component';
+import { AppProfileComponent } from './components/profile/profile.component';
+import { AppSocialProvidersComponent } from './components/social-providers/social-providers.component';
 import { AuthEffects } from './ngrx/effects';
+import { authReducer } from './ngrx/reducer';
 import {
     YaAuthConfig,
     YaAuthService,
     YA_AUTH_CONFIG,
 } from './services/ya-auth.service';
-import { AppProfileComponent } from './components/profile/profile.component';
-import { AppAuthWorkspaceComponent } from './components/auth-workspace/auth-workspace.component';
 
 export interface AuthConfig {
     yandex: YaAuthConfig;
@@ -26,17 +26,17 @@ export interface AuthConfig {
         EffectsModule.forFeature([AuthEffects]),
     ],
     declarations: [
-        AppLoginComponent,
+        AppSocialProvidersComponent,
         AppProfileComponent,
-        AppAuthWorkspaceComponent,
+        AppProfileWorkspaceComponent,
     ],
-    exports: [AppAuthWorkspaceComponent],
+    exports: [AppProfileWorkspaceComponent],
     providers: [YaAuthService],
 })
-export class AppAuthModule {
-    static forRoot(config: AuthConfig): ModuleWithProviders<AppAuthModule> {
+export class AppProfileModule {
+    static forRoot(config: AuthConfig): ModuleWithProviders<AppProfileModule> {
         return {
-            ngModule: AppAuthModule,
+            ngModule: AppProfileModule,
             providers: [
                 {
                     provide: YA_AUTH_CONFIG,
