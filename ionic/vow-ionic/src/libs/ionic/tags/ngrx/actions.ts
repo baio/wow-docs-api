@@ -13,3 +13,7 @@ export const createTag = createAction(
     props<{ name: string; date: number }>()
 );
 
+export const removeTag = createAction(
+    '[Tags] Remove Tag',
+    props<{ name: string }>()
+);

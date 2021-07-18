@@ -67,7 +67,7 @@ const getDocView = (doc: Doc): DocView => {
     styleUrls: ['documents-workspace.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppDocumentsWorkspaceComponent implements OnInit {
+export class AppDocumentsWorkspaceComponent {
     readonly search$ = new BehaviorSubject<string>(null);
     readonly view$: Observable<DocumentsWorkspaceView>;
 
@@ -83,10 +83,6 @@ export class AppDocumentsWorkspaceComponent implements OnInit {
             )
         );
         this.view$ = rows$.pipe(map((rows) => ({ rows })));
-    }
-
-    ngOnInit() {
-        setTimeout(() => this.store.dispatch(rehydrateDocs()), 1000);
     }
 
     onDocClick(doc: Doc) {

@@ -1,6 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Platform } from '@ionic/angular';
+import { Store } from '@ngrx/store';
 import { DbService, SqLiteService } from 'src/libs/ionic/db';
+import { rehydrateDocs } from 'src/libs/ionic/docs/ngrx/actions';
+import { rehydrateTags } from 'src/libs/ionic/tags/ngrx/actions';
 
 @Component({
     selector: 'app-root',
@@ -11,7 +14,8 @@ export class AppComponent implements OnDestroy {
     constructor(
         private readonly sqLiteService: SqLiteService,
         private readonly dbService: DbService,
-        private readonly platform: Platform
+        private readonly platform: Platform,
+        private readonly store: Store
     ) {
         this.initializeApp();
     }
@@ -24,6 +28,8 @@ export class AppComponent implements OnDestroy {
             console.log('$$$ from Echo ' + res.value);
             await this.dbService.init();
             console.log('$$$ db initialized');
+            this.store.dispatch(rehydrateDocs());
+            this.store.dispatch(rehydrateTags());
         });
     }
 

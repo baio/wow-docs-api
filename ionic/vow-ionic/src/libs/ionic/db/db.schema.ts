@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS docs (
     tags TEXT,
     comment TEXT
 );
+CREATE TABLE IF NOT EXISTS tags (
+    id TEXT PRIMARY KEY NOT NULL,
+    createDate TEXT
+);
 
 PRAGMA user_version = 1;
 `;

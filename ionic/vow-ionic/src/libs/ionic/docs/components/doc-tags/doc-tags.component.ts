@@ -46,6 +46,8 @@ export class AppDocTagsComponent {
 
     async onAddTag() {
         const tag = await this.tagsSelectorService.selectTag(this.tags || []);
-        this.addTag.next(tag);
+        if (tag) {
+            this.addTag.next(tag);
+        }
     }
 }

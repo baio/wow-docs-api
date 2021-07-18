@@ -3,7 +3,10 @@
         <ion-title>Таги</ion-title>
     </ion-toolbar>
     <ion-toolbar>
-        <ion-searchbar placeholder="найти"></ion-searchbar>
+        <ion-searchbar
+            placeholder="найти"
+            (ionChange)="onSearchChange($event)"
+        ></ion-searchbar>
     </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
@@ -11,7 +14,13 @@
         <ion-item
             *ngFor="let tag of view.tags; trackBy: trackByTag"
             (click)="onSelect(tag)"
-            >{{ tag }}</ion-item
+        >
+            <ion-icon
+                name="trash-outline"
+                slot="end"
+                (click)="$event.stopPropagation(); onRemoveTag(tag)"
+            ></ion-icon>
+            <ion-label>{{ tag }}</ion-label></ion-item
         >
     </ion-list>
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">

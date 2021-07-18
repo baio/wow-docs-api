@@ -8,6 +8,7 @@ import { DbModule } from '../db/db.module';
 import { AppTagsSelectorWorkspaceComponent } from './components/tags-selector-workspace/tags-selector-workspace.component';
 import { TagsEffects } from './ngrx/effects';
 import { tagsReducer } from './ngrx/reducer';
+import { TagsRepositoryService } from './repository/tags.repository';
 import { TagsSelectorService } from './services/tags-selector.service';
 
 @NgModule({
@@ -21,6 +22,6 @@ import { TagsSelectorService } from './services/tags-selector.service';
         ReactiveFormsModule,
     ],
     declarations: [AppTagsSelectorWorkspaceComponent],
-    providers: [TagsSelectorService],
+    providers: [TagsSelectorService, TagsRepositoryService],
 })
 export class AppTagsModule {}

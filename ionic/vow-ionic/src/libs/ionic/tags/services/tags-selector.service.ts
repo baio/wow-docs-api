@@ -15,6 +15,6 @@ export class TagsSelectorService {
         });
         await modal.present();
         const { data } = await modal.onWillDismiss();
-        return data.tag;
+        return data && data.tag;
     }
 }

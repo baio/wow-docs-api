@@ -1,11 +1,15 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import {
+    ActionSheetController,
+    AlertController,
+    ModalController,
+} from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import Fuse from 'fuse.js';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Tag } from '../../models';
-import { createTag } from '../../ngrx/actions';
+import { createTag, removeTag } from '../../ngrx/actions';
 import { selectTagsAsSortedList } from '../../ngrx/selectors';
 
 export interface TagsSelectorWorkspaceView {
@@ -48,7 +52,8 @@ export class AppTagsSelectorWorkspaceComponent {
     constructor(
         private readonly store: Store,
         private readonly modalController: ModalController,
-        private readonly alertController: AlertController
+        private readonly alertController: AlertController,
+        private readonly actionSheetController: ActionSheetController
     ) {
         const tags$ = store.select(selectTagsAsSortedList);
         this.view$ = combineLatest([tags$, this.search$]).pipe(
@@ -64,6 +69,11 @@ export class AppTagsSelectorWorkspaceComponent {
 
     onSelect(tag: string) {
         this.modalController.dismiss({ tag });
+    }
+
+    onSearchChange(evt: any) {
+        const search = evt.detail.value;
+        this.search$.next(search);
     }
 
     async onCreate() {
@@ -87,12 +97,16 @@ export class AppTagsSelectorWorkspaceComponent {
                     text: 'Создать',
                     handler: (x) => {
                         if (x.name) {
+                            const name = (x.name as string)
+                                .toLowerCase()
+                                .replace(/\s+/, ' ');
                             this.store.dispatch(
                                 createTag({
-                                    name: x.name,
+                                    name,
                                     date: new Date().getTime(),
                                 })
                             );
+                            this.onSelect(name);
                         }
                     },
                 },
@@ -100,5 +114,27 @@ export class AppTagsSelectorWorkspaceComponent {
         });
 
         const res = await alert.present();
+    }
+
+    async onRemoveTag(tag: string) {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Удалить таг',
+            buttons: [
+                {
+                    text: 'Удалить безвозвратно',
+                    icon: 'alert-outline',
+                    handler: () => {
+                        this.store.dispatch(removeTag({ name: tag }));
+                    },
+                },
+                {
+                    text: 'Отмена',
+                    icon: 'close-outline',
+                    handler: () => {},
+                },
+            ],
+        });
+
+        await actionSheet.present();
     }
 }
