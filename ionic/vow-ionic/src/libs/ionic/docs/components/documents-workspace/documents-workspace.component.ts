@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Store } from '@ngrx/store';
 import { chunk } from 'lodash';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { Doc, DocFormatted } from '../../models';
@@ -13,6 +13,7 @@ import {
     uploadImage,
 } from '../../ngrx/actions';
 import { selectDocsAsSortedList } from '../../ngrx/selectors';
+import { searchDocs } from './search-docs';
 
 export interface DocCaption {
     title: string;
@@ -67,10 +68,13 @@ const getDocView = (doc: Doc): DocView => {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppDocumentsWorkspaceComponent implements OnInit {
+    readonly search$ = new BehaviorSubject<string>(null);
     readonly view$: Observable<DocumentsWorkspaceView>;
 
     constructor(private readonly store: Store) {
-        const rows$ = store.select(selectDocsAsSortedList).pipe(
+        const docs$ = store.select(selectDocsAsSortedList);
+        const rows$ = combineLatest([docs$, this.search$]).pipe(
+            map(([docs, search]) => searchDocs(docs, search)),
             map((list) =>
                 chunk(list, 2).map(([first, second]) => ({
                     first: getDocView(first),
@@ -117,5 +121,10 @@ export class AppDocumentsWorkspaceComponent implements OnInit {
         } catch (err) {
             console.warn(err);
         }
+    }
+
+    onSearchChange(evt: any) {
+        const search = evt.detail.value;
+        this.search$.next(search);
     }
 }
