@@ -61,3 +61,13 @@ export const showFullScreenImage = createAction(
     '[Docs] Show Full Screen Image',
     props<{ doc: Doc }>()
 );
+
+export const addDocTag = createAction(
+    '[Docs] Add Doc Tag',
+    props<{ id: string; tag: string }>()
+);
+
+export const removeDocTag = createAction(
+    '[Docs] Remove Doc Tag',
+    props<{ id: string; tag: string }>()
+);

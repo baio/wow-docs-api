@@ -46,6 +46,8 @@ export interface Doc extends DocState {
     imgBase64: string;
     upload: DocUpload;
     date: number;
+    tags: string[];
+    comment: string;
 }
 
 export interface DocsState {

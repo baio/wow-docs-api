@@ -1,0 +1,22 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-title>Таги</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-searchbar placeholder="найти"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <ion-list *ngIf="view$ | async as view">
+        <ion-item
+            *ngFor="let tag of view.tags; trackBy: trackByTag"
+            (click)="onSelect(tag)"
+            >{{ tag }}</ion-item
+        >
+    </ion-list>
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+        <ion-fab-button (click)="onCreate()"
+            ><ion-icon name="add-outline"></ion-icon
+        ></ion-fab-button>
+    </ion-fab>
+</ion-content>

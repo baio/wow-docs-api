@@ -31,4 +31,12 @@
         [imgBase64]="view.doc.imgBase64"
         (imageClick)="onViewImage(view.doc)"
     ></app-doc-display>
+    <app-doc-tags
+        [tags]="view.doc.tags"
+        (addTag)="onAddTag(view.doc, $event)"
+        (removeTag)="onRemoveTag(view.doc, $event)"
+    ></app-doc-tags>
+    <ion-item>
+        <ion-textarea placeholder="Коментарий"></ion-textarea>
+    </ion-item>
 </ion-content>

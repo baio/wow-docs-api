@@ -2,8 +2,10 @@ import { createReducer, on } from '@ngrx/store';
 import { assocPath, fromPairs, omit, pipe } from 'lodash/fp';
 import { DocsState, DocState } from '../models';
 import {
+    addDocTag,
     deleteDoc,
     rehydrateDocsSuccess,
+    removeDocTag,
     setImageBase64,
     updateDocFormatted,
     updateDocState,
@@ -50,5 +52,35 @@ export const docsReducer = createReducer(
                     docFormatted ? docFormatted.kind : null
                 )
             )(state) as any
-    )
+    ),
+    on(addDocTag, (state, { id, tag }) => {
+        const doc = state.docs[id];
+        if (doc) {
+            const tags = doc?.tags || [];
+            if (!tags.includes(tag)) {
+                return assocPath(['docs', id, 'tags'], [tag, ...tags], state);
+            } else {
+                return state;
+            }
+        } else {
+            return state;
+        }
+    }),
+    on(removeDocTag, (state, { id, tag }) => {
+        const doc = state.docs[id];
+        if (doc) {
+            const tags = doc?.tags || [];
+            if (tags.includes(tag)) {
+                return assocPath(
+                    ['docs', id, 'tags'],
+                    tags.filter((f) => f !== tag),
+                    state
+                );
+            } else {
+                return state;
+            }
+        } else {
+            return state;
+        }
+    })
 );

@@ -19,9 +19,11 @@ import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Doc, DocView } from '../../models';
 import {
+    addDocTag,
     copyClipboard,
     deleteDoc,
     editDoc,
+    removeDocTag,
     shareDoc,
     showFullScreenImage,
 } from '../../ngrx/actions';
@@ -142,5 +144,13 @@ export class AppDocWorkspaceComponent implements OnInit {
 
     onCopyClipboard(doc: Doc) {
         this.store.dispatch(copyClipboard({ doc }));
+    }
+
+    onAddTag(doc: Doc, tag: string) {
+        this.store.dispatch(addDocTag({ id: doc.id, tag }));
+    }
+
+    onRemoveTag(doc: Doc, tag: string) {
+        this.store.dispatch(removeDocTag({ id: doc.id, tag }));
     }
 }
