@@ -1,34 +1,51 @@
-<ion-grid *ngIf="view$ | async as view">
-    <ion-row
-        *ngFor="let row of view.rows; trackBy: trackByRow"
-        class="list-row"
-    >
-        <ion-col size="6">
-            <ng-container
-                *ngTemplateOutlet="col; context: { $implicit: row.first }"
-            ></ng-container>
-        </ion-col>
-        <ion-col size="6">
-            <ng-container *ngIf="row.second">
+<ion-content>
+    <ion-grid *ngIf="view$ | async as view">
+        <ion-row
+            *ngFor="let row of view.rows; trackBy: trackByRow"
+            class="list-row"
+        >
+            <ion-col size="6">
                 <ng-container
-                    *ngTemplateOutlet="col; context: { $implicit: row.second }"
+                    *ngTemplateOutlet="col; context: { $implicit: row.first }"
                 ></ng-container>
-            </ng-container>
-        </ion-col>
-    </ion-row>
-</ion-grid>
-<app-upload-image-button
-    (fileSelected)="onFileSelected($event)"
-></app-upload-image-button>
+            </ion-col>
+            <ion-col size="6">
+                <ng-container *ngIf="row.second">
+                    <ng-container
+                        *ngTemplateOutlet="
+                            col;
+                            context: { $implicit: row.second }
+                        "
+                    ></ng-container>
+                </ng-container>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
-<ng-template #col let-doc>
-    <app-doc-image
-        [imgBase64]="doc.imgBase64"
-        [title]="
-            doc.caption
-                ? (doc.caption.subTitle || '') + ' ' + (doc.caption.title || '')
-                : null
-        "
-        (click)="onDocClick(doc)"
-    ></app-doc-image>
-</ng-template>
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+        <ion-fab-button (click)="onFileSelected(fileInput)"
+            ><ion-icon name="camera-outline"></ion-icon
+        ></ion-fab-button>
+    </ion-fab>
+    <input
+        type="file"
+        id="file"
+        style="display: none"
+        #fileInput
+        (change)="onFileSelected($event.target['files'][0])"
+    />
+
+    <ng-template #col let-doc>
+        <app-doc-image
+            [imgBase64]="doc.imgBase64"
+            [title]="
+                doc.caption
+                    ? (doc.caption.subTitle || '') +
+                      ' ' +
+                      (doc.caption.title || '')
+                    : null
+            "
+            (click)="onDocClick(doc)"
+        ></app-doc-image>
+    </ng-template>
+</ion-content>

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Camera, CameraResultType } from '@capacitor/camera';
 import { Store } from '@ngrx/store';
 import { chunk } from 'lodash';
 import { Observable } from 'rxjs';
@@ -84,18 +85,37 @@ export class AppDocumentsWorkspaceComponent implements OnInit {
         setTimeout(() => this.store.dispatch(rehydrateDocs()), 1000);
     }
 
-    onFileSelected(base64: string) {
-        const id = v4();
-        this.store.dispatch(
-            uploadImage({ id, base64, date: new Date().getTime() })
-        );
-    }
-
     onDocClick(doc: Doc) {
         this.store.dispatch(displayDoc({ id: doc.id }));
     }
 
     trackByRow(_, row: DocsRow) {
         return row.first.id;
+    }
+
+    async onFileSelected(fileInput: HTMLInputElement) {
+        try {
+            const image = await Camera.getPhoto({
+                quality: 90,
+                // allowEditing: true,
+                resultType: CameraResultType.Base64,
+                saveToGallery: false,
+                preserveAspectRatio: true,
+                width: 1500,
+            });
+
+            // image.webPath will contain a path that can be set as an image src.
+            // You can access the original file using image.path, which can be
+            // passed to the Filesystem API to read the raw data of the image,
+            // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+
+            const base64 = `data:image/${image.format};base64,${image.base64String}`;
+            const id = v4();
+            this.store.dispatch(
+                uploadImage({ id, base64, date: new Date().getTime() })
+            );
+        } catch (err) {
+            console.warn(err);
+        }
     }
 }
