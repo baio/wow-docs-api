@@ -78,6 +78,20 @@ export class DocsRepositoryService {
         }
     }
 
+    async setDocTags(id: string, tags: string[]) {
+        const sqlCmd = 'UPDATE docs SET tags = ? WHERE id = ?';
+        const cmdValues = [tags && tags.length > 0 ? tags.join(',') : null, id];
+        const res = await this.db.runCommand(sqlCmd, cmdValues);
+        console.log('$$$ setDocTags result', res);
+    }
+
+    async setDocComment(id: string, comment: string) {
+        const sqlCmd = 'UPDATE docs SET comment = ? WHERE id = ?';
+        const cmdValues = [comment || null, id];
+        const res = await this.db.runCommand(sqlCmd, cmdValues);
+        console.log('$$$ setDocComment result', res);
+    }
+
     async deleteDoc(id: string) {
         // add one user with statement and values
         const sqlcmd = 'DELETE FROM docs WHERE id = ?';
@@ -116,6 +130,8 @@ export class DocsRepositoryService {
                           }
                         : null,
                     formatted: m.content ? JSON.parse(m.content) : null,
+                    tags: m.tags ? m.tags.split(',') : [],
+                    comment: m.comment,
                 } as Doc)
         );
     }

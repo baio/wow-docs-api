@@ -9,7 +9,9 @@ CREATE TABLE IF NOT EXISTS docs (
     content TEXT,
     lastName TEXT,
     firstMiddleName TEXT,
-    createDate INT
+    createDate INT,
+    tags TEXT,
+    comment TEXT
 );
 
 PRAGMA user_version = 1;

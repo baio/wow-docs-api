@@ -4,7 +4,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { ModalController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of, Subject, timer } from 'rxjs';
+import { Observable, of, Subject, timer } from 'rxjs';
 import {
     catchError,
     map,
@@ -21,12 +21,14 @@ import { DocsRepositoryService } from '../repository/docs.repository';
 import { DocsDataAccessService } from '../services/docs.data-access.service';
 import { docToText } from '../utils';
 import {
+    addDocTag,
     copyClipboard,
     deleteDoc,
     displayDoc,
     editDoc,
     rehydrateDocs,
     rehydrateDocsSuccess,
+    removeDocTag,
     shareDoc,
     showFullScreenImage,
     updateDocFormatted,
@@ -38,8 +40,9 @@ import {
 import { Clipboard } from '@capacitor/clipboard';
 import { ToastController } from '@ionic/angular';
 import { AppFullScreenImageComponent } from '../components/full-screen-image/full-screen-image.component';
-import { Store } from '@ngrx/store';
-import { selectDoc } from './selectors';
+import { select, Store } from '@ngrx/store';
+import { selectDoc, selectDocs } from './selectors';
+import { Doc, DocState } from '../models';
 
 @Injectable()
 export class DocsEffects {
@@ -49,7 +52,8 @@ export class DocsEffects {
         private readonly modalController: ModalController,
         private readonly docRepository: DocsRepositoryService,
         private readonly router: Router,
-        private readonly toastController: ToastController
+        private readonly toastController: ToastController,
+        private readonly store: Store
     ) {}
 
     loadDocs$ = createEffect(() =>
@@ -272,6 +276,18 @@ export class DocsEffects {
                     });
                     await modal.present();
                     const { data } = await modal.onWillDismiss();
+                })
+            ),
+        { dispatch: false }
+    );
+
+    setDocTags$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(addDocTag, removeDocTag),
+                switchMap(({ id }) => this.store.select(selectDoc(id))),
+                tap((doc) => {
+                    this.docRepository.setDocTags(doc.id, doc.tags);
                 })
             ),
         { dispatch: false }

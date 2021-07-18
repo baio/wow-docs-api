@@ -22,7 +22,7 @@ export class DbService {
             1
         );
 
-        // await this.db.delete();
+        //await this.db.delete();
         // open db testEncryption
         await this.db.open();
 
