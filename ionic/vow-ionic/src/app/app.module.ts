@@ -6,7 +6,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { ActionReducer, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeLogger } from 'ngrx-store-logger';
-import { AppAuthModule } from 'src/libs/ionic/auth';
+import { AppAuthModule } from 'src/libs/ionic/profile';
 import { DbModule } from 'src/libs/ionic/db/db.module';
 import { AppGateKeeperModule } from 'src/libs/ionic/gate-keeper';
 import { environment } from '../environments/environment';

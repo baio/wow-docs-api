@@ -7,7 +7,7 @@ import { Tab3Page } from './tab3.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { Tab3PageRoutingModule } from './tab3-routing.module';
-import { AppAuthModule } from '../../libs/ionic/auth';
+import { AppAuthModule } from '../../libs/ionic/profile';
 
 @NgModule({
     imports: [
@@ -17,7 +17,7 @@ import { AppAuthModule } from '../../libs/ionic/auth';
         ExploreContainerComponentModule,
         RouterModule.forChild([{ path: '', component: Tab3Page }]),
         Tab3PageRoutingModule,
-        AppAuthModule
+        AppAuthModule,
     ],
     declarations: [Tab3Page],
 })
