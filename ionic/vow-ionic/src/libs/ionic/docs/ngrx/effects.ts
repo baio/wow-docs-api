@@ -115,23 +115,22 @@ export class DocsEffects {
     );
     */
 
-    uploadImage$ = createEffect(
-        () =>
-            this.actions$.pipe(
-                ofType(uploadImage),
-                tap(async ({ id }) => {
-                    const modal = await this.modalController.create({
-                        component: AppDocEditWorkspaceComponent,
-                        componentProps: {
-                            documentId: id,
-                            title: 'Новый документ',
-                        },
-                    });
-                    await modal.present();
-                    const { data } = await modal.onWillDismiss();
-                })
-            ),
-        { dispatch: false }
+    uploadImage$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(uploadImage),
+            switchMap(async ({ id }) => {
+                const modal = await this.modalController.create({
+                    component: AppDocEditWorkspaceComponent,
+                    componentProps: {
+                        documentId: id,
+                        title: 'Новый документ',
+                    },
+                });
+                await modal.present();
+                await modal.onWillDismiss();
+                return displayDoc({ id });
+            })
+        )
     );
 
     displayDocShowModal$ = createEffect(
