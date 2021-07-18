@@ -34,6 +34,10 @@ export const searchDocs = (docs: Doc[], search: string) => {
                     name: 'formatted.middleName',
                     weight: 0.1,
                 },
+                {
+                    name: 'tags',
+                    weight: 0.3,
+                },
             ],
         };
         const typedDocs = docs.map((m) => ({
