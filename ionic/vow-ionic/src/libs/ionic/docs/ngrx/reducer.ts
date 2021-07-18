@@ -6,6 +6,7 @@ import {
     deleteDoc,
     rehydrateDocsSuccess,
     removeDocTag,
+    setDocComment,
     setImageBase64,
     updateDocFormatted,
     updateDocState,
@@ -34,6 +35,9 @@ export const docsReducer = createReducer(
     ),
     on(updateDocState, (state, { id, docState }) =>
         assocPath(['docs', id], { ...state.docs[id], ...docState }, state)
+    ),
+    on(setDocComment, (state, { id, comment }) =>
+        assocPath(['docs', id, 'comment'], comment, state)
     ),
     on(rehydrateDocsSuccess, (state, { docs }) => {
         const hash = fromPairs(docs.map((m) => [m.id, m]));

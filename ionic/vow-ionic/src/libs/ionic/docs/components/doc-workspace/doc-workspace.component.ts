@@ -24,6 +24,7 @@ import {
     deleteDoc,
     editDoc,
     removeDocTag,
+    setDocComment,
     shareDoc,
     showFullScreenImage,
 } from '../../ngrx/actions';
@@ -152,5 +153,10 @@ export class AppDocWorkspaceComponent implements OnInit {
 
     onRemoveTag(doc: Doc, tag: string) {
         this.store.dispatch(removeDocTag({ id: doc.id, tag }));
+    }
+
+    onCommentChange(doc: Doc, event$: any) {
+        const comment = event$.detail.value;
+        this.store.dispatch(setDocComment({ id: doc.id, comment }));
     }
 }

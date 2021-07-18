@@ -37,6 +37,11 @@
         (removeTag)="onRemoveTag(view.doc, $event)"
     ></app-doc-tags>
     <ion-item>
-        <ion-textarea placeholder="Коментарий"></ion-textarea>
+        <ion-textarea
+            placeholder="Коментарий"
+            [debounce]="500"
+            (ionChange)="onCommentChange(view.doc, $event)"
+            [value]="view.doc.comment"
+        ></ion-textarea>
     </ion-item>
 </ion-content>

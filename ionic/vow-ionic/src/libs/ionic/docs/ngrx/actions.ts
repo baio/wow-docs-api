@@ -71,3 +71,8 @@ export const removeDocTag = createAction(
     '[Docs] Remove Doc Tag',
     props<{ id: string; tag: string }>()
 );
+
+export const setDocComment = createAction(
+    '[Docs] Set Doc Comment',
+    props<{ id: string; comment: string }>()
+);

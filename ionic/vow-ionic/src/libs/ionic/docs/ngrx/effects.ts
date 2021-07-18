@@ -29,6 +29,7 @@ import {
     rehydrateDocs,
     rehydrateDocsSuccess,
     removeDocTag,
+    setDocComment,
     shareDoc,
     showFullScreenImage,
     updateDocFormatted,
@@ -176,6 +177,17 @@ export class DocsEffects {
                 ofType(updateDocState),
                 tap(({ id, docState }) =>
                     this.docRepository.updateDocState(id, docState)
+                )
+            ),
+        { dispatch: false }
+    );
+
+    setDocComment$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(setDocComment),
+                tap(({ id, comment }) =>
+                    this.docRepository.setDocComment(id, comment)
                 )
             ),
         { dispatch: false }
