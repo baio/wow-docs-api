@@ -17,7 +17,9 @@ export class SqLiteService {
     isService = false;
     platform: string;
 
-    constructor() {}
+    constructor() {
+        console.log('777');
+    }
     /**
      * Plugin Initialization
      */

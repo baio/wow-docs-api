@@ -22,15 +22,17 @@ export class AppComponent implements OnDestroy {
     }
 
     async initializeApp() {
-        await this.platform.ready();
-        const ret = await this.sqLiteService.initializePlugin();
-        console.log('$$$ in App  this.initPlugin ', ret);
-        const res = await this.sqLiteService.echo('Hello World');
-        console.log('$$$ from Echo ' + res.value);
-        await this.dbService.init();
-        console.log('$$$ db initialized');
-        this.store.dispatch(rehydrateDocs());
-        this.store.dispatch(rehydrateTags());
+        this.platform.ready().then(async () => {
+            const ret = await this.sqLiteService.initializePlugin();
+            console.log('$$$ in App  this.initPlugin ', ret);
+
+            const res = await this.sqLiteService.echo('Hello World');
+            console.log('$$$ from Echo ' + res.value);
+            await this.dbService.init();
+            console.log('$$$ db initialized');
+            this.store.dispatch(rehydrateDocs());
+            this.store.dispatch(rehydrateTags());
+        });
     }
 
     ngOnDestroy() {
