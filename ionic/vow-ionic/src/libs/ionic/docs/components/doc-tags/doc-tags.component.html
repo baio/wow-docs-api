@@ -1,8 +1,0 @@
-<ion-chip *ngFor="let tag of tags; trackBy: trackByTag" (click)="onRemove(tag)">
-    <ion-label>{{ tag }}</ion-label>
-    <ion-icon name="close-circle"></ion-icon>
-</ion-chip>
-<ion-chip color="primary" (click)="onAddTag()">
-    <ion-icon name="add-circle"></ion-icon>
-    <ion-label>Добавить</ion-label>
-</ion-chip>
