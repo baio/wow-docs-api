@@ -11,9 +11,24 @@ docker-compose up
 
 run test requests in `test.http`
 
-## debug with docker 
+## k8s
+
+`helm install redis bitnami/redis --set auth.password="abc" --set replica.replicaCount=1`
+
+With pulumi
+
+[DAPR docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/)
+[Example](https://github.com/dapr/quickstarts/tree/v1.0.0/hello-kubernetes)
 
 ```
-$Env:PORT=3004
-dapr run --app-id label-doc --app-protocol grpc --app-port $Env:Port -- py label-doc.py
+docker build --build-arg PORT=3000 -t baio/vow-docs-read-file -f ./fsharp/ReadFile/Dockerfile ./fsharp
+kubectl apply -f ./deploy/read-file.yaml
 ```
+
+```
+cd k8s
+p up
+k apply -f ../dapr/components/pubsub.yaml
+k apply -f ../dapr/components/statestore.yaml
+```
+
