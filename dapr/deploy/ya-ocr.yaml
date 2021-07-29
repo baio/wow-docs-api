@@ -17,26 +17,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "dapr-read-file"
+  name: "dapr-ya-ocr"
   labels:
-    app: "read-file"
+    app: "ya-ocr"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "read-file"
+      app: "ya-ocr"
   template:
     metadata:
       labels:
-        app: "read-file"
+        app: "ya-ocr"
       annotations:
         dapr.io/config: "tracing"
         dapr.io/enabled: "true"
-        dapr.io/app-id: "read-file"
+        dapr.io/app-id: "ya-ocr"
         dapr.io/app-port: "3000"
     spec:
       containers:
-      - name: "read-file"
-        image: baio/vow-docs-read-file:latest
+      - name: "ya-ocr"
+        image: baio/vow-docs-ya-ocr:latest
         ports:
         - containerPort: 3000

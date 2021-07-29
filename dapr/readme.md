@@ -19,10 +19,19 @@ With pulumi
 
 [DAPR docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/)
 [Example](https://github.com/dapr/quickstarts/tree/v1.0.0/hello-kubernetes)
-
+[zipkin](https://docs.dapr.io/operations/monitoring/tracing/supported-tracing-backends/zipkin/)
+```
+kubectl apply -f ./dapr/configs/tracing.yaml
+```
 ```
 docker build --build-arg PORT=3000 -t baio/vow-docs-read-file -f ./fsharp/ReadFile/Dockerfile ./fsharp
+#
+docker push baio/vow-docs-read-file:latest
 kubectl apply -f ./deploy/read-file.yaml
+#
+docker build --build-arg PORT=3000 -t baio/vow-docs-ya-ocr -f ./fsharp/YaOCR/Dockerfile ./fsharp
+docker push baio/vow-docs-ya-ocr:latest
+kubectl apply -f ./deploy/ya-ocr.yaml
 ```
 
 ```

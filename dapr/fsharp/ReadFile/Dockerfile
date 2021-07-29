@@ -1,7 +1,7 @@
 ARG NET_IMAGE=5.0-buster-slim
 
 FROM mcr.microsoft.com/dotnet/aspnet:${NET_IMAGE} AS base
-ARG PORT=5000
+ARG PORT=3000
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:${NET_IMAGE} AS build
