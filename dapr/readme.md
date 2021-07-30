@@ -20,9 +20,16 @@ With pulumi
 [DAPR docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/)
 [Example](https://github.com/dapr/quickstarts/tree/v1.0.0/hello-kubernetes)
 [zipkin](https://docs.dapr.io/operations/monitoring/tracing/supported-tracing-backends/zipkin/)
+[new relic](https://docs.dapr.io/operations/monitoring/logging/newrelic/)
+
+```
+helm repo add newrelic https://helm-charts.newrelic.com
+helm install newrelic-logging newrelic/newrelic-logging --set licenseKey=eu01xxac810d9fa0d7dce806f0029fba74cfNRAL --set endpoint=https://log-api.eu.newrelic.com/log/v1```
+
 ```
 kubectl apply -f ./dapr/configs/tracing.yaml
 ```
+
 ```
 docker build --build-arg PORT=3000 -t baio/vow-docs-read-file -f ./fsharp/ReadFile/Dockerfile ./fsharp
 #
