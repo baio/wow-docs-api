@@ -1,9 +1,28 @@
-@BASE_URL=http://localhost:3000
 
+@BASE_URL=http://localhost
+
+GET {{BASE_URL}}:3001/dapr/subscribe
+
+##########
+
+## ReadDocEvent consumed by ya-ocr
+POST {{BASE_URL}}:3001/$pubsub/doc-read
+Content-Type: application/json
+
+{ "id": "111",
+  "specVersion": "1",
+  "source": "test",
+  "type": "test",
+  "dataContentType": "test",    
+  "data": {
+    "docKey": "xxx",
+    "docContent": "yyy"
+  }
+}
+#############
 
 ## upload
-
-POST {{BASE_URL}}/upload
+POST {{BASE_URL}}:3000/upload
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -16,3 +35,4 @@ Content-Type: image/jpg
 
 < ./images/passport-2.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+

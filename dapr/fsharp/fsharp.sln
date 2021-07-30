@@ -19,6 +19,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Dapr", "FSharp.Dapr\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "YaAuth", "YaAuth\YaAuth.fsproj", "{24B24721-0D81-4889-AE7F-D0685FCF8B16}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Fetch", "FSharp.Fetch\FSharp.Fetch.fsproj", "{6A4BD03C-D024-4592-A0E7-149FD5C14A75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{24B24721-0D81-4889-AE7F-D0685FCF8B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B24721-0D81-4889-AE7F-D0685FCF8B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B24721-0D81-4889-AE7F-D0685FCF8B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A4BD03C-D024-4592-A0E7-149FD5C14A75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A4BD03C-D024-4592-A0E7-149FD5C14A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A4BD03C-D024-4592-A0E7-149FD5C14A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A4BD03C-D024-4592-A0E7-149FD5C14A75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

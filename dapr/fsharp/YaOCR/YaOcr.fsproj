@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.fsproj" />
     <ProjectReference Include="..\Shared\Shared.fsproj" />
+    <ProjectReference Include="..\YaAuth\YaAuth.fsproj" />
   </ItemGroup>
 
 </Project>

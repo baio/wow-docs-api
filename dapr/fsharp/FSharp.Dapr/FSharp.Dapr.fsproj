@@ -12,6 +12,7 @@
         <Compile Include="Logger.fs" />
         <Compile Include="PubSub.fs" />
         <Compile Include="State.fs" />
+        <Compile Include="Secrets.fs" />
         <Compile Include="AppUtils.fs" />
         <Compile Include="App.fs" />
     </ItemGroup>

@@ -41,10 +41,9 @@ docker push baio/vow-docs-ya-ocr:latest
 kubectl apply -f ./deploy/ya-ocr.yaml
 ```
 
-```
-cd k8s
-p up
-k apply -f ../dapr/components/pubsub.yaml
-k apply -f ../dapr/components/statestore.yaml
-```
+## Secrets
 
+```
+kubectl apply -f ./dapr/components/secret-store.yaml
+kubectl apply -f ./dapr/secrets/secrets-dev.yaml
+```
