@@ -41,6 +41,15 @@ let private getYaConfig dapr =
         return config
     }
 
+let private cacheIamToken env token ttl = 
+    createStateWithMetadataAsync  
+        env 
+        DAPR_DOC_STATE_STORE 
+        STORE_IAM_KEY 
+        token 
+        (readOnlyDict ["ttlInSeconds", (ttl - 600).ToString()])
+
+let private getCachedIamToken env = getStateAsync env DAPR_DOC_STATE_STORE STORE_IAM_KEY        
 
 let private requestIAMToken env = 
 
@@ -52,12 +61,7 @@ let private requestIAMToken env =
 
         match iamResult with
         | Ok (token, ttl) -> 
-            do! createStateWithMetadataAsync  
-                    env 
-                    DAPR_DOC_STATE_STORE 
-                    STORE_IAM_KEY 
-                    token 
-                    (readOnlyDict ["ttlInSeconds", (ttl - 600).ToString()])
+            do! cacheIamToken env token ttl
             return token                
         | Error ex ->
             return raise ex    
@@ -67,15 +71,15 @@ let private getIAMToken env =
 
     task {
 
-        let! existentIamKey = getStateAsync env DAPR_DOC_STATE_STORE STORE_IAM_KEY
+        let! cachedIamToken = getCachedIamToken env
 
-        match existentIamKey with
+        match cachedIamToken with
         | None ->             
             logTrace env.Logger "Ya IAM token not found in cache, request new one"
             return! requestIAMToken env
-        | Some  existentIamKey ->
+        | Some cachedIamToken ->
             logTrace env.Logger "Ya IAM token found in cache"
-            return existentIamKey
+            return cachedIamToken
     }
 
 //
