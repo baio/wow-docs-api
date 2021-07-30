@@ -21,16 +21,16 @@ module private JWTToken =
         rsa.ImportFromPem(span)
         rsa
 
-    let getJwtToken (config: YaAuthConfig) = 
+    let getJwtToken ttl (config: YaAuthConfig) = 
         let now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
         let headers = [ ("kid", config.KeyId :> obj); ("type", "JWT" :> obj)] |> Map.ofSeq
-
+        
         let payload = [
             ("aud", YA_IAM_AUDIENCE :> obj)
             ("iss", config.ServiceAccountId :> obj)
             ("iat", now :> obj)
-            ("exp", (now + int64 3600) :> obj) ] |> Map.ofSeq 
+            ("exp", (now + int64 ttl) :> obj) ] |> Map.ofSeq 
 
         let rsaPriv = createRSA config.PrivateKey
 
@@ -51,7 +51,9 @@ module YaAuth =
 
     let getIAMToken (config: YaAuthConfig) =
 
-        let jwtToken = JWTToken.getJwtToken config
+        let ttl = 3600
+
+        let jwtToken = JWTToken.getJwtToken ttl config
 
         let request: Request<_> = {
             Url = YA_TOKENS_URL
@@ -65,7 +67,7 @@ module YaAuth =
                 result 
                 |> Result.bind(fun x -> 
                    match x.code with
-                   | 0 -> Ok x.iamToken
+                   | 0 -> Ok(x.iamToken, ttl)
                    | _ -> Error (exn x.message)
                 )
 

@@ -15,9 +15,9 @@ module State =
     let private NEW_ETAG = "-1"
 
     /// Create new item or fail if already exists
-    let tryCreateStateAsync { Dapr = dapr; Logger = logger } storeName id doc =
+    let tryCreateStateWithMetadataAsync { Dapr = dapr; Logger = logger } storeName id doc metadata =
         task {
-            let! res = dapr.TrySaveStateAsync(storeName, id, doc, NEW_ETAG)
+            let! res = dapr.TrySaveStateAsync(storeName, id, doc, NEW_ETAG, metadata = metadata)
 
             match res with
             | true ->
@@ -32,6 +32,18 @@ module State =
 
             return res
         }
+
+    let tryCreatStateAsync env storeName id doc = tryCreateStateWithMetadataAsync env storeName id doc (readOnlyDict [])    
+
+    // Create new item even if exists
+    let createStateWithMetadataAsync { Dapr = dapr; Logger = logger } storeName id doc metadata =
+        task {
+            do! dapr.SaveStateAsync(storeName, id, doc, metadata = metadata)
+
+            logTrace3 logger "{stateStore} record with {id} updated with new {document}" storeName id doc
+        }
+
+    let creatStateAsync env storeName id doc = createStateWithMetadataAsync env storeName id doc (readOnlyDict [])    
 
     /// Find item and update it if exists
     /// If item is not exists then create new and then update it
@@ -66,4 +78,19 @@ module State =
 #if TRACE                
                 logTrace3 logger "{stateStore} document with {docKey} fail to update with {result}" storeName id res
 #endif                
+        }
+
+    /// Create new item or fail if already exists
+    let getStateAsync<'a> { Dapr = dapr; Logger = logger } storeName id =
+        task {
+            let! res = dapr.GetStateAsync<'a>(storeName, id)
+
+            match box res with
+            | null  ->
+                logWarn2 logger "{stateStore} get value for {id} not found" storeName id                
+                return None
+            | _ ->
+                logTrace3 logger "{stateStore} get value for {id} return {res}" storeName id res
+                return Some res
+
         }

@@ -6,7 +6,7 @@ GET {{BASE_URL}}:3001/dapr/subscribe
 ##########
 
 ## ReadDocEvent consumed by ya-ocr
-POST {{BASE_URL}}:3001/$pubsub/doc-read
+POST {{BASE_URL}}:3000/$pubsub/doc-read
 Content-Type: application/json
 
 { "id": "111",

@@ -45,5 +45,5 @@ kubectl apply -f ./deploy/ya-ocr.yaml
 
 ```
 kubectl apply -f ./dapr/components/secret-store.yaml
-kubectl apply -f ./dapr/secrets/secrets-dev.yaml
+kubectl apply -k ./dapr/secrets/dev/ya
 ```
