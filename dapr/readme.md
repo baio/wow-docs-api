@@ -33,7 +33,6 @@ kubectl apply -f ./dapr/configs/tracing.yaml
 
 ```
 docker build --build-arg PORT=3000 -t baio/vow-docs-read-file -f ./fsharp/ReadFile/Dockerfile ./fsharp
-#
 docker push baio/vow-docs-read-file:latest
 kubectl apply -f ./deploy/read-file.yaml
 #

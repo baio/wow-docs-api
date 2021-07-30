@@ -40,3 +40,4 @@ spec:
         image: baio/vow-docs-read-file:latest
         ports:
         - containerPort: 3000
+        imagePullPolicy: "Always"
