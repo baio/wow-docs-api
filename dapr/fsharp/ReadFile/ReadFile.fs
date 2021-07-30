@@ -9,6 +9,8 @@ open Shared
 open Domain
 open FSharp.Dapr
 
+// TODO : Validate file size and image size
+
 let fileUploadHandler =
     fun (env: DaprAppEnv) (next: HttpFunc) (ctx: HttpContext) ->
         task {
@@ -18,8 +20,13 @@ let fileUploadHandler =
                     ctx.Request.Form.Files
                     |> Seq.tryFind (fun f -> f.Name = "file")
 
-                match file with
-                | Some file ->
+                let docKey =
+                    match ctx.Request.Form.TryGetValue "docKey" with
+                    | true, v -> Some v.[0]
+                    | _ -> None
+
+                match file, docKey with
+                | Some file, Some docId ->
                     let fileStream = file.OpenReadStream()
                     let memoryStream = new MemoryStream()
                     do! fileStream.CopyToAsync(memoryStream)
@@ -27,12 +34,12 @@ let fileUploadHandler =
                     let fileBase64 = System.Convert.ToBase64String bytes
 
                     let event =
-                        { DocContent = "xxx"
-                          DocKey = fileBase64.Substring(0, System.Random(100).Next(1, 300)) }
+                        { DocContent = fileBase64
+                          DocKey = docId }
 
                     do! publishDocRead env event
                     return! json event next ctx
-                | None -> return! RequestErrors.BAD_REQUEST {| file = "Missed file with name file" |} next ctx
+                | _ -> return! RequestErrors.BAD_REQUEST {| file = "Missed file with name file or docId" |} next ctx
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx
         }
 

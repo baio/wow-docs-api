@@ -21,6 +21,7 @@ With pulumi
 [Example](https://github.com/dapr/quickstarts/tree/v1.0.0/hello-kubernetes)
 [zipkin](https://docs.dapr.io/operations/monitoring/tracing/supported-tracing-backends/zipkin/)
 [new relic](https://docs.dapr.io/operations/monitoring/logging/newrelic/)
+[bridge to k8s](https://www.youtube.com/watch?v=ZwFOEUYe1WA&t=120s)
 
 ```
 helm repo add newrelic https://helm-charts.newrelic.com
