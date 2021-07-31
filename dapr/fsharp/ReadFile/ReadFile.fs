@@ -14,8 +14,6 @@ open FSharp.Dapr
 let fileUploadHandler =
     fun (env: DaprAppEnv) (next: HttpFunc) (ctx: HttpContext) ->
         task {
-            let! s = getSecret' env.Dapr "kubernetes" "vow-docs-ya"
-            printfn "1111 %O" (s.Values |> Seq.head)
             match ctx.Request.HasFormContentType with
             | true ->
                 let file =
@@ -36,7 +34,7 @@ let fileUploadHandler =
                     let fileBase64 = System.Convert.ToBase64String bytes
 
                     let event =
-                        { DocContent = "!!!" //fileBase64
+                        { DocContent = fileBase64
                           DocKey = docId }
 
                     do! publishDocRead env event
