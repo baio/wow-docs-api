@@ -39,7 +39,7 @@ let fileUploadHandler =
 
                     do! publishDocRead env event
                     return! json event next ctx
-                | _ -> return! RequestErrors.BAD_REQUEST {| file = "Missed file with name file or docId" |} next ctx
+                | _ -> return! RequestErrors.BAD_REQUEST {| file = "Missed file with name file or docKey" |} next ctx
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx
         }
 

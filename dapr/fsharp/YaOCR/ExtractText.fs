@@ -89,12 +89,15 @@ module internal ExtractText =
                   Body = Some body
                   Headers = Map [ ("Authorization", $"Bearer {iamToken}") ] }
 
+            printfn "request %O" request                  
+
             let! result = fetch<YaOCRJson.YaOcr, _> request
 
             let wordsResult =
                 result
                 |> Result.bind
                     (fun yaOcrJson ->
+                        printfn "??? %O" yaOcrJson
                         match (yaOcrJson.code, yaOcrJson.results) with
                         | 16, _ -> Error(UnAuthorizedException "Unauthorized")
                         | 0, results ->
