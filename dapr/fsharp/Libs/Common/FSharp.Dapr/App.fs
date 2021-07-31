@@ -12,6 +12,7 @@ module App =
     open System.Text.Json.Serialization
     open Giraffe
     open System.Text.Json
+    open FSharp.Control.Tasks
 
     type PubSubName = string
 
@@ -28,7 +29,18 @@ module App =
     let private subToHandler envFactory (pubSubName, topicName, topicHandler: TopicHandler<'x>) =
         POST
         >=> route $"/${pubSubName}/{topicName}"
-        >=> (fun next ctx -> topicHandler (envFactory ctx) next ctx)
+        >=> (fun next ctx ->
+            task {
+                try
+                    return! topicHandler (envFactory ctx) next ctx
+                with
+                | ex ->
+                    ctx
+                        .GetLogger()
+                        .LogError("Error while handling, return ok to not retry. Error : {error}", ex)
+
+                    return! Successful.ok (json {| ok = "OK but not OK, to not retry" |}) next ctx
+            })
 
     let private getDaprSubscribeHandler (subs: DaprSubs<'x>) =
         subs
@@ -48,7 +60,7 @@ module App =
         let subscribeRouter = getDaprSubscribeRouter subs
         let subToHandler = subToHandler dapr
         let routers = subs |> List.map (subToHandler)
-        subscribeRouter :: routers |> choose    
+        subscribeRouter :: routers |> choose
 
     let daprApp'
         (webhostConfig: IConfiguration -> IWebHostBuilder -> IWebHostBuilder)
@@ -97,7 +109,7 @@ module App =
                 .AddEnvironmentVariables()
                 .Build()
 
-        let appBuilder = 
+        let appBuilder =
             application {
                 use_config (fun _ -> config)
                 use_router routes
@@ -106,6 +118,7 @@ module App =
                 use_json_serializer (serializer)
                 webhost_config (webhostConfig config)
             }
-        appBuilder            
+
+        appBuilder
 
     let daprApp webhostConfig = daprApp' webhostConfig (fst)

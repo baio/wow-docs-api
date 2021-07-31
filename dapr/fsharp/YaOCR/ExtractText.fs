@@ -99,6 +99,7 @@ module internal ExtractText =
                     (fun yaOcrJson ->
                         printfn "??? %O" yaOcrJson
                         match (yaOcrJson.code, yaOcrJson.results) with
+                        | 7, _ -> Error(UnAuthorizedException "Unauthorized")
                         | 16, _ -> Error(UnAuthorizedException "Unauthorized")
                         | 0, results ->
                             results.[0].results.[0].textDetection.pages.[0]
