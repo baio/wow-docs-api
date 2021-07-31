@@ -21,6 +21,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "YaAuth", "Libs\Common\YaAut
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Fetch", "Libs\Common\FSharp.Fetch\FSharp.Fetch.fsproj", "{6A4BD03C-D024-4592-A0E7-149FD5C14A75}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ParseDoc", "ParseDoc\ParseDoc.fsproj", "{076164DC-1B1F-47C0-BC6A-CF416483BC3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{6A4BD03C-D024-4592-A0E7-149FD5C14A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A4BD03C-D024-4592-A0E7-149FD5C14A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A4BD03C-D024-4592-A0E7-149FD5C14A75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{076164DC-1B1F-47C0-BC6A-CF416483BC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{076164DC-1B1F-47C0-BC6A-CF416483BC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{076164DC-1B1F-47C0-BC6A-CF416483BC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{076164DC-1B1F-47C0-BC6A-CF416483BC3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
