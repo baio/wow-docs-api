@@ -23,6 +23,10 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Constants.fs" />
+    <Compile Include="Config.fs" />
+    <Compile Include="IamToken.fs" />
+    <Compile Include="ExtractText.fs" />
     <Compile Include="YaOCR.fs" />
   </ItemGroup>
 
@@ -32,6 +36,7 @@
     <ProjectReference Include="..\Domain\Domain.fsproj" />
     <ProjectReference Include="..\Shared\Shared.fsproj" />
     <ProjectReference Include="..\YaAuth\YaAuth.fsproj" />
+    <ProjectReference Include="..\FSharp.Fetch\FSharp.Fetch.fsproj" />
   </ItemGroup>
 
 </Project>

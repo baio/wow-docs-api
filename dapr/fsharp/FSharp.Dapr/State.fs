@@ -94,3 +94,7 @@ module State =
                 return Some res
 
         }
+
+    /// Create new item or fail if already exists
+    let deleteStateAsync { Dapr = dapr; Logger = logger } storeName id =
+        dapr.DeleteStateAsync(storeName, id)

@@ -1,85 +1,41 @@
-module StoreDoc
+module YaOCR.Main
 
 open FSharp.Control.Tasks
 open Shared
 open Domain
 open FSharp.Dapr
-open YaAuth
+open YaOCR.IamToken
+open YaOCR.ExtractText
 
-
-let SECRET_STORE_NAME = "vow-docs"
-let SECRET_NAME = "vow-docs-ya"
-let YA_SERVICE_ACCOUNT_ID_KEY = "YA_SERVICE_ACCOUNT_ID"
-let YA_KEY_ID_KEY = "YA_KEY_ID"
-let YA_PRIVATE_KEY_KEY = "ya-private-key.pem"
-
-let STORE_IAM_KEY = "ya-iam-key"
-
-let private getYaConfig dapr =
-
+let rec private extractWords retryOnUanauthorized (env: DaprAppEnv) imgBase64 =
     task {
+        let! iamToken = getIAMToken env
 
-        let! secrets = 
-            getAllSecrets 
-                dapr
-                SECRET_STORE_NAME 
-                SECRET_NAME
-                [YA_SERVICE_ACCOUNT_ID_KEY; YA_KEY_ID_KEY; YA_PRIVATE_KEY_KEY]        
+        let! result = extractText env.Dapr iamToken imgBase64
 
-        let (yaServiceAccountId, yaKeyId, yaPrivateKey) =
-            match secrets with
-            | Some ([yaServiceAccountId; yaKeyId; yaPrivateKey]) -> yaServiceAccountId, yaKeyId, yaPrivateKey
-            | _ ->
-                raise (exn "Some Ya secrets not found")
+        let! words =
+            match result with
+            | Ok words -> System.Threading.Tasks.Task.FromResult words
+            | Error ex ->
+                match ex with
+                | :? UnAuthorizedException ->
+                    logWarn env.Logger "YaOcr unauthorized error consider IAM token expired or revoked"
 
-        let config = {
-            ServiceAccountId = yaServiceAccountId
-            KeyId = yaKeyId
-            PrivateKey = yaPrivateKey
-        }
+                    task {
+                        match retryOnUanauthorized with
+                        | true ->
+                            logDebug env.Logger "Retry extract text with another IAM token"
+                            do! clearIAMTokenCache env
+                            return! extractWords false env imgBase64
+                        | false ->
+                            logError1 env.Logger "Unauthorized {error} on retry" ex
+                            return raise ex
+                    }
+                | _ ->
+                    logError1 env.Logger "YaOCR error {error}" ex
+                    raise ex
 
-        return config
-    }
-
-let private cacheIamToken env token ttl = 
-    createStateWithMetadataAsync  
-        env 
-        DAPR_DOC_STATE_STORE 
-        STORE_IAM_KEY 
-        token 
-        (readOnlyDict ["ttlInSeconds", (ttl - 600).ToString()])
-
-let private getCachedIamToken env = getStateAsync env DAPR_DOC_STATE_STORE STORE_IAM_KEY        
-
-let private requestIAMToken env = 
-
-    task {
-
-        let! config = getYaConfig env.Dapr
-
-        let! iamResult = getIAMToken config 
-
-        match iamResult with
-        | Ok (token, ttl) -> 
-            do! cacheIamToken env token ttl
-            return token                
-        | Error ex ->
-            return raise ex    
-    }
-
-let private getIAMToken env = 
-
-    task {
-
-        let! cachedIamToken = getCachedIamToken env
-
-        match cachedIamToken with
-        | None ->             
-            logTrace env.Logger "Ya IAM token not found in cache, request new one"
-            return! requestIAMToken env
-        | Some cachedIamToken ->
-            logTrace env.Logger "Ya IAM token found in cache"
-            return cachedIamToken
+        return words
     }
 
 //
@@ -87,13 +43,13 @@ let docRead (event: DocReadEvent) (env: DaprAppEnv) =
 
     task {
 
-        let! iamToken = getIAMToken env
+        let! words = extractWords true env event.DocContent
 
-        let docExtractedText : DocExtarctedText =
-            { Words = event.DocContent.Split("a")
+        let docExtractedText: DocExtarctedText =
+            { Words = words
               Provider = DocTextExtarctedProvider.YaOCR }
 
-        let docTextExtractedEvent : DocTextExtractedEvent =
+        let docTextExtractedEvent: DocTextExtractedEvent =
             { DocKey = event.DocKey
               DocExtractedText = docExtractedText }
 
