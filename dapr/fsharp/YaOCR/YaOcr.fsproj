@@ -33,10 +33,10 @@
   <ItemGroup />
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.fsproj" />
-    <ProjectReference Include="..\Shared\Shared.fsproj" />
-    <ProjectReference Include="..\YaAuth\YaAuth.fsproj" />
-    <ProjectReference Include="..\FSharp.Fetch\FSharp.Fetch.fsproj" />
+    <ProjectReference Include="..\Libs\Vow\Domain\Domain.fsproj" />
+    <ProjectReference Include="..\Libs\Vow\Shared\Shared.fsproj" />
+    <ProjectReference Include="..\Libs\Common\YaAuth\YaAuth.fsproj" />
+    <ProjectReference Include="..\Libs\Common\FSharp.Fetch\FSharp.Fetch.fsproj" />
   </ItemGroup>
 
 </Project>

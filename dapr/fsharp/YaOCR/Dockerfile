@@ -7,9 +7,11 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:${NET_IMAGE} AS build
 WORKDIR /src
 
-COPY ["FSharp.Dapr/", "FSharp.Dapr/"]
-COPY ["Shared/", "Shared/"]
-COPY ["Domain/", "Domain/"]
+COPY ["Libs/Common/YaOCR/", "Libs/Common/YaOCR/"]
+COPY ["Libs/Common/FSharp.Fetch/", "Libs/Common/FSharp.Fetch/"]
+COPY ["Libs/Common/FSharp.Dapr/", "Libs/Common/FSharp.Dapr/"]
+COPY ["Libs/Common/Shared/", "Libs/Common/Shared/"]
+COPY ["Libs/Vow/Domain/", "Libs/Vow/Domain/"]
 COPY ["YaOCR/", "YaOCR/"]
 COPY ["fsharp.sln", "fsharp.sln"]
 RUN dotnet restore YaOCR

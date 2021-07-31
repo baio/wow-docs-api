@@ -30,7 +30,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.fsproj" />
-      <ProjectReference Include="..\FSharp.Dapr\FSharp.Dapr.fsproj" />
+      <ProjectReference Include="..\..\Common\FSharp.Dapr\FSharp.Dapr.fsproj" />
     </ItemGroup>
 
 </Project>

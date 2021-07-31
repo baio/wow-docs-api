@@ -7,19 +7,19 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ReadFile", "ReadFile\ReadFi
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "YaOCR", "YaOCR\YaOCR.fsproj", "{10B0BD88-7F6F-48DE-8FF2-BB8F1C92C2C7}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Shared", "Shared\Shared.fsproj", "{2C6961C3-FB54-485B-88DC-FF1BDB090379}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Shared", "Libs\Vow\Shared\Shared.fsproj", "{2C6961C3-FB54-485B-88DC-FF1BDB090379}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "EventsStore", "EventsStore\EventsStore.fsproj", "{849A022A-F88E-4F1F-902E-49EF2EBFEAEB}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StoreDoc", "StoreDoc\StoreDoc.fsproj", "{5D766C7D-6A02-4E2D-8B97-730791639B80}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Domain", "Domain\Domain.fsproj", "{A917CB1B-1129-4A21-8719-A7FFFB9D6C29}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Domain", "Libs\Vow\Domain\Domain.fsproj", "{A917CB1B-1129-4A21-8719-A7FFFB9D6C29}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Dapr", "FSharp.Dapr\FSharp.Dapr.fsproj", "{D5024F57-C24C-44CB-8B08-FD1AE82512D0}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Dapr", "Libs\Common\FSharp.Dapr\FSharp.Dapr.fsproj", "{D5024F57-C24C-44CB-8B08-FD1AE82512D0}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "YaAuth", "YaAuth\YaAuth.fsproj", "{24B24721-0D81-4889-AE7F-D0685FCF8B16}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "YaAuth", "Libs\Common\YaAuth\YaAuth.fsproj", "{24B24721-0D81-4889-AE7F-D0685FCF8B16}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Fetch", "FSharp.Fetch\FSharp.Fetch.fsproj", "{6A4BD03C-D024-4592-A0E7-149FD5C14A75}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Fetch", "Libs\Common\FSharp.Fetch\FSharp.Fetch.fsproj", "{6A4BD03C-D024-4592-A0E7-149FD5C14A75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
