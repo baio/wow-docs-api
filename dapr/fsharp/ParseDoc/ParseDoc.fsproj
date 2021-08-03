@@ -6,7 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Utils.fs" />
-    <Compile Include="CleanLine.fs" />    
     <Compile Include="Resources.fs" />
     <Compile Include="NameHelpers.fs" />
     <Compile Include="RegexHelpers.fs" />
