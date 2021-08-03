@@ -41,3 +41,7 @@ module DaprEvents =
     let subscribeDocLabeled x =
         x
         |> subscribeDapr<DaprAppEnv, DocLabeledEvent, bool> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_LABELED
+
+    let subscribeDocParsed x =
+        x
+        |> subscribeDapr<DaprAppEnv, DocParsedEvent, unit> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_PARSED

@@ -9,12 +9,7 @@ open Config
 let STORE_IAM_KEY = "ya-iam-key"
 
 let private cacheIamToken env token ttl =
-    createStateWithMetadataAsync
-        env
-        DAPR_DOC_STATE_STORE
-        STORE_IAM_KEY
-        token
-        (readOnlyDict [ "ttlInSeconds", ttl.ToString() ])
+    creatStateTTLAsync env DAPR_DOC_STATE_STORE STORE_IAM_KEY token ttl
 
 let private getCachedIamToken env =
     getStateAsync env DAPR_DOC_STATE_STORE STORE_IAM_KEY

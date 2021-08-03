@@ -8,73 +8,23 @@ open Domain
 open FSharp.Dapr
 
 //
+
+let TTL_FOR_STORE_PARSED_DOC = 60
+
 type DocEntry =
-    { DocId: string
-      Store: DocStore option
-      ExtractedText: DocExtarctedText option
-      Label: DocLabeled option }
+    { DocKey: string
+      DocParsed: DocParsed }
 
-let createDocEntry docId =
-    { DocId = docId
-      Store = None
-      ExtractedText = None
-      Label = None }
+let docTextParsed (event: DocParsedEvent) env =
+    creatStateTTLAsync
+        env
+        DAPR_DOC_STATE_STORE
+        event.DocKey
+        { DocKey = event.DocKey
+          DocParsed = event.DocParsed }
+        TTL_FOR_STORE_PARSED_DOC
 
-let docRead (event: DocReadEvent) env =
-    task {
-        let docEntry = createDocEntry event.DocKey
-        let! _ = tryCreateStateAsync env DAPR_DOC_STATE_STORE event.DocKey docEntry
-        return true
-    }
-
-let docStored (event: DocStoredEvent) env =
-    task {
-        let! _ =
-            tryUpdateOrCreateStateAsync
-                env
-                DAPR_DOC_STATE_STORE
-                event.DocKey
-                createDocEntry
-                (fun doc -> { doc with Store = Some event.DocStore })
-
-        return true
-    }
-
-let docTextExtracted (event: DocTextExtractedEvent) env =
-    task {
-        let! _ =
-            tryUpdateOrCreateStateAsync
-                env
-                DAPR_DOC_STATE_STORE
-                event.DocKey
-                createDocEntry
-                (fun doc ->
-                    { doc with
-                          ExtractedText = Some event.DocExtractedText })
-
-        return true
-    }
-
-let docTextLabeled (event: DocLabeledEvent) env =
-    task {
-        let! _ =
-            tryUpdateOrCreateStateAsync
-                env
-                DAPR_DOC_STATE_STORE
-                event.DocKey
-                createDocEntry
-                (fun doc ->
-                    { doc with
-                          Label = Some event.DocLabeled })
-
-        return true
-    }
-
-let subs =
-    [ subscribeDocRead docRead
-      subscribeDocStored docStored
-      subscribeDocTextExtracted docTextExtracted
-      subscribeDocLabeled docTextLabeled ]
+let subs = [ subscribeDocParsed docTextParsed ]
 
 [<EntryPoint>]
-let main _ = runDaprApp 5002 (DaprSubs subs)
+let main _ = runDaprApp 3003 (DaprSubs subs)
