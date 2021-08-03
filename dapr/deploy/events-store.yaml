@@ -1,0 +1,42 @@
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: "dapr-read-file"
+#   labels:
+#     app: "read-file"
+# spec:
+#   selector:
+#     app: node
+#   ports:
+#   - protocol: TCP
+#     port: 3000
+#     targetPort: 3000
+#   type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "dapr-events-store"
+  labels:
+    app: "events-store"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "events-store"
+  template:
+    metadata:
+      labels:
+        app: "events-store"
+      annotations:
+        dapr.io/config: "tracing"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "events-store"
+        dapr.io/app-port: "3000"
+    spec:
+      containers:
+      - name: "events-store"
+        image: baio/vow-docs-events-store:latest
+        ports:
+        - containerPort: 3000

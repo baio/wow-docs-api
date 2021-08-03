@@ -43,6 +43,10 @@ kubectl apply -f ./deploy/ya-ocr.yaml
 docker build --build-arg PORT=3000 -t baio/vow-docs-parse-doc -f ./fsharp/ParseDoc/Dockerfile ./fsharp
 docker push baio/vow-docs-parse-doc:latest
 kubectl apply -f ./deploy/parse-doc.yaml
+#
+docker build --build-arg PORT=3000 -t baio/vow-docs-events-store -f ./fsharp/EventsStore/Dockerfile ./fsharp
+docker push baio/vow-docs-events-store:latest
+kubectl apply -f ./deploy/events-store.yaml
 ```
 
 ## Secrets
