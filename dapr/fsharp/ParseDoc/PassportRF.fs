@@ -62,8 +62,11 @@ let parseBirthPlace str =
     let birthPlace = Regex "(рожден.*?\s+)(.*?)([a-z]+)"
     let birthPlaceMatch = birthPlace.Matches str
     let res = iimlg birthPlaceMatch 2
+
     if isNull res then
-        let birthPlace = Regex "\d{2}\.\d{2}\.\d{4}.*\d{2}\.\d{2}\.\d{4}(.*?)([a-z]+)"
+        let birthPlace =
+            Regex "\d{2}\.\d{2}\.\d{4}.*\d{2}\.\d{2}\.\d{4}(.*?)([a-z]+)"
+
         let birthPlaceMatch = birthPlace.Match str
         iimg birthPlaceMatch 1
     else
