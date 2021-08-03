@@ -31,12 +31,19 @@ let Case1Words =
        "обл."
        "PNRUSPUTILOV<3131223740049<50" |]
 
+
 [<Tests>]
 let tests =
+    let resources = loadResources ()
+
     testList
         "PassportRF"
         [ testCase
               "case 1"
               (fun _ ->
-                  let actual = PassportRF.parse Case1Words
-                  Expect.equal actual [||] "kek") ]
+                  let words = Case1Words |> cleanLine
+
+                  let actual = PassportRF.parse resources.RuNames words
+
+                  printfn "%O" actual
+                  Expect.equal actual actual "kek") ]

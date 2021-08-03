@@ -1,4 +1,6 @@
-﻿module ParseDoc
+﻿module ParseDoc.Main
 
-let parseDoc words =
-    printfn "Hello %s" words
+[<EntryPoint>]
+let parseDoc argv =
+    printfn "!!!"
+    0
