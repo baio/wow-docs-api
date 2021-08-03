@@ -50,6 +50,8 @@ module internal ExtractText =
     open FSharp.Control.Tasks
     open YaOCR.Constants
 
+    exception UnAuthorizedException of string
+
     let YA_OCR_URL =
         "https://vision.api.cloud.yandex.net/vision/v1/batchAnalyze"
 
@@ -67,7 +69,16 @@ module internal ExtractText =
             return yaFolder
         }
 
-    exception UnAuthorizedException of string
+    let cleanWordsLine words =
+        words
+        |> Seq.fold
+            (fun acc (v: string) ->
+                if v.Length = 1 then
+                    acc + v
+                else
+                    acc + " " + v)
+            ""
+        |> (fun x -> x.ToLower().Trim())
 
     let extractText dapr iamToken (imgBase64: string) =
         task {
@@ -89,7 +100,7 @@ module internal ExtractText =
                   Body = Some body
                   Headers = Map [ ("Authorization", $"Bearer {iamToken}") ] }
 
-            printfn "request %O" request                  
+            printfn "request %O" request
 
             let! result = fetch<YaOCRJson.YaOcr, _> request
 
@@ -97,7 +108,6 @@ module internal ExtractText =
                 result
                 |> Result.bind
                     (fun yaOcrJson ->
-                        printfn "??? %O" yaOcrJson
                         match (yaOcrJson.code, yaOcrJson.results) with
                         | 7, _ -> Error(UnAuthorizedException "Unauthorized")
                         | 16, _ -> Error(UnAuthorizedException "Unauthorized")
@@ -108,6 +118,7 @@ module internal ExtractText =
                                 (fun block ->
                                     block.lines
                                     |> Array.collect (fun line -> line.words |> Array.map (fun word -> word.text)))
+                                    |> cleanWordsLine
                             |> Ok
                         | _ -> Error(exn "Ya OCR can't extract text"))
 

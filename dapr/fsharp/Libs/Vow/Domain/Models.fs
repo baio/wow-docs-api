@@ -1,36 +1,30 @@
 ﻿namespace Domain
 
 [<AutoOpen>]
-module Models = 
+module Models =
 
-    type DocStoreProvider =
-        | YaCloud
+    type DocStoreProvider = | YaCloud
 
-    type DocStore = {
-        Url: string
-        Provider: DocStoreProvider
-    }
+    type DocStore =
+        { Url: string
+          Provider: DocStoreProvider }
 
     //
-    type DocTextExtarctedProvider = 
-        |  YaOCR
+    type DocTextExtarctedProvider = | YaOCR
 
-    type DocExtarctedText = {
-        Words: string array
-        Provider: DocTextExtarctedProvider
-    }
+    type DocExtarctedText =
+        { Words: string
+          Provider: DocTextExtarctedProvider }
 
     //
-    type DocLabeledProvider = 
-        |  CustomPy
+    type DocLabeledProvider = | CustomPy
 
-    type DocLabel = 
+    type DocLabel =
         | Passport
         | ForeignPassport
         | DriverLicense
         | Visa
 
-    type DocLabeled = {
-        Label: DocLabel
-        Provider: DocLabeledProvider
-    }
+    type DocLabeled =
+        { Label: DocLabel
+          Provider: DocLabeledProvider }
