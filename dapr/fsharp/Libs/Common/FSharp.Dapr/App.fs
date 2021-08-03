@@ -105,7 +105,7 @@ module App =
         //
         let config =
             ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.json", optional = true)
                 .AddEnvironmentVariables()
                 .Build()
 

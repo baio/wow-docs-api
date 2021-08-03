@@ -1,0 +1,42 @@
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: "dapr-read-file"
+#   labels:
+#     app: "read-file"
+# spec:
+#   selector:
+#     app: node
+#   ports:
+#   - protocol: TCP
+#     port: 3000
+#     targetPort: 3000
+#   type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "dapr-parse-doc"
+  labels:
+    app: "parse-doc"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "parse-doc"
+  template:
+    metadata:
+      labels:
+        app: "parse-doc"
+      annotations:
+        dapr.io/config: "tracing"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "parse-doc"
+        dapr.io/app-port: "3000"
+    spec:
+      containers:
+      - name: "parse-doc"
+        image: baio/vow-docs-parse-doc:latest
+        ports:
+        - containerPort: 3000
