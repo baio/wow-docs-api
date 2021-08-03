@@ -1,19 +1,8 @@
 [<RequireQualifiedAccess>]
 module ParseDoc.PassportRF
 
+open Domain
 open System.Text.RegularExpressions
-
-type Data =
-    { Issuer: string
-      IssuerCode: string
-      BirthDate: string
-      Number: string
-      FirstName: string
-      LastName: string
-      MiddleName: string
-      Sex: string
-      IssueDate: string
-      BirthPlace: string }
 
 let parseIssuer str =
     let issuer =

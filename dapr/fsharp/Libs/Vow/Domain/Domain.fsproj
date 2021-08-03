@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ParsedDocModels.fs" />
     <Compile Include="Models.fs" />
     <Compile Include="Events.fs" />
   </ItemGroup>

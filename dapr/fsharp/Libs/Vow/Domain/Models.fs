@@ -28,3 +28,5 @@ module Models =
     type DocLabeled =
         { Label: DocLabel
           Provider: DocLabeledProvider }
+
+    type DocParsed = { ParsedDoc: ParsedDoc }

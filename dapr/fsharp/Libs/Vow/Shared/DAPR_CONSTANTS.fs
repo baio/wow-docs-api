@@ -9,3 +9,4 @@ module DAPR_CONSTANTS =
     let DAPR_TOPIC_DOC_STORED = "doc-stored"
     let DAPR_TOPIC_DOC_TEXT_EXTRACTED = "doc-text-extracted"
     let DAPR_TOPIC_DOC_LABELED = "doc-text-labeled"
+    let DAPR_TOPIC_DOC_PARSED = "doc-text-parsed"

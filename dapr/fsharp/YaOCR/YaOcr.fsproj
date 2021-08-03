@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Libs\Vow\Domain\Domain.fsproj" />
     <ProjectReference Include="..\Libs\Vow\Shared\Shared.fsproj" />
+    <ProjectReference Include="..\Libs\Common\FSharp.Dapr\FSharp.Dapr.fsproj" />
     <ProjectReference Include="..\Libs\Common\YaAuth\YaAuth.fsproj" />
     <ProjectReference Include="..\Libs\Common\FSharp.Fetch\FSharp.Fetch.fsproj" />
   </ItemGroup>

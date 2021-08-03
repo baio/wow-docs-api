@@ -22,6 +22,10 @@ module DaprEvents =
         x
         |> publishEventAsync<DocLabeledEvent> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_LABELED
 
+    let publishDocParsed x =
+        x
+        |> publishEventAsync<DocParsedEvent> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_PARSED
+
     let subscribeDocRead x =
         x
         |> subscribeDapr<DaprAppEnv, DocReadEvent, bool> DAPR_DOC_PUB_SUB DAPR_TOPIC_DOC_READ

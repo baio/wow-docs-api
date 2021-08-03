@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <WarnOn>3390;$(WarnOn)</WarnOn>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="Utils.fs" />
     <Compile Include="Resources.fs" />
@@ -11,6 +12,7 @@
     <Compile Include="RegexHelpers.fs" />
     <Compile Include="PassportRF.fs" />
     <Compile Include="ParseDoc.fs" />
+    <Compile Include="Main.fs" />
     <EmbeddedResource Include="data/fnames.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -21,4 +23,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ply" Version="0.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libs\Vow\Domain\Domain.fsproj" />
+    <ProjectReference Include="..\Libs\Vow\Shared\Shared.fsproj" />
+    <ProjectReference Include="..\Libs\Common\FSharp.Dapr\FSharp.Dapr.fsproj" />
+  </ItemGroup>
+
 </Project>
