@@ -25,6 +25,12 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ParseDoc", "ParseDoc\ParseD
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ParseDocTest", "ParseDocTest\ParseDocTest.fsproj", "{824A5F7F-111C-4E13-B05D-28DC4F0363C3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{BD41BB7E-A8F7-41F4-86B1-5FA07489E5BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{6A969FE0-57AE-4EDD-8794-8E2659C060C7}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.DaprTest", "Libs\Common\FSharp.DaprTest\FSharp.DaprTest.fsproj", "{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,11 +81,19 @@ Global
 		{824A5F7F-111C-4E13-B05D-28DC4F0363C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{824A5F7F-111C-4E13-B05D-28DC4F0363C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{824A5F7F-111C-4E13-B05D-28DC4F0363C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {338F65A5-1E90-41C5-8B2F-BD079F21FA45}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6A969FE0-57AE-4EDD-8794-8E2659C060C7} = {BD41BB7E-A8F7-41F4-86B1-5FA07489E5BF}
+		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D} = {6A969FE0-57AE-4EDD-8794-8E2659C060C7}
 	EndGlobalSection
 EndGlobal

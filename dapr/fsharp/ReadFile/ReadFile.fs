@@ -47,4 +47,5 @@ let router =
     fun dapr -> router { post "/upload" (fileUploadHandler dapr) }
 
 [<EntryPoint>]
-let main _ = runDaprApp 5000 (DaprRouter router)
+let main _ =
+    runSharedDaprApp 5000 (DaprRouter router)

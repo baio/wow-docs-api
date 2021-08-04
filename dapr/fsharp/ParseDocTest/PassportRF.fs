@@ -2,6 +2,7 @@ module PassportRFTests
 
 open Expecto
 open ParseDoc
+open Domain
 
 let Case1Words =
     "российская федерация отделением уфмс россии по челябинской областив гор. трехгорный сл 21.10.2013 123-456 путилов максим сл александрович мух. 11.03.1980 гор. златоуст челябинской обл. pnrusputilov<<maksim<aleksandrovi3<<<<<<<<<< 7824678082rus8003111m<<<<<<<3131223740049<50"
@@ -15,7 +16,7 @@ let tests =
         [ testCase
               "case 1"
               (fun _ ->
-                  let expected: PassportRF.Data =
+                  let expected: PassportRF  =
                       { Issuer =
                             "российская федерация отделением уфмс россии по челябинской областив гор. трехгорный сл"
                         IssuerCode = "123-456"

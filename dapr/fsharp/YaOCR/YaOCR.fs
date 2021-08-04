@@ -60,4 +60,4 @@ let docRead (event: DocReadEvent) (env: DaprAppEnv) =
 
 [<EntryPoint>]
 let main _ =
-    runDaprApp 3001 (DaprSubs [ subscribeDocRead docRead ])
+    runSharedDaprApp 3001 (DaprSubs [ subscribeDocRead docRead ])

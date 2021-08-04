@@ -1,7 +1,7 @@
 ﻿namespace FSharp.Dapr
 
 [<AutoOpen>]
-module CloudEvent = 
+module CloudEvent =
 
     open Microsoft.AspNetCore.Http
     open Giraffe
@@ -13,19 +13,19 @@ module CloudEvent =
           Source: string
           Type: string
           DataContentType: string
-          PubSubName: string option
-          TraceId: string option
-          Topic: string option
-          DataSchema: string option
-          Subject: string option
-          Time: string option
+          PubSubName: string
+          TraceId: string
+          Topic: string
+          DataSchema: string
+          Subject: string
+          Time: string
           Data: 'a
-          DataBase64: string option }
+          DataBase64: string }
 
-    let bindCloudEventAsync<'a> (httpContext: HttpContext) = 
+    let bindCloudEventAsync<'a> (httpContext: HttpContext) =
         httpContext.BindJsonAsync<CloudEvent<'a>>()
 
-    let bindCloudEventDataAsync<'a> (httpContext: HttpContext) = 
+    let bindCloudEventDataAsync<'a> (httpContext: HttpContext) =
         task {
             let! event = bindCloudEventAsync<'a> httpContext
             return event.Data

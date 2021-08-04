@@ -1,18 +1,20 @@
 ﻿namespace FSharp.Dapr
 
-open Microsoft.AspNetCore.Hosting
-
 [<AutoOpen>]
 module App =
     open Microsoft.AspNetCore.Http
     open Microsoft.Extensions.Logging
     open Dapr.Client
     open Microsoft.Extensions.Configuration
-    open Saturn
+    open Microsoft.AspNetCore.Hosting
+    open Microsoft.Extensions.Hosting
+    //open Saturn
     open System.Text.Json.Serialization
     open Giraffe
     open System.Text.Json
     open FSharp.Control.Tasks
+    open Microsoft.AspNetCore.Builder
+    open Microsoft.Extensions.DependencyInjection
 
     type PubSubName = string
 
@@ -62,14 +64,61 @@ module App =
         let routers = subs |> List.map (subToHandler)
         subscribeRouter :: routers |> choose
 
-    let daprApp'
+    let private configureApp webApp (app: IApplicationBuilder) =
+        // Add Giraffe to the ASP.NET Core pipeline
+        app.UseResponseCompression().UseGiraffe webApp
+
+    let getJsonConverter () =
+        JsonFSharpConverter(JsonUnionEncoding.FSharpLuLike, allowNullFields = true)
+
+    let private configureServices (services: IServiceCollection) =
+        // https://giraffe.wiki/docs#json
+        // https://github.com/Tarmil/FSharp.SystemTextJson
+        // set json converter for dapr https://github.com/dapr/dotnet-sdk/issues/362
+
+        // Add Giraffe dependencies
+
+        let serializationOptions =
+            JsonSerializerOptions(PropertyNameCaseInsensitive = true)
+
+        let converter = getJsonConverter ()
+        serializationOptions.Converters.Add(converter)            
+
+        let serializer = 
+            SystemTextJson.Serializer(serializationOptions)
+
+        services
+            .AddGiraffe()
+            .AddResponseCompression()
+            .AddSingleton<Json.ISerializer>(serializer)
+        |> ignore
+
+
+    let configureWebHostBuilder webApp (webHostBuilder: IWebHostBuilder) =
+        webHostBuilder
+            .Configure(configureApp webApp)
+            .ConfigureServices(configureServices)
+
+    let dapr2webApp envFactory =
+        function
+        | DaprSubs subs -> subsToHandler envFactory subs
+        | DaprRouter router -> fun next ctx -> router (envFactory ctx) next ctx
+
+    let createDaprClient () =
+        let daprClient = DaprClientBuilder().Build()
+        let jsonConverter = getJsonConverter ()
+        daprClient.JsonSerializerOptions.Converters.Add(jsonConverter)
+        daprClient
+
+
+    let runDaprApp'
         (webhostConfig: IConfiguration -> IWebHostBuilder -> IWebHostBuilder)
         (envFactory: DaprAppEnv * HttpContext -> 'x)
         (defaultAppPort)
         (app: DaprApp<'x>)
         =
 
-        let dapr = DaprClientBuilder().Build()
+        let dapr = createDaprClient()
 
         let envFactory' (httpContext: HttpContext) =
             envFactory (
@@ -78,47 +127,26 @@ module App =
                 httpContext
             )
 
-        let routes =
-            match app with
-            | DaprSubs subs -> subsToHandler envFactory' subs
-            | DaprRouter router -> fun next ctx -> router (envFactory' ctx) next ctx
+        let routes = dapr2webApp envFactory' app
 
-        // Make all parts to talk same json
-
-        // https://giraffe.wiki/docs#json
-        // https://github.com/Tarmil/FSharp.SystemTextJson
-        // set json converter for dapr https://github.com/dapr/dotnet-sdk/issues/362
-
-        //
-        let converter =
-            JsonFSharpConverter(JsonUnionEncoding.FSharpLuLike)
-
-        dapr.JsonSerializerOptions.Converters.Add(converter)
-        //
-        let serializationOptions =
-            JsonSerializerOptions(PropertyNameCaseInsensitive = true)
-
-        serializationOptions.Converters.Add(converter)
-
-        let serializer =
-            SystemTextJson.Serializer(serializationOptions)
-        //
         let config =
             ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional = true)
                 .AddEnvironmentVariables()
                 .Build()
 
-        let appBuilder =
-            application {
-                use_config (fun _ -> config)
-                use_router routes
-                url (getAppUrl defaultAppPort)
-                use_gzip
-                use_json_serializer (serializer)
-                webhost_config (webhostConfig config)
-            }
+        let url = getAppUrl defaultAppPort
 
-        appBuilder
+        Host
+            .CreateDefaultBuilder()
+            .ConfigureWebHostDefaults(fun builder ->
+                (configureWebHostBuilder routes builder)
+                    .UseUrls([| url |])
+                |> webhostConfig config
+                |> ignore)
+            .Build()
+            .Run()
 
-    let daprApp webhostConfig = daprApp' webhostConfig (fst)
+        0
+
+    let runDaprApp webhostConfig = runDaprApp' webhostConfig (fst)
