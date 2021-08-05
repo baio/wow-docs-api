@@ -1,8 +1,5 @@
 ﻿module UpdateStore
 
-open Microsoft.Extensions.Logging
-open Saturn
-open FSharp.Control.Tasks
 open Shared
 open Domain
 open FSharp.Dapr
