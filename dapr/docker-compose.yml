@@ -43,12 +43,12 @@ services:
     network_mode: "service:read-file"
 
   ############################
-  # events-store + Dapr sidecar
+  # update-store + Dapr sidecar
   ############################
-  events-store:
+  update-store:
     build:
       context: ./fsharp
-      dockerfile: EventsStore/Dockerfile         
+      dockerfile: UpdateStore/Dockerfile         
     ports:
       - "3002:3000"
     environment: 
@@ -58,10 +58,10 @@ services:
     depends_on:
       - redis
       - placement
-  events-store-dapr:
+  update-store-dapr:
     image: "daprio/daprd:1.2.0"
     command: ["./daprd",
-     "-app-id", "events-store",
+     "-app-id", "update-store",
      "-app-port", "3000",
      "-placement-host-address", "placement:50006",
      "-components-path", "/dapr/components",
@@ -69,8 +69,8 @@ services:
     volumes:
         - "./dapr/:/dapr"
     depends_on:
-      - events-store
-    network_mode: "service:events-store"
+      - update-store
+    network_mode: "service:update-store"
   ############################
   # store-doc + Dapr sidecar
   ############################

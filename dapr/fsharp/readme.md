@@ -13,7 +13,7 @@ dapr run --app-id read-file --app-port $Env:Port -- dotnet watch run --project R
 $Env:PORT=3001
 dapr run --app-id store-doc --app-port $Env:Port -- dotnet watch run --project StoreDoc
 $Env:PORT=3002
-dapr run --app-id events-store --app-port $Env:Port -- dotnet watch run --project EventsStore
+dapr run --app-id update-store --app-port $Env:Port -- dotnet watch run --project UpdateStore
 $Env:PORT=3003
 dapr run --app-id ya-ocr --app-port $Env:Port -- dotnet watch run --project YaOCR
 ```

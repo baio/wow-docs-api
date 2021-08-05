@@ -1,4 +1,4 @@
-﻿module ReadFile
+﻿module UpdateStore
 
 open Microsoft.Extensions.Logging
 open Saturn

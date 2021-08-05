@@ -10,12 +10,12 @@ WORKDIR /src
 COPY ["Libs/Common/FSharp.Dapr/", "Libs/Common/FSharp.Dapr/"]
 COPY ["Libs/Vow/Shared/", "Libs/Vow/Shared/"]
 COPY ["Libs/Vow/Domain/", "Libs/Vow/Domain/"]
-COPY ["EventsStore/", "EventsStore/"]
+COPY ["UpdateStore/", "UpdateStore/"]
 COPY ["fsharp.sln", "fsharp.sln"]
-RUN dotnet restore EventsStore
+RUN dotnet restore UpdateStore
 
 FROM build AS publish
-RUN dotnet publish --no-restore -c Release -o /app/publish EventsStore
+RUN dotnet publish --no-restore -c Release -o /app/publish UpdateStore
 
 FROM base AS final
 WORKDIR /app
@@ -24,5 +24,5 @@ RUN echo ${PORT}
 EXPOSE  ${PORT}
 ENV PORT ${PORT}
 
-ENTRYPOINT ["dotnet", "EventsStore.dll"]
+ENTRYPOINT ["dotnet", "UpdateStore.dll"]
 

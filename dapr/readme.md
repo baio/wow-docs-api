@@ -44,9 +44,9 @@ docker build --build-arg PORT=3000 -t baio/vow-docs-parse-doc -f ./fsharp/ParseD
 docker push baio/vow-docs-parse-doc:latest
 kubectl apply -f ./deploy/parse-doc.yaml
 #
-docker build --build-arg PORT=3000 -t baio/vow-docs-events-store -f ./fsharp/EventsStore/Dockerfile ./fsharp
-docker push baio/vow-docs-events-store:latest
-kubectl apply -f ./deploy/events-store.yaml
+docker build --build-arg PORT=3000 -t baio/vow-docs-update-store -f ./fsharp/UpdateStore/Dockerfile ./fsharp
+docker push baio/vow-docs-update-store:latest
+kubectl apply -f ./deploy/update-store.yaml
 ```
 
 ## Secrets

@@ -3,7 +3,6 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>doc_events_store</RootNamespace>
         <WarnOn>3390;$(WarnOn)</WarnOn>
     </PropertyGroup>
 
@@ -16,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="EventsStore.fs" />
+        <Compile Include="UpdateStore.fs" />
         <Content Include="appsettings.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>

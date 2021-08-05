@@ -17,26 +17,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "dapr-events-store"
+  name: "dapr-update-store"
   labels:
-    app: "events-store"
+    app: "update-store"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "events-store"
+      app: "update-store"
   template:
     metadata:
       labels:
-        app: "events-store"
+        app: "update-store"
       annotations:
         dapr.io/config: "tracing"
         dapr.io/enabled: "true"
-        dapr.io/app-id: "events-store"
+        dapr.io/app-id: "update-store"
         dapr.io/app-port: "3000"
     spec:
       containers:
-      - name: "events-store"
-        image: baio/vow-docs-events-store:latest
+      - name: "update-store"
+        image: baio/vow-docs-update-store:latest
         ports:
         - containerPort: 3000
