@@ -21,7 +21,6 @@
       <PackageReference Include="Dapr.Client" Version="1.2.0" />
       <PackageReference Include="FSharp.SystemTextJson" Version="0.17.4" />
       <PackageReference Include="Giraffe" Version="5.0.0" />
-      <PackageReference Include="Saturn" Version="0.15.0-preview03" />
     </ItemGroup>
 
 </Project>

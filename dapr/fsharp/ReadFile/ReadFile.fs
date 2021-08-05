@@ -1,6 +1,5 @@
 module ReadFile
 
-open Saturn
 open Giraffe
 open FSharp.Control.Tasks
 open Microsoft.AspNetCore.Http
@@ -44,7 +43,10 @@ let fileUploadHandler =
         }
 
 let router =
-    fun dapr -> router { post "/upload" (fileUploadHandler dapr) }
+    fun dapr ->
+        route "/upload"
+        >=> POST
+        >=> (fileUploadHandler dapr)
 
 [<EntryPoint>]
 let main _ =

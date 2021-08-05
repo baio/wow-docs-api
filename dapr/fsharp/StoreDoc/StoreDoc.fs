@@ -1,6 +1,5 @@
 ﻿module StoreDoc
 
-open Saturn
 open FSharp.Control.Tasks
 open Shared
 open Domain
@@ -25,4 +24,4 @@ let docRead =
 let subs = [ subscribeDocRead docRead ]
 
 [<EntryPoint>]
-let main _ = runDaprApp 5003 (DaprSubs subs)
+let main _ = runSharedDaprApp 5003 (DaprSubs subs)

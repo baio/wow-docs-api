@@ -8,7 +8,6 @@ module App =
     open Microsoft.Extensions.Configuration
     open Microsoft.AspNetCore.Hosting
     open Microsoft.Extensions.Hosting
-    //open Saturn
     open System.Text.Json.Serialization
     open Giraffe
     open System.Text.Json
