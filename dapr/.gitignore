@@ -303,3 +303,4 @@ cython_debug/
 ###
 
 secrets/
+secrets.json

@@ -6,7 +6,7 @@ GET {{BASE_URL}}:3001/dapr/subscribe
 ##########
 
 ## ReadDocEvent consumed by ya-ocr
-POST {{BASE_URL}}:3000/$pubsub/doc-read
+POST {{BASE_URL}}:3002/$pubsub/doc-read
 Content-Type: application/json
 
 { "id": "111",
@@ -22,13 +22,13 @@ Content-Type: application/json
 #############
 
 ## upload
-POST {{BASE_URL}}:3000/upload
+POST {{BASE_URL}}:3001/upload
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="docKey";
 
- 124
+123
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="file"; filename="passport-3.jpg"
 Content-Type: image/jpg
@@ -36,3 +36,11 @@ Content-Type: image/jpg
 < ./images/passport-3.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
+#############
+
+## query-parsed 
+GET {{BASE_URL}}:3001/docs/123/parsed
+
+#############
+
+GET http://localhost:3500/v1.0/secrets/vow-docs/vow-docs-ya

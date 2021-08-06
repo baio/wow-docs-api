@@ -36,7 +36,7 @@ module PubSub =
 
     let publishEventAsync<'a> pubSubName topicName { Dapr = dapr; Logger = logger } (event: 'a) =
 
-        logTrace3 logger "Publishing {pubSubName} {topicName} {event}" pubSubName topicName event
+        logTrace3 logger "Publishing {pubSubName} {topicName} {event}" pubSubName topicName "[event]"
 
         dapr.PublishEventAsync(pubSubName, topicName, event)
 
@@ -45,14 +45,14 @@ module PubSub =
         topicName,
         fun env next (ctx: HttpContext) ->
             task {
-                let! bodyStr = readRequestBody ctx.Request
+                //let! bodyStr = readRequestBody ctx.Request
 
                 logTrace3
                     (ctx.GetLogger())
                     "Subscription {pubSubName} {topicName} called with {body}"
                     pubSubName
                     topicName
-                    bodyStr
+                    "[bodyStr]"
 
                 let! event = bindCloudEventDataAsync<'e> ctx
 
@@ -61,7 +61,7 @@ module PubSub =
                     "Subscription {pubSubName} {topicName} called with parsed {event}"
                     pubSubName
                     topicName
-                    event
+                    "[event]"
 
                 return! handler event env next ctx
             }

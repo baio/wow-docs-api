@@ -45,7 +45,9 @@ module State =
 
     let creatStateTTLAsync env storeName id doc (ttl: int) = createStateWithMetadataAsync env storeName id doc (readOnlyDict [ "ttlInSeconds", ttl.ToString() ])
 
-    let creatStateAsync env storeName id doc = createStateWithMetadataAsync env storeName id doc (readOnlyDict [])    
+    let creatStateAsync { Dapr = dapr } storeName id doc = 
+        dapr.SaveStateAsync("statestore", "aaa", doc)
+        //createStateWithMetadataAsync env storeName id doc (readOnlyDict [])    
 
     /// Find item and update it if exists
     /// If item is not exists then create new and then update it
@@ -85,7 +87,7 @@ module State =
     /// Create new item or fail if already exists
     let getStateAsync<'a> { Dapr = dapr; Logger = logger } storeName id =
         task {
-            let! res = dapr.GetStateAsync<'a>(storeName, id)
+            let! res = dapr.GetStateAsync<'a>(storeName, id, consistencyMode = ConsistencyMode.Eventual)
 
             match box res with
             | null  ->

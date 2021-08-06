@@ -100,7 +100,6 @@ module internal ExtractText =
                   Body = Some body
                   Headers = Map [ ("Authorization", $"Bearer {iamToken}") ] }
 
-            printfn "request %O" request
 
             let! result = fetch<YaOCRJson.YaOcr, _> request
 

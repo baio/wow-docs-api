@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <Compile Include="DAPR_CONSTANTS.fs" />
+        <Compile Include="DaprStore.fs" />
         <Compile Include="DaprEvents.fs" />
         <Compile Include="DaprLogging.fs" />
         <Compile Include="DaprApp.fs" />

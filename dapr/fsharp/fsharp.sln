@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{6A969F
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.DaprTest", "Libs\Common\FSharp.DaprTest\FSharp.DaprTest.fsproj", "{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "QueryStore", "QueryStore\QueryStore.fsproj", "{A8ECB02D-4C62-493A-AD3D-10E1F2EA2351}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB04EF0B-7C15-4800-854E-8C27C56BBE3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8ECB02D-4C62-493A-AD3D-10E1F2EA2351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8ECB02D-4C62-493A-AD3D-10E1F2EA2351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8ECB02D-4C62-493A-AD3D-10E1F2EA2351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8ECB02D-4C62-493A-AD3D-10E1F2EA2351}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

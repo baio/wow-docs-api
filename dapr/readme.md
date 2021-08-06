@@ -1,3 +1,27 @@
+## Configuration
+
+Set store strategy to 'name' in order to share state between apps !!!
+https://docs.dapr.io/developing-applications/building-blocks/state-management/howto-share-state/
+
+
+## Dapr dev slim mode
+
+```
+redis-server
+dapr init --slim
+.\scripts\slim-run-all.ps1
+```
+
+`statestore.yaml`
+
+(disable)[https://docs.dapr.io/operations/configuration/configuration-overview/] zipkin in local config !!!
+
+```
+cd C:\dev\vow-docs\dapr
+dapr run --app-id testdapr --dapr-http-port 3500 --components-path ./dapr/slim-components
+```
+
+
 ## docker-compose dev
 
 ```
@@ -47,6 +71,10 @@ kubectl apply -f ./deploy/parse-doc.yaml
 docker build --build-arg PORT=3000 -t baio/vow-docs-update-store -f ./fsharp/UpdateStore/Dockerfile ./fsharp
 docker push baio/vow-docs-update-store:latest
 kubectl apply -f ./deploy/update-store.yaml
+#
+docker build --build-arg PORT=3000 -t baio/vow-docs-query-store -f ./fsharp/QueryStore/Dockerfile ./fsharp
+docker push baio/vow-docs-query-store:latest
+kubectl apply -f ./deploy/query-store.yaml
 ```
 
 ## Secrets

@@ -40,7 +40,6 @@ let rec private extractWords retryOnUanauthorized (env: DaprAppEnv) imgBase64 =
 
 //
 let docRead (event: DocReadEvent) (env: DaprAppEnv) =
-
     task {
 
         let! words = extractWords true env event.DocContent
@@ -60,4 +59,4 @@ let docRead (event: DocReadEvent) (env: DaprAppEnv) =
 
 [<EntryPoint>]
 let main _ =
-    runSharedDaprApp 3001 (DaprSubs [ subscribeDocRead docRead ])
+    runSharedDaprApp 3002 (DaprSubs [ subscribeDocRead docRead ])

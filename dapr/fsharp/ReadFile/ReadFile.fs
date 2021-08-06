@@ -21,7 +21,7 @@ let fileUploadHandler =
 
                 let docKey =
                     match ctx.Request.Form.TryGetValue "docKey" with
-                    | true, v -> Some v.[0]
+                    | true, v -> Some (v.[0].Trim())
                     | _ -> None
 
                 match file, docKey with
@@ -50,4 +50,4 @@ let router =
 
 [<EntryPoint>]
 let main _ =
-    runSharedDaprApp 5000 (DaprRouter router)
+    runSharedDaprApp 3001 (DaprRouter router)
