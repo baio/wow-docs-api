@@ -28,7 +28,5 @@ let getYaConfig dapr =
               KeyId = yaKeyId
               PrivateKey = yaPrivateKey }
 
-        printfn "111 %O" config               
-
         return config
     }

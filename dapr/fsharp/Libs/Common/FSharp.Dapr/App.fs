@@ -81,9 +81,9 @@ module App =
             JsonSerializerOptions(PropertyNameCaseInsensitive = true)
 
         let converter = getJsonConverter ()
-        serializationOptions.Converters.Add(converter)            
+        serializationOptions.Converters.Add(converter)
 
-        let serializer = 
+        let serializer =
             SystemTextJson.Serializer(serializationOptions)
 
         services
@@ -115,9 +115,10 @@ module App =
         (envFactory: DaprAppEnv * HttpContext -> 'x)
         (defaultAppPort)
         (app: DaprApp<'x>)
+        (args: string [])
         =
 
-        let dapr = createDaprClient()
+        let dapr = createDaprClient ()
 
         let envFactory' (httpContext: HttpContext) =
             envFactory (
@@ -128,9 +129,20 @@ module App =
 
         let routes = dapr2webApp envFactory' app
 
+        let env =
+            System.Environment.GetEnvironmentVariable("APP_ENV")
+
+        let env =
+            if isNull env then
+                env
+            else
+                env.ToLower()
+
         let config =
             ConfigurationBuilder()
+                .AddCommandLine(args)
                 .AddJsonFile("appsettings.json", optional = true)
+                .AddJsonFile($"appsettings.{env}.json", optional = true)
                 .AddEnvironmentVariables()
                 .Build()
 
