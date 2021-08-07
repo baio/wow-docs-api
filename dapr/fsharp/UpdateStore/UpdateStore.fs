@@ -10,4 +10,5 @@ let docTextParsed (event: DocParsedEvent) env =
 let subs = [ subscribeDocParsed docTextParsed ]
 
 [<EntryPoint>]
-let main _ = runSharedDaprApp 3003 (DaprSubs subs)
+let main args =
+    runSharedDaprApp 3003 (DaprSubs subs) args

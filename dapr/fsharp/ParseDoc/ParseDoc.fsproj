@@ -9,6 +9,9 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="appsettings.slim.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Utils.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="NameHelpers.fs" />

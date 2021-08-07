@@ -146,7 +146,7 @@ module App =
                 .AddEnvironmentVariables()
                 .Build()
 
-        let url = getAppUrl defaultAppPort
+        let url = getAppUrl config defaultAppPort
 
         Host
             .CreateDefaultBuilder()

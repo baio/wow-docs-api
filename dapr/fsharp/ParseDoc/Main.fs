@@ -24,6 +24,6 @@ let private handleDocTextExtracted (resources: Resources) (event: DocTextExtract
     }
 
 [<EntryPoint>]
-let main _ =
+let main args =
     let resources = loadResources ()
-    runSharedDaprApp 3002 (DaprSubs [ subscribeDocTextExtracted (handleDocTextExtracted resources) ])
+    runSharedDaprApp 3030 (DaprSubs [ subscribeDocTextExtracted (handleDocTextExtracted resources) ]) args

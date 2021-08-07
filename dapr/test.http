@@ -22,7 +22,7 @@ Content-Type: application/json
 #############
 
 ## upload
-POST {{BASE_URL}}:3001/upload
+POST {{BASE_URL}}:3010/upload
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -39,7 +39,7 @@ Content-Type: image/jpg
 #############
 
 ## query-parsed 
-GET {{BASE_URL}}:3001/docs/123/parsed
+GET {{BASE_URL}}:3050/docs/123/parsed
 
 #############
 

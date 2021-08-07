@@ -24,5 +24,5 @@ let router =
         >=> routef "/docs/%s/parsed" (getParsedDoc dapr)
 
 [<EntryPoint>]
-let main _ =
-    runSharedDaprApp 3004 (DaprRouter router)
+let main args =
+    runSharedDaprApp 3004 (DaprRouter router) args

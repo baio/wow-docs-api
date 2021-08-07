@@ -2,9 +2,12 @@
 
 [<AutoOpen>]
 module private AppUtils =
-    let getAppPort (defaultPort: int) =
-        match System.Environment.GetEnvironmentVariable("PORT") with        
+    open Microsoft.Extensions.Configuration
+
+    let getAppPort (config: IConfigurationRoot) (defaultPort: int) =
+        match config.GetValue("PORT") with
         | null -> defaultPort.ToString()
         | port -> port
-    
-    let getAppUrl defaultPort = $"http://*:{getAppPort defaultPort}"
+
+    let getAppUrl (config: IConfigurationRoot) defaultPort =
+        $"http://*:{getAppPort config defaultPort}"
