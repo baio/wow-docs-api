@@ -14,6 +14,9 @@ module App =
     open FSharp.Control.Tasks
     open Microsoft.AspNetCore.Builder
     open Microsoft.Extensions.DependencyInjection
+    open System.Text.Encodings.Web
+    open System.Text.Unicode
+
 
     type PubSubName = string
 
@@ -77,8 +80,12 @@ module App =
 
         // Add Giraffe dependencies
 
+        // TODO : Pass as config param
         let serializationOptions =
-            JsonSerializerOptions(PropertyNameCaseInsensitive = true)
+            JsonSerializerOptions(
+                PropertyNameCaseInsensitive = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
+            )
 
         let converter = getJsonConverter ()
         serializationOptions.Converters.Add(converter)
