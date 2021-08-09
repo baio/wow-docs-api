@@ -1,0 +1,1 @@
+docker buildx build --platform linux/arm64 --push -t baio/vow-docs-read-file:arm -f ./fsharp/ReadFile/Dockerfile ./fsharp

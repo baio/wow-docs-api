@@ -3,7 +3,12 @@
 Set store strategy to 'name' in order to share state between apps !!!
 https://docs.dapr.io/developing-applications/building-blocks/state-management/howto-share-state/
 
+## Gettings started with k8s
 
++ Install k8s
++ dapr init -k
++ ./scripts/pi/pi-apply-infra.yaml
++ ./scripts/pi/pi-apply-all.ps1
 ## Dapr dev slim mode
 
 ```
@@ -35,8 +40,10 @@ docker-compose up
 
 run test requests in `test.http`
 
-## k8s
+`$Env:KUBECONFIG="C:/dev/vow/secrets/mail_ru/kubeconfig.yaml;$HOME\.kube\config"`
 
+## k8s
+`https://blog.dapr.io/posts/2020/10/30/dapr-on-raspberry-pi-with-k3s/`
 `helm install redis bitnami/redis --set auth.password="abc" --set replica.replicaCount=1`
 
 With pulumi
@@ -83,3 +90,9 @@ kubectl apply -f ./deploy/query-store.yaml
 kubectl apply -f ./dapr/components/secret-store.yaml
 kubectl apply -k ./dapr/secrets/dev/ya
 ```
+
+## Remote k8s cluster
+
+https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/
+
+Debug k8s `kubectl run -it --rm --restart=Never busybox --image=arm64v8/busybox sh`

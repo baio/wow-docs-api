@@ -1,17 +1,17 @@
-# kind: Service
-# apiVersion: v1
-# metadata:
-#   name: "dapr-read-file"
-#   labels:
-#     app: "read-file"
-# spec:
-#   selector:
-#     app: node
-#   ports:
-#   - protocol: TCP
-#     port: 3000
-#     targetPort: 3000
-#   type: LoadBalancer
+kind: Service
+apiVersion: v1
+metadata:
+  name: "dapr-read-file"
+  labels:
+    app: "read-file"
+spec:
+  selector:
+    app: node
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+  type: LoadBalancer
 
 ---
 apiVersion: apps/v1
@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: "read-file"
-        image: baio/vow-docs-read-file:latest
+        image: baio/vow-docs-read-file:arm
         ports:
         - containerPort: 3000
         imagePullPolicy: "Always"
