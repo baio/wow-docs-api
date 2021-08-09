@@ -1,0 +1,111 @@
+name: Publish Docker image
+on:
+    push:
+        tags:
+            - v*
+jobs:
+    push_to_registry:
+        name: Push Docker image to Docker Hub
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out the repo
+              uses: actions/checkout@v2
+            - name: Docker meta app ReadFile
+              id: docker_meta_app_read_file
+              uses: crazy-max/ghaction-docker-meta@v1
+              with:
+                  images: baio/vow-docs-read-file-arm
+                  tag-semver: |
+                      {{version}}
+                      {{major}}.{{minor}}
+            - name: Docker meta app YaOCR
+              id: docker_meta_app_ya_ocr
+              uses: crazy-max/ghaction-docker-meta@v1
+              with:
+                  images: baio/vow-docs-ya-ocr-arm
+                  tag-semver: |
+                      {{version}}
+                      {{major}}.{{minor}}
+            - name: Docker meta app ParseDoc
+              id: docker_meta_app_parse_doc
+              uses: crazy-max/ghaction-docker-meta@v1
+              with:
+                  images: baio/vow-docs-parse-doc-arm
+                  tag-semver: |
+                      {{version}}
+                      {{major}}.{{minor}}
+            - name: Docker meta app UpdateStore
+              id: docker_meta_app_update_store
+              uses: crazy-max/ghaction-docker-meta@v1
+              with:
+                  images: baio/vow-docs-update-store-arm
+                  tag-semver: |
+                      {{version}}
+                      {{major}}.{{minor}}
+            - name: Docker meta app QueryStore
+              id: docker_meta_app_query_store
+              uses: crazy-max/ghaction-docker-meta@v1
+              with:
+                  images: baio/vow-docs-query-store-arm
+                  tag-semver: |
+                      {{version}}
+                      {{major}}.{{minor}}
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v1
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v1
+            - name: Login to DockerHub
+              uses: docker/login-action@v1
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_PASSWORD }}
+            - name: Build & Push ReadFile to Docker Hub
+              uses: docker/build-push-action@v2
+              with:
+                  build-args: PORT=300
+                  context: ./dapr/fsharp
+                  file: ./dapr/fsharp/ReadFile/Dockerfile
+                  platforms: linux/arm64
+                  push: true
+                  tags: ${{ steps.docker_meta_app_read_file.outputs.tags }}
+                  labels: ${{ steps.docker_meta_app_read_file.outputs.labels }}
+            - name: Build & Push YaOCR to Docker Hub
+              uses: docker/build-push-action@v2
+              with:
+                  build-args: PORT=300
+                  context: ./dapr/fsharp
+                  file: ./dapr/fsharp/YaOCR/Dockerfile
+                  platforms: linux/arm64
+                  push: true
+                  tags: ${{ steps.docker_meta_app_ya_ocr.outputs.tags }}
+                  labels: ${{ steps.docker_meta_app_ya_ocr.outputs.labels }}
+            - name: Build & Push ParseDoc to Docker Hub
+              uses: docker/build-push-action@v2
+              with:
+                  build-args: PORT=300
+                  context: ./dapr/fsharp
+                  file: ./dapr/fsharp/ParseDoc/Dockerfile
+                  platforms: linux/arm64
+                  push: true
+                  tags: ${{ steps.docker_meta_app_parse_doc.outputs.tags }}
+                  labels: ${{ steps.docker_meta_app_parse_doc.outputs.labels }}
+            - name: Build & Push UpdateStore to Docker Hub
+              uses: docker/build-push-action@v2
+              with:
+                  build-args: PORT=300
+                  context: ./dapr/fsharp
+                  file: ./dapr/fsharp/UpdateStore/Dockerfile
+                  platforms: linux/arm64
+                  push: true
+                  tags: ${{ steps.docker_meta_app_update_store.outputs.tags }}
+                  labels: ${{ steps.docker_meta_app_update_store.outputs.labels }}
+            - name: Build & Push QueryStore to Docker Hub
+              uses: docker/build-push-action@v2
+              with:
+                  build-args: PORT=300
+                  context: ./dapr/fsharp
+                  file: ./dapr/fsharp/QueryStore/Dockerfile
+                  platforms: linux/arm64
+                  push: true
+                  tags: ${{ steps.docker_meta_app_query_store.outputs.tags }}
+                  labels: ${{ steps.docker_meta_app_query_store.outputs.labels }}
