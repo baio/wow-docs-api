@@ -14,7 +14,7 @@ jobs:
               id: docker_meta_app_read_file
               uses: crazy-max/ghaction-docker-meta@v1
               with:
-                  images: baio/vow-docs-read-file
+                  images: baio/vow-docs-read-file-arm
                   tag-semver: |
                       {{version}}
                       {{major}}.{{minor}}
@@ -30,10 +30,9 @@ jobs:
             - name: Push ReadFile to Docker Hub
               uses: docker/build-push-action@v2
               with:
-                  buildArgs:
-                    PORT=300
-                  context: ./fsharp
-                  file: ./fsharp/ReadFile/Dockerfile
+                  build-args: PORT=300
+                  context: ./dapr/fsharp
+                  file: ./dapr/fsharp/ReadFile/Dockerfile
                   platforms: linux/arm64
                   push: true
                   tags: ${{ steps.docker_meta_app_read_file.outputs.tags }}
