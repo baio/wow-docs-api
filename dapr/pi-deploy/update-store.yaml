@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "dapr-update-store"
+  labels:
+    app: "update-store"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "update-store"
+  template:
+    metadata:
+      labels:
+        app: "update-store"
+      annotations:
+        dapr.io/config: "tracing"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "update-store"
+        dapr.io/app-port: "3000"
+    spec:
+      containers:
+      - name: "update-store"
+        image: baio/vow-docs-update-store-arm:latest
+        ports:
+        - containerPort: 3000

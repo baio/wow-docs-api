@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "dapr-ya-ocr"
+  labels:
+    app: "ya-ocr"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "ya-ocr"
+  template:
+    metadata:
+      labels:
+        app: "ya-ocr"
+      annotations:
+        dapr.io/config: "tracing"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "ya-ocr"
+        dapr.io/app-port: "3000"
+    spec:
+      containers:
+      - name: "ya-ocr"
+        image: baio/vow-docs-ya-ocr-arm:latest
+        ports:
+        - containerPort: 3000

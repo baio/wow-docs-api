@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "dapr-parse-doc"
+  labels:
+    app: "parse-doc"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "parse-doc"
+  template:
+    metadata:
+      labels:
+        app: "parse-doc"
+      annotations:
+        dapr.io/config: "tracing"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "parse-doc"
+        dapr.io/app-port: "3000"
+    spec:
+      containers:
+      - name: "parse-doc"
+        image: baio/vow-docs-parse-doc-arm:latest
+        ports:
+        - containerPort: 3000
