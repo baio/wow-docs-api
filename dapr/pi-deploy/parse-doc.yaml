@@ -24,3 +24,4 @@ spec:
         image: baio/vow-docs-parse-doc-arm:latest
         ports:
         - containerPort: 3000
+        imagePullPolicy: "Always"

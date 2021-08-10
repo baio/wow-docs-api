@@ -24,3 +24,4 @@ spec:
         image: baio/vow-docs-ya-ocr-arm:latest
         ports:
         - containerPort: 3000
+        imagePullPolicy: "Always"

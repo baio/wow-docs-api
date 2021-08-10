@@ -95,4 +95,5 @@ kubectl apply -k ./dapr/secrets/dev/ya
 
 https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/
 
-Debug k8s `kubectl run -it --rm --restart=Never busybox --image=arm64v8/busybox sh`
+Debug k8s `k run -it --rm --restart=Never busybox --image=arm64v8/busybox sh`
+Debug k8s `k run -it --rm test --image=baio/vow-docs-ya-ocr-arm sh`
