@@ -6,12 +6,11 @@ metadata:
     app: "read-file"
 spec:
   selector:
-    app: node
+    app: "read-file"
   ports:
   - protocol: TCP
     port: 3000
     targetPort: 3000
-  type: LoadBalancer
 
 ---
 apiVersion: apps/v1

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vow-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /upload
+        pathType: Prefix
+        backend:
+          service:
+            name: dapr-read-file
+            port:
+              number: 3000
+      - path: /docs
+        pathType: Prefix
+        backend:
+          service:
+            name: dapr-query-store
+            port:
+              number: 3000              

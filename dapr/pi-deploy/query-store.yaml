@@ -6,7 +6,7 @@ metadata:
     app: "query-store"
 spec:
   selector:
-    app: node
+    app: query-store
   ports:
   - protocol: TCP
     port: 3000
