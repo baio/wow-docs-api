@@ -48,10 +48,9 @@ type Base64Body =
 
 let base64UploadHandler =
     fun (env: DaprAppEnv) (next: HttpFunc) (ctx: HttpContext) ->
-        logTrace env.Logger ctx.Request.ContentType
         task {
-            match ctx.Request.ContentType with
-            | "application/json" ->
+            match ctx.Request.HasJsonContentType() with
+            | true ->
                 let! body = ctx.BindJsonAsync<Base64Body>()
 
                 match body.DocKey, body.Base64 with
@@ -61,7 +60,7 @@ let base64UploadHandler =
                     do! publishDocRead env event
                     return! json event next ctx
                 | _ -> return! RequestErrors.BAD_REQUEST {| body = "Missed docKey of base64 field" |} next ctx
-            | _ -> return! RequestErrors.BAD_REQUEST {| body = "Not json content" |} next ctx
+            | false -> return! RequestErrors.BAD_REQUEST {| body = "Not json content" |} next ctx
         }
 
 let router =
