@@ -16,7 +16,7 @@ module App =
     open Microsoft.Extensions.DependencyInjection
     open System.Text.Encodings.Web
     open System.Text.Unicode
-
+    open Microsoft.AspNetCore.Cors
 
     type PubSubName = string
 
@@ -68,7 +68,15 @@ module App =
 
     let private configureApp webApp (app: IApplicationBuilder) =
         // Add Giraffe to the ASP.NET Core pipeline
-        app.UseResponseCompression().UseGiraffe webApp
+        app
+            .UseResponseCompression()
+            .UseCors(fun x ->
+                x
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                |> ignore)
+            .UseGiraffe webApp
 
     let getJsonConverter () =
         JsonFSharpConverter(JsonUnionEncoding.FSharpLuLike, allowNullFields = true)
@@ -95,6 +103,7 @@ module App =
 
         services
             .AddGiraffe()
+            .AddCors()
             .AddResponseCompression()
             .AddSingleton<Json.ISerializer>(serializer)
         |> ignore

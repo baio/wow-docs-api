@@ -1,5 +1,8 @@
 
 @BASE_URL=http://localhost
+@READ_FILE_URL=http://192.168.0.103:3010
+#@READ_FILE_URL=http://b6fad0f1f512.ngrok.io
+@QUERY_PARSED_URL=http://b6fad0f1f512.ngrok.io
 
 GET {{BASE_URL}}:3010/dapr/subscribe
 
@@ -21,7 +24,7 @@ Content-Type: application/json
   }
 }
 ###########
-POST {{BASE_URL}}:3010/upload/base64
+POST {{READ_FILE_URL}}/upload/base64
 Content-Type: application/json
 
 {
@@ -30,13 +33,13 @@ Content-Type: application/json
 }
 
 #############
-POST {{BASE_URL}}:3010/upload/file
-#http://192.168.0.105/read-file
+# POST {{BASE_URL}}:3010/upload/file
 ## upload
 # POST http://b6fad0f1f512.ngrok.io/upload
 //POST https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/upload
 // POST https://functions.yandexcloud.net/d4e5te3r3hsmg4rcr6lj
-#POST http://b6fad0f1f512.ngrok.io/upload
+//POST http://b6fad0f1f512.ngrok.io/upload/file
+POST http://192.168.0.105/upload/file
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW

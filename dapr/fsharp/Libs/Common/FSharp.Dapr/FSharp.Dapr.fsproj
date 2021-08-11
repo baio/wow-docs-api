@@ -21,6 +21,7 @@
       <PackageReference Include="Dapr.Client" Version="1.2.0" />
       <PackageReference Include="FSharp.SystemTextJson" Version="0.17.4" />
       <PackageReference Include="Giraffe" Version="5.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     </ItemGroup>
 
 </Project>
