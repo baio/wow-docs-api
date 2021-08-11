@@ -42,11 +42,36 @@ let fileUploadHandler =
             | false -> return! RequestErrors.BAD_REQUEST {| file = "Not form content" |} next ctx
         }
 
+type Base64Body =
+    { DocKey: string option
+      Base64: string option }
+
+let base64UploadHandler =
+    fun (env: DaprAppEnv) (next: HttpFunc) (ctx: HttpContext) ->
+        logTrace env.Logger ctx.Request.ContentType
+        task {
+            match ctx.Request.ContentType with
+            | "application/json" ->
+                let! body = ctx.BindJsonAsync<Base64Body>()
+
+                match body.DocKey, body.Base64 with
+                | Some docKey, Some base64 ->
+                    let event = { DocContent = base64; DocKey = docKey }
+
+                    do! publishDocRead env event
+                    return! json event next ctx
+                | _ -> return! RequestErrors.BAD_REQUEST {| body = "Missed docKey of base64 field" |} next ctx
+            | _ -> return! RequestErrors.BAD_REQUEST {| body = "Not json content" |} next ctx
+        }
+
 let router =
     fun dapr ->
-        route "/upload"
-        >=> POST
-        >=> (fileUploadHandler dapr)
+        choose [ route "/upload/file"
+                 >=> POST
+                 >=> (fileUploadHandler dapr)
+                 route "/upload/base64"
+                 >=> POST
+                 >=> (base64UploadHandler dapr) ]
 
 [<EntryPoint>]
 let main args =

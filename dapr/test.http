@@ -1,12 +1,13 @@
 
 @BASE_URL=http://localhost
 
-GET {{BASE_URL}}:3001/dapr/subscribe
+GET {{BASE_URL}}:3010/dapr/subscribe
 
 ##########
 
 ## ReadDocEvent consumed by ya-ocr
-POST {{BASE_URL}}:3002/$pubsub/doc-read
+POST {{BASE_URL}}:3010/$pubsub/doc-read
+
 Content-Type: application/json
 
 { "id": "111",
@@ -19,11 +20,23 @@ Content-Type: application/json
     "docContent": "yyy"
   }
 }
+###########
+POST {{BASE_URL}}:3010/upload/base64
+Content-Type: application/json
+
+{
+    "docKey": "333",
+    "base64": "xxx"
+}
+
 #############
-#{{BASE_URL}}:3010/upload
+POST {{BASE_URL}}:3010/upload/file
 #http://192.168.0.105/read-file
 ## upload
-POST http://192.168.0.105/upload
+# POST http://b6fad0f1f512.ngrok.io/upload
+//POST https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/upload
+// POST https://functions.yandexcloud.net/d4e5te3r3hsmg4rcr6lj
+#POST http://b6fad0f1f512.ngrok.io/upload
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -41,7 +54,9 @@ Content-Type: image/jpg
 
 ## query-parsed 
 ##GET {{BASE_URL}}:3050/docs/777/parsed
-GET http://192.168.0.105/docs/888/parsed
+# GET http://192.168.0.105/docs/123/parsed
+#GET https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/docs/888/parsed
+GET https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/docs/444/parsed
 
 #############
 

@@ -97,3 +97,5 @@ https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-mul
 
 Debug k8s `k run -it --rm --restart=Never busybox --image=arm64v8/busybox sh`
 Debug k8s `k run -it --rm test --image=baio/vow-docs-ya-ocr-arm sh`
+
+`./ngrok http 80 --log=stdout > ngrok.log & disown`
