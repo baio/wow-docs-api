@@ -32,8 +32,6 @@
     <Compile Include="YaOCR.fs" />
   </ItemGroup>
 
-  <ItemGroup />
-
   <ItemGroup>
     <ProjectReference Include="..\Libs\Vow\Domain\Domain.fsproj" />
     <ProjectReference Include="..\Libs\Vow\Shared\Shared.fsproj" />
