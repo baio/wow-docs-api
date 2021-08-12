@@ -69,43 +69,43 @@ jobs:
                   push: true
                   tags: ${{ steps.docker_meta_app_ya_ocr.outputs.tags }}
                   labels: ${{ steps.docker_meta_app_ya_ocr.outputs.labels }}
-            - name: Build & Push ReadFile to Docker Hub
-              uses: docker/build-push-action@v2
-              with:
-                  build-args: PORT=3000
-                  context: ./dapr/fsharp
-                  file: ./dapr/fsharp/ReadFile/Dockerfile
-                  platforms: linux/arm64
-                  push: true
-                  tags: ${{ steps.docker_meta_app_read_file.outputs.tags }}
-                  labels: ${{ steps.docker_meta_app_read_file.outputs.labels }}
-            - name: Build & Push ParseDoc to Docker Hub
-              uses: docker/build-push-action@v2
-              with:
-                  build-args: PORT=3000
-                  context: ./dapr/fsharp
-                  file: ./dapr/fsharp/ParseDoc/Dockerfile
-                  platforms: linux/arm64
-                  push: true
-                  tags: ${{ steps.docker_meta_app_parse_doc.outputs.tags }}
-                  labels: ${{ steps.docker_meta_app_parse_doc.outputs.labels }}
-            - name: Build & Push UpdateStore to Docker Hub
-              uses: docker/build-push-action@v2
-              with:
-                  build-args: PORT=3000
-                  context: ./dapr/fsharp
-                  file: ./dapr/fsharp/UpdateStore/Dockerfile
-                  platforms: linux/arm64
-                  push: true
-                  tags: ${{ steps.docker_meta_app_update_store.outputs.tags }}
-                  labels: ${{ steps.docker_meta_app_update_store.outputs.labels }}
-            - name: Build & Push QueryStore to Docker Hub
-              uses: docker/build-push-action@v2
-              with:
-                  build-args: PORT=3000
-                  context: ./dapr/fsharp
-                  file: ./dapr/fsharp/QueryStore/Dockerfile
-                  platforms: linux/arm64
-                  push: true
-                  tags: ${{ steps.docker_meta_app_query_store.outputs.tags }}
-                  labels: ${{ steps.docker_meta_app_query_store.outputs.labels }}
+            # - name: Build & Push ReadFile to Docker Hub
+            #   uses: docker/build-push-action@v2
+            #   with:
+            #       build-args: PORT=3000
+            #       context: ./dapr/fsharp
+            #       file: ./dapr/fsharp/ReadFile/Dockerfile
+            #       platforms: linux/arm64
+            #       push: true
+            #       tags: ${{ steps.docker_meta_app_read_file.outputs.tags }}
+            #       labels: ${{ steps.docker_meta_app_read_file.outputs.labels }}
+            # - name: Build & Push ParseDoc to Docker Hub
+            #   uses: docker/build-push-action@v2
+            #   with:
+            #       build-args: PORT=3000
+            #       context: ./dapr/fsharp
+            #       file: ./dapr/fsharp/ParseDoc/Dockerfile
+            #       platforms: linux/arm64
+            #       push: true
+            #       tags: ${{ steps.docker_meta_app_parse_doc.outputs.tags }}
+            #       labels: ${{ steps.docker_meta_app_parse_doc.outputs.labels }}
+            # - name: Build & Push UpdateStore to Docker Hub
+            #   uses: docker/build-push-action@v2
+            #   with:
+            #       build-args: PORT=3000
+            #       context: ./dapr/fsharp
+            #       file: ./dapr/fsharp/UpdateStore/Dockerfile
+            #       platforms: linux/arm64
+            #       push: true
+            #       tags: ${{ steps.docker_meta_app_update_store.outputs.tags }}
+            #       labels: ${{ steps.docker_meta_app_update_store.outputs.labels }}
+            # - name: Build & Push QueryStore to Docker Hub
+            #   uses: docker/build-push-action@v2
+            #   with:
+            #       build-args: PORT=3000
+            #       context: ./dapr/fsharp
+            #       file: ./dapr/fsharp/QueryStore/Dockerfile
+            #       platforms: linux/arm64
+            #       push: true
+            #       tags: ${{ steps.docker_meta_app_query_store.outputs.tags }}
+            #       labels: ${{ steps.docker_meta_app_query_store.outputs.labels }}
