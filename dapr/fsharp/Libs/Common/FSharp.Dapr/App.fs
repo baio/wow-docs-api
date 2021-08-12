@@ -91,6 +91,7 @@ module App =
         // TODO : Pass as config param
         let serializationOptions =
             JsonSerializerOptions(
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 PropertyNameCaseInsensitive = true,
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
             )
