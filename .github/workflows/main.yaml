@@ -18,14 +18,14 @@ jobs:
                   tag-semver: |
                       {{version}}
                       {{major}}.{{minor}}
-            - name: Docker meta app YaOCR 1
-              id: docker_meta_app_ya_ocr_1
-              uses: crazy-max/ghaction-docker-meta@v1
-              with:
-                  images: baio/vow-docs-ya-ocr-arm
-                  tag-semver: |
-                      {{version}}
-                      {{major}}.{{minor}}
+            # - name: Docker meta app YaOCR 1
+            #   id: docker_meta_app_ya_ocr_1
+            #   uses: crazy-max/ghaction-docker-meta@v1
+            #   with:
+            #       images: baio/vow-docs-ya-ocr-arm
+            #       tag-semver: |
+            #           {{version}}
+            #           {{major}}.{{minor}}
             - name: Docker meta app ParseDoc
               id: docker_meta_app_parse_doc
               uses: crazy-max/ghaction-docker-meta@v1
@@ -59,16 +59,16 @@ jobs:
               with:
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_PASSWORD }}
-            - name: Build & Push YaOCR to Docker Hub
-              uses: docker/build-push-action@v2
-              with:
-                  build-args: PORT=3000
-                  context: ./dapr/fsharp
-                  file: ./dapr/fsharp/YaOCR/Dockerfile
-                  platforms: linux/arm64
-                  push: true
-                  tags: ${{ steps.docker_meta_app_ya_ocr_1.outputs.tags }}
-                  labels: ${{ steps.docker_meta_app_ya_ocr_1.outputs.labels }}
+            # - name: Build & Push YaOCR to Docker Hub
+            #   uses: docker/build-push-action@v2
+            #   with:
+            #       build-args: PORT=3000
+            #       context: ./dapr/fsharp
+            #       file: ./dapr/fsharp/YaOCR/Dockerfile
+            #       platforms: linux/arm64
+            #       push: true
+            #       tags: ${{ steps.docker_meta_app_ya_ocr_1.outputs.tags }}
+            #       labels: ${{ steps.docker_meta_app_ya_ocr_1.outputs.labels }}
             - name: Build & Push ReadFile to Docker Hub
               uses: docker/build-push-action@v2
               with:
