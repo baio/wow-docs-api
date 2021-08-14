@@ -29,7 +29,7 @@
     <Compile Include="Config.fs" />
     <Compile Include="IamToken.fs" />
     <Compile Include="ExtractText.fs" />
-    <Compile Include="YaOCR.fs" />
+    <Compile Include="YaOcr.fs" />
   </ItemGroup>
 
   <ItemGroup>
