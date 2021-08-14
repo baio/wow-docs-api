@@ -2,7 +2,6 @@ namespace Domain
 
 [<AutoOpen>]
 module ParsedDocModels =
-
     type PassportRF =
         { Issuer: string
           IssuerCode: string
@@ -15,4 +14,6 @@ module ParsedDocModels =
           IssueDate: string
           BirthPlace: string }
 
-    type ParsedDoc = PassportRF of PassportRF
+    type ParsedDoc =
+        | ErrorDoc of DomainError
+        | PassportRF of PassportRF

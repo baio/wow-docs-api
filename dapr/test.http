@@ -1,9 +1,9 @@
 
 @BASE_URL=http://localhost
-#@READ_FILE_URL=http://192.168.0.103:3010
-#@QUERY_PARSED_URL=http://192.168.0.103:3050
-@READ_FILE_URL=https://vow.perimeter.pw
-@QUERY_PARSED_URL=https://vow.perimeter.pw
+@READ_FILE_URL=http://192.168.0.103:3010
+@QUERY_PARSED_URL=http://192.168.0.103:3050
+#@READ_FILE_URL=https://vow.perimeter.pw
+#@QUERY_PARSED_URL=https://vow.perimeter.pw
 
 GET {{BASE_URL}}:3010/dapr/subscribe
 
@@ -61,7 +61,7 @@ Content-Type: image/jpg
 # GET http://192.168.0.105/docs/123/parsed
 #GET https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/docs/888/parsed
 #GET https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/docs/444/parsed
-GET {{QUERY_PARSED_URL}}/docs/222/parsed
+GET {{QUERY_PARSED_URL}}/docs/333/parsed
 
 #############
 

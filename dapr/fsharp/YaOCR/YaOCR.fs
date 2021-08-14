@@ -38,22 +38,36 @@ let rec private extractWords retryOnUanauthorized (env: DaprAppEnv) imgBase64 =
         return words
     }
 
-//
+let private getTextExtractedEvent dokcKey result provider =
+    let docExtractedText: DocExtarctedText = { Result = result; Provider = provider }
+
+    { DocKey = dokcKey
+      DocExtractedText = docExtractedText }
+
 let docRead (event: DocReadEvent) (env: DaprAppEnv) =
     task {
 
-        let! words = extractWords true env event.DocContent
+        try
+            let! words = extractWords true env event.DocContent
 
-        let docExtractedText: DocExtarctedText =
-            { Words = words
-              Provider = DocTextExtarctedProvider.YaOCR }
+            let docTextExtractedEvent =
+                getTextExtractedEvent event.DocKey (DocExtractedResult.Words words) YaOCR
 
-        let docTextExtractedEvent: DocTextExtractedEvent =
-            { DocKey = event.DocKey
-              DocExtractedText = docExtractedText }
+            do! publishDocTextExtracted env docTextExtractedEvent
+            return true
+        with
+        | ex ->
+            let docTextExtractedEvent =
+                getTextExtractedEvent
+                    event.DocKey
+                    (DocExtractedResult.Error(
+                        { Message = ex.Message
+                          Code = ex.HResult }
+                    ))
+                    YaOCR
 
-        do! publishDocTextExtracted env docTextExtractedEvent
-        return true
+            do! publishDocTextExtracted env docTextExtractedEvent
+            return false
     }
 
 

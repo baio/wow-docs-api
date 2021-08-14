@@ -12,8 +12,12 @@ module Models =
     //
     type DocTextExtarctedProvider = | YaOCR
 
+    [<RequireQualifiedAccessAttribute>]
+    type DocExtractedResult =
+        | Words of string
+        | Error of DomainError
     type DocExtarctedText =
-        { Words: string
+        { Result: DocExtractedResult
           Provider: DocTextExtarctedProvider }
 
     //

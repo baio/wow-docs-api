@@ -15,7 +15,15 @@ let getParsedDoc =
 
             match result with
             | None -> return! RequestErrors.NOT_FOUND {| message = $"Item with key [{docKey}] not found" |} next ctx
-            | Some result -> return! json result next ctx
+            | Some result ->
+                match result.ParsedDoc with
+                | ErrorDoc _ ->
+                    return!
+                        RequestErrors.UNPROCESSABLE_ENTITY
+                            {| message = $"Cant extract text from [{docKey}]" |}
+                            next
+                            ctx
+                | _ -> return! json result.ParsedDoc next ctx
         }
 
 let router =

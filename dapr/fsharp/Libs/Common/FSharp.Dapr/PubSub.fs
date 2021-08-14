@@ -61,7 +61,7 @@ module PubSub =
                     "Subscription {pubSubName} {topicName} called with parsed {event}"
                     pubSubName
                     topicName
-                    "[event]"
+                    event
 
                 return! handler event env next ctx
             }
