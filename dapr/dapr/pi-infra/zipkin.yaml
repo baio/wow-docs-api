@@ -6,7 +6,7 @@ metadata:
     app: "zipkin"
 spec:
   selector:
-    app: node
+    app: "zipkin"
   ports:
   - protocol: TCP
     port: 9411
