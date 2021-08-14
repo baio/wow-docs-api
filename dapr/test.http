@@ -46,7 +46,7 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0g
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="docKey";
 
-222
+111
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="file"; filename="passport-3.jpg"
 Content-Type: image/jpg
@@ -61,7 +61,7 @@ Content-Type: image/jpg
 # GET http://192.168.0.105/docs/123/parsed
 #GET https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/docs/888/parsed
 #GET https://d5dpfrp927m5qv1v5bg8.apigw.yandexcloud.net/docs/444/parsed
-GET {{QUERY_PARSED_URL}}/docs/333/parsed
+GET {{QUERY_PARSED_URL}}/docs/111/parsed?format
 
 #############
 

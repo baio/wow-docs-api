@@ -13,6 +13,9 @@
     <Content Include="appsettings.slim.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Formatted/Utils.fs" />
+    <Compile Include="Formatted/PassportRF.fs" />
+    <Compile Include="Formatted/FormatDoc.fs" />
     <Compile Include="QueryStore.fs" />
   </ItemGroup>
 

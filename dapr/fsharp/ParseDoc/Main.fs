@@ -10,20 +10,25 @@ let private handleDocTextExtracted (resources: Resources) (event: DocTextExtract
 
     let doc =
         match event.DocExtractedText.Result with
-        | DocExtractedResult.Words words -> parseDoc resources words env
-        | DocExtractedResult.Error err -> Some(ErrorDoc err)
+        | DocExtractedResult.Words words ->
+            let parsed = parseDoc resources words env
+
+            match parsed with
+            | Some parsed -> parsed
+            | None ->
+                ErrorDoc
+                    { Message = "Cant parse doc"
+                      Code = -1 }
+        | DocExtractedResult.Error err -> ErrorDoc err
 
     task {
-        match doc with
-        | Some doc ->
-            { DocParsed = { ParsedDoc = doc }
-              DocKey = event.DocKey
-              DocExtractedText = event.DocExtractedText }
-            |> publishDocParsed env
-            |> ignore
+        { DocParsed = { ParsedDoc = doc }
+          DocKey = event.DocKey
+          DocExtractedText = event.DocExtractedText }
+        |> publishDocParsed env
+        |> ignore
 
-            return true
-        | _ -> return false
+        return true
     }
 
 

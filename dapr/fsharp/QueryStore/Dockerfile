@@ -10,6 +10,7 @@ WORKDIR /src
 COPY ["Libs/Common/FSharp.Dapr/", "Libs/Common/FSharp.Dapr/"]
 COPY ["Libs/Vow/Shared/", "Libs/Vow/Shared/"]
 COPY ["Libs/Vow/Domain/", "Libs/Vow/Domain/"]
+COPY ["QueryStore/Formatted", "QueryStore/Formatted"]
 COPY ["QueryStore/", "QueryStore/"]
 COPY ["fsharp.sln", "fsharp.sln"]
 RUN dotnet restore QueryStore

@@ -1,12 +1,12 @@
-module ReadFile
+module QueryStore.Main
 
 open Giraffe
 open FSharp.Control.Tasks
 open Microsoft.AspNetCore.Http
-open System.IO
 open Shared
 open Domain
 open FSharp.Dapr
+open QueryStore.Formatted
 
 let getParsedDoc =
     fun (env: DaprAppEnv) (docKey: string) (next: HttpFunc) (ctx: HttpContext) ->
@@ -19,11 +19,16 @@ let getParsedDoc =
                 match result.ParsedDoc with
                 | ErrorDoc _ ->
                     return!
-                        RequestErrors.UNPROCESSABLE_ENTITY
-                            {| message = $"Cant extract text from [{docKey}]" |}
-                            next
-                            ctx
-                | _ -> return! json result.ParsedDoc next ctx
+                        RequestErrors.UNPROCESSABLE_ENTITY {| message = $"Cant extract text from [{docKey}]" |} next ctx
+                | _ ->
+                    let formatOpt = ctx.TryGetQueryStringValue("format")
+
+                    let doc =
+                        match formatOpt with
+                        | Some _ -> formatDoc result.ParsedDoc
+                        | None -> result.ParsedDoc :> obj
+
+                    return! json doc next ctx
         }
 
 let router =
