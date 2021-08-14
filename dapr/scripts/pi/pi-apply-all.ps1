@@ -10,7 +10,7 @@ kubectl apply -k ./dapr/secrets/dev/ya
 
 kubectl apply -f ./pi-deploy/read-file.yaml
 # build locally and restart manually, sunno why its not built correctly with github
-# kubectl apply -f ./pi-deploy/ya-ocr.yaml
+kubectl apply -f ./pi-deploy/ya-ocr.yaml
 kubectl apply -f ./pi-deploy/parse-doc.yaml
 kubectl apply -f ./pi-deploy/update-store.yaml
 kubectl apply -f ./pi-deploy/query-store.yaml

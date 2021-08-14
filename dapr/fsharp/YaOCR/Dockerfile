@@ -12,12 +12,12 @@ COPY ["Libs/Common/FSharp.Fetch/", "Libs/Common/FSharp.Fetch/"]
 COPY ["Libs/Common/FSharp.Dapr/", "Libs/Common/FSharp.Dapr/"]
 COPY ["Libs/Vow/Shared/", "Libs/Vow/Shared/"]
 COPY ["Libs/Vow/Domain/", "Libs/Vow/Domain/"]
-COPY ["YaOCR/", "YaOCR/"]
+COPY ["YaOcr/", "YaOcr/"]
 COPY ["fsharp.sln", "fsharp.sln"]
-RUN dotnet restore YaOCR
+RUN dotnet restore YaOcr
 
 FROM build AS publish
-RUN dotnet publish --no-restore -c Release -o /app/publish YaOCR
+RUN dotnet publish --no-restore -c Release -o /app/publish YaOcr
 
 FROM base AS final
 WORKDIR /app
@@ -25,5 +25,5 @@ COPY --from=publish /app/publish .
 RUN echo ${PORT}
 EXPOSE  ${PORT}
 ENV PORT ${PORT}
-ENTRYPOINT ["dotnet", "YaOCR.dll"]
+ENTRYPOINT ["dotnet", "YaOcr.dll"]
 

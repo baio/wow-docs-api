@@ -106,7 +106,7 @@ services:
   ya-ocr:
     build:
       context: ./fsharp
-      dockerfile: YaOCR/Dockerfile         
+      dockerfile: YaOcr/Dockerfile         
     ports:
       - "3004:3000"
     environment: 
