@@ -20,20 +20,14 @@ module State =
             let! res = dapr.TrySaveStateAsync(storeName, id, doc, NEW_ETAG, metadata = metadata)
 
             match res with
-            | true ->
-#if TRACE                
-                logTrace2 logger "{stateStore} updated with new {document}" storeName doc
-#endif                
-            | false ->
-                logWarn2 logger "{stateStore} failed to update, {docKey} already exists" storeName id
-#if TRACE                
-                logTrace2 logger "{stateStore} failed to update, {document} already exists" storeName doc
-#endif                
+            | true -> logTrace2 logger "{stateStore} updated with new {document}" storeName "[doc]"
+            | false -> logWarn2 logger "{stateStore} failed to update, {docKey} already exists" storeName id
 
             return res
         }
 
-    let tryCreatStateAsync env storeName id doc = tryCreateStateWithMetadataAsync env storeName id doc (readOnlyDict [])    
+    let tryCreatStateAsync env storeName id doc =
+        tryCreateStateWithMetadataAsync env storeName id doc (readOnlyDict [])
 
     // Create new item even if exists
     let createStateWithMetadataAsync { Dapr = dapr; Logger = logger } storeName id doc metadata =
@@ -43,11 +37,12 @@ module State =
             logTrace3 logger "{stateStore} record with {id} updated with new {document}" storeName id doc
         }
 
-    let creatStateTTLAsync env storeName id doc (ttl: int) = createStateWithMetadataAsync env storeName id doc (readOnlyDict [ "ttlInSeconds", ttl.ToString() ])
+    let creatStateTTLAsync env storeName id doc (ttl: int) =
+        createStateWithMetadataAsync env storeName id doc (readOnlyDict [ "ttlInSeconds", ttl.ToString() ])
 
-    let creatStateAsync { Dapr = dapr } storeName id doc = 
+    let creatStateAsync { Dapr = dapr } storeName id doc =
         dapr.SaveStateAsync("statestore", "aaa", doc)
-        //createStateWithMetadataAsync env storeName id doc (readOnlyDict [])    
+    //createStateWithMetadataAsync env storeName id doc (readOnlyDict [])
 
     /// Find item and update it if exists
     /// If item is not exists then create new and then update it
@@ -74,14 +69,9 @@ module State =
 
             match res.IsSuccess with
             | true ->
-#if TRACE
-                logTrace3 logger "{stateStore} document with {docKey} is updated with {result}" storeName id res
-#endif                
+                logTrace3 logger "{stateStore} document with {docKey} is updated with {result}" storeName id "[res]"
             | false ->
                 logWarn3 logger "{stateStore} document with {docKey} fail to update with {etag}" storeName id etag
-#if TRACE                
-                logTrace3 logger "{stateStore} document with {docKey} fail to update with {result}" storeName id res
-#endif                
         }
 
     /// Create new item or fail if already exists
@@ -90,15 +80,14 @@ module State =
             let! res = dapr.GetStateAsync<'a>(storeName, id, consistencyMode = ConsistencyMode.Eventual)
 
             match box res with
-            | null  ->
-                logWarn2 logger "{stateStore} get value for {id} not found" storeName id                
+            | null ->
+                logWarn2 logger "{stateStore} get value for {id} not found" storeName id
                 return None
             | _ ->
-                logTrace3 logger "{stateStore} get value for {id} return {res}" storeName id res
+                logTrace3 logger "{stateStore} get value for {id} return {res}" storeName id "[res]"
                 return Some res
 
         }
 
     /// Create new item or fail if already exists
-    let deleteStateAsync { Dapr = dapr; Logger = logger } storeName id =
-        dapr.DeleteStateAsync(storeName, id)
+    let deleteStateAsync { Dapr = dapr; Logger = logger } storeName id = dapr.DeleteStateAsync(storeName, id)
