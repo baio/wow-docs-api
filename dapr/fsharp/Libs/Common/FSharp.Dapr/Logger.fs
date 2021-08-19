@@ -15,6 +15,8 @@ module Logger =
     //
     let logTrace (logger: ILogger) message = logger.LogTrace(message)
 
+    let logTrace1 (logger: ILogger) message (arg1: obj)  = logger.LogTrace(message, arg1)
+
     let logTrace2 (logger: ILogger) message (arg1: obj) (arg2: obj) = logger.LogTrace(message, arg1, arg2)
 
     let logTrace3 (logger: ILogger) message (arg1: obj) (arg2: obj) (arg3: obj) =

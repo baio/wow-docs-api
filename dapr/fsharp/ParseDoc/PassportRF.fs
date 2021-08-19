@@ -27,13 +27,13 @@ let parseNumber str =
     iim numberMatch
 
 let parseSex str =
-    let sex = Regex "му[х|ж]\."
+    let sex = Regex "му[х|ж]\.?"
     let sexMatch = sex.Match str
 
     if sexMatch.Success then
         "male"
     else
-        let sex = Regex "[х|ж]ен\."
+        let sex = Regex "[х|ж]ен\.?"
         let sexMatch = sex.Match str
 
         if sexMatch.Success then
@@ -50,7 +50,16 @@ let parseIssueDate str =
 let parseBirthPlace str =
     let birthPlace = Regex "(рожден.*?\s+)(.*?)([a-z]+)"
     let birthPlaceMatch = birthPlace.Matches str
-    let res = iimlg birthPlaceMatch 2
+    let mutable res = iimlg birthPlaceMatch 2
+
+    if isNull res then
+        let birthPlace =
+            Regex "место(рожден.*?\s+)?(.*?)([a-z]+|$)"
+
+        let birthPlaceMatch = birthPlace.Matches str
+
+        if birthPlaceMatch.Count > 0 then
+            res <- birthPlaceMatch.[0].Value
 
     if isNull res then
         let birthPlace =

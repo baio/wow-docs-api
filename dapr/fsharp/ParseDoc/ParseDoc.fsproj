@@ -17,8 +17,8 @@
     <Compile Include="NameHelpers.fs" />
     <Compile Include="RegexHelpers.fs" />
     <Compile Include="PassportRF.fs" />
+    <Compile Include="ParseDocHandler.fs" />
     <Compile Include="ParseDoc.fs" />
-    <Compile Include="Main.fs" />
     <EmbeddedResource Include="data/fnames.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
