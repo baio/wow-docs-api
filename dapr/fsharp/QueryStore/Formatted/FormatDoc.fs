@@ -8,4 +8,5 @@ module FormatDoc =
     let formatDoc =
         function
         | PassportRF doc -> PassportRF.format doc :> obj
+        | ForeignPassportRF doc -> ForeignPassportRF.format doc :> obj
         | _ -> null :> obj

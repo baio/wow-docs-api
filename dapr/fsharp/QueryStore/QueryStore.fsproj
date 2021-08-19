@@ -15,6 +15,7 @@
     </Content>
     <Compile Include="Formatted/Utils.fs" />
     <Compile Include="Formatted/PassportRF.fs" />
+    <Compile Include="Formatted/ForeignPassportRF.fs" />
     <Compile Include="Formatted/FormatDoc.fs" />
     <Compile Include="QueryStore.fs" />
   </ItemGroup>
