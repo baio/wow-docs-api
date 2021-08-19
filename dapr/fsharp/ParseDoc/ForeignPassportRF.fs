@@ -59,15 +59,16 @@ let parseBirthPlaceEn (str: string) =
     else
         "russia"
 
-let parse resources words =
-    let names = parseNames resources words
+let parse (resources: Resources) words =
+    let names = parseNames resources.RuNames words
+    let namesEn = parseNames resources.EnNames words
 
     { LastName = names.LastName
-      LastNameEn = names.LastName
+      LastNameEn = namesEn.LastName
       FirstName = names.FirstName
-      FirstNameEn = names.FirstName
+      FirstNameEn = namesEn.FirstName
       MiddleName = names.MiddleName
-      MiddleNameEn = names.MiddleName
+      MiddleNameEn = namesEn.MiddleName
       Identifier = parseNumber words
       Issuer = parseIssuer words
       IssueDate = parseIssueDate words

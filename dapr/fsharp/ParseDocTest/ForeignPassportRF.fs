@@ -12,30 +12,30 @@ let Case1Words =
 let tests =
     let resources = loadResources ()
 
-    ftestList
+    testList
         "ForeignPassportRF"
         [ testCase
               "case 1"
               (fun _ ->
                   let expected: ForeignPassportRF =
-                      { LastName = ""
-                        LastNameEn = ""
-                        FirstName = ""
-                        FirstNameEn = ""
-                        MiddleName = ""
-                        MiddleNameEn = ""
-                        Identifier = ""
-                        Issuer = ""
-                        IssueDate = ""
-                        ExpiryDate = ""
-                        Sex = ""
-                        DateOfBirth = ""
-                        PlaceOfBirth = ""
-                        PlaceOfBirthEn = ""
+                      { LastName = "путилов"
+                        LastNameEn = "putilov"
+                        FirstName = "максим"
+                        FirstNameEn = "maxim"
+                        MiddleName = "александрович"
+                        MiddleNameEn = null
+                        Identifier = "722288239"
+                        Issuer = "фмс 77001"
+                        IssueDate = "06.12.2012"
+                        ExpiryDate = "06.12.2022"
+                        Sex = "male"
+                        DateOfBirth = "11.03.1980"
+                        PlaceOfBirth = "челябинская обл"
+                        PlaceOfBirthEn = "ussr"
                         Type = "C" }
 
                   let actual =
-                      ForeignPassportRF.parse resources.RuNames Case1Words
+                      ForeignPassportRF.parse resources Case1Words
 
                   printfn "%O" actual
                   Expect.equal actual expected "unexpected result")

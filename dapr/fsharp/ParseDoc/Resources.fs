@@ -9,7 +9,7 @@ type Names =
       LastNames: string []
       MiddleNames: string [] }
 
-type Resources = { RuNames: Names }
+type Resources = { RuNames: Names; EnNames: Names }
 
 let private getResourcePath = sprintf "ParseDoc.data.%s.csv"
 
@@ -39,7 +39,22 @@ let loadResources () =
     let mnames =
         readResourceFileAsLines assembly "mnames"
 
+    let fnamesEn =
+        readResourceFileAsLines assembly "fnames_en"
+
+    let lnamesEn =
+        readResourceFileAsLines assembly "lnames_en"
+
+    let mnamesEn =
+        readResourceFileAsLines assembly "mnames_en"
+
     { RuNames =
           { FirstNames = fnames
             LastNames = lnames
-            MiddleNames = mnames } }
+            MiddleNames = mnames }
+      EnNames =
+          { FirstNames = fnamesEn
+            LastNames = lnamesEn
+            MiddleNames = mnamesEn }
+
+    }
