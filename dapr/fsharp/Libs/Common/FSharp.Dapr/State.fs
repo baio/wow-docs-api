@@ -34,15 +34,14 @@ module State =
         task {
             do! dapr.SaveStateAsync(storeName, id, doc, metadata = metadata)
 
-            logTrace3 logger "{stateStore} record with {id} updated with new {document}" storeName id doc
+            logTrace3 logger "{stateStore} record with {id} updated with new {document}" storeName id "[doc]"
         }
 
     let creatStateTTLAsync env storeName id doc (ttl: int) =
         createStateWithMetadataAsync env storeName id doc (readOnlyDict [ "ttlInSeconds", ttl.ToString() ])
 
-    let creatStateAsync { Dapr = dapr } storeName id doc =
-        dapr.SaveStateAsync("statestore", "aaa", doc)
-    //createStateWithMetadataAsync env storeName id doc (readOnlyDict [])
+    let creatStateAsync env storeName id doc =
+        createStateWithMetadataAsync env storeName id doc (readOnlyDict [])
 
     /// Find item and update it if exists
     /// If item is not exists then create new and then update it

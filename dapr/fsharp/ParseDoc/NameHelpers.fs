@@ -16,7 +16,7 @@ type ParsedName =
 let private cleanWord (str: string) =
     match str with
     | null -> null
-    | s -> Regex.Replace(s, "\d+", "")
+    | s -> Regex.Replace(s, "\W+", "")
 
 let parseNames (resources: Resources.Names) (line: string) =
     let words = line.Split " " |> Seq.map cleanWord
