@@ -32,7 +32,28 @@ module ParsedDocModels =
           Type: string }
 
 
+    type DriverLicenseRF =
+        { LastName: string
+          LastNameEn: string
+          FirstName: string
+          FirstNameEn: string
+          MiddleName: string
+          MiddleNameEn: string
+          Identifier: string
+          Issuer: string
+          IssuerEn: string
+          IssueDate: string
+          ExpiryDate: string
+          DateOfBirth: string
+          RegionOfBirth: string
+          RegionOfBirthEn: string
+          IssuerRegion: string
+          IssuerRegionEn: string
+          Categories: string }
+
+
     type ParsedDoc =
         | ErrorDoc of DomainError
         | PassportRF of PassportRF
         | ForeignPassportRF of ForeignPassportRF
+        | DriverLicenseRF of DriverLicenseRF
