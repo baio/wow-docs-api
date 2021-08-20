@@ -21,9 +21,14 @@ let parseBirthDate str =
     iimc dateMatch 0
 
 let parseNumber str =
-    let number = Regex "\d{9}"
+    let number = Regex "\d{2}\D{0,2}\d{7}"
     let numberMatch = number.Match str
-    iim numberMatch
+    let res = iim numberMatch
+
+    if not (isNull res) then
+        Regex("\D+").Replace(res, " ")
+    else
+        null
 
 let parseSex str =
     let sex = Regex "[m|м]\/[m|м]"
