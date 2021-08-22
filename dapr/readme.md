@@ -1,3 +1,12 @@
+## Hardlink
+
+```
+mklink /J C:\dev\wow-docs\wow-docs-api\dapr\fsharp\Libs\Common\FSharp.Dapr C:\dev\FSharp\Dapr\FSharp.Dapr
+
+mklink /J C:\dev\wow-docs\wow-docs-api\dapr\fsharp\Libs\Common\FSharp.DaprTest C:\dev\FSharp\Dapr\FSharp.DaprTest
+
+```
+
 ## Configuration
 
 Set store strategy to 'name' in order to share state between apps !!!
