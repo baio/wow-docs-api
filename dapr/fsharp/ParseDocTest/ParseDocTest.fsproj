@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Include="Sample.fs" />
     <Compile Include="PassportRF.fs" />
+    <Compile Include="BirthCertificateRF.fs" />
     <Compile Include="ForeignPassportRF.fs" />
     <Compile Include="DriverLicenseRF.fs" />
     <Compile Include="DriverLicenseOldRF.fs" />

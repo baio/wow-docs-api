@@ -20,6 +20,7 @@
     <Compile Include="DriverLicenseOldRF.fs" />
     <Compile Include="DriverLicenseRF.fs" />
     <Compile Include="ForeignPassportRF.fs" />
+    <Compile Include="BirthCertificateRF.fs" />
     <Compile Include="ParseDocHandler.fs" />
     <Compile Include="ParseDoc.fs" />
     <EmbeddedResource Include="data/fnames.csv">

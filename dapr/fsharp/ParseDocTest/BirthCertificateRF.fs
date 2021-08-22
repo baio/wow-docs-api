@@ -38,6 +38,8 @@ let tests =
                       |> Some
 
                   let actual =
-                      DriverLicenseRF.parse resources Case1Words
+                      BirthCertificateRF.parse resources.RuNames Case1Words
 
-                  Expect.equal actual expected "unexpected result") ]
+                  printfn "%O" actual
+
+                  Expect.equal true false "unexpected result") ]

@@ -51,9 +51,27 @@ module ParsedDocModels =
           IssuerRegionEn: string
           Categories: string }
 
-
+    type BirthCertificateRF =
+        { Identifier: string
+          LastName: string
+          FirstName: string
+          MiddleName: string
+          BirthDate: string
+          BirthPlace: string
+          IssueDate: string
+          AuthorityDate: string
+          Authority: string
+          FatherLastName: string
+          FatherFirstName: string
+          FatherMiddleName: string
+          MotherLastName: string
+          MotherFirstName: string
+          MotherMiddleName: string
+          DocNumber: string }
+          
     type ParsedDoc =
         | ErrorDoc of DomainError
         | PassportRF of PassportRF
         | ForeignPassportRF of ForeignPassportRF
         | DriverLicenseRF of DriverLicenseRF
+        | BirthCertificateRF of BirthCertificateRF
