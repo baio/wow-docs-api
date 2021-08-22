@@ -78,25 +78,32 @@ let parseRegionOfBirthEn (str: string) =
     let m = regex.Match str
     iimg m 1
 
+let isDrivingLicence (str: string) = str.Contains("driving licence")
 
 let parse (resources: Resources) words =
     let names = parseNames resources.RuNames words
     let namesEn = parseNames resources.EnNames words
 
-    { LastName = names.LastName
-      LastNameEn = namesEn.LastName
-      FirstName = names.FirstName
-      FirstNameEn = namesEn.FirstName
-      MiddleName = names.MiddleName
-      MiddleNameEn = namesEn.MiddleName
-      Identifier = parseNumber words
-      Issuer = parseIssuer words
-      IssuerEn = parseIssuerEn words
-      IssueDate = parseIssueDate words
-      ExpiryDate = parseExpiryDate words
-      DateOfBirth = parseBirthDate words
-      RegionOfBirth = parseRegionOfBirth words
-      RegionOfBirthEn = parseRegionOfBirthEn words
-      IssuerRegion = parseIssuerRegion words
-      IssuerRegionEn = parseIssuerRegionEn words
-      Categories = null }: DriverLicenseRF
+    let f = isDrivingLicence words
+
+    if f then
+        ({ LastName = names.LastName
+           LastNameEn = namesEn.LastName
+           FirstName = names.FirstName
+           FirstNameEn = namesEn.FirstName
+           MiddleName = names.MiddleName
+           MiddleNameEn = namesEn.MiddleName
+           Identifier = parseNumber words
+           Issuer = parseIssuer words
+           IssuerEn = parseIssuerEn words
+           IssueDate = parseIssueDate words
+           ExpiryDate = parseExpiryDate words
+           DateOfBirth = parseBirthDate words
+           RegionOfBirth = parseRegionOfBirth words
+           RegionOfBirthEn = parseRegionOfBirthEn words
+           IssuerRegion = parseIssuerRegion words
+           IssuerRegionEn = parseIssuerRegionEn words
+           Categories = null }: DriverLicenseRF)
+        |> Some
+    else
+        None
