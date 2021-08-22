@@ -35,9 +35,9 @@ let tests =
                         IssuerRegion = "москва"
                         IssuerRegionEn = null
                         Categories = null }
+                      |> Some
 
                   let actual =
                       DriverLicenseOldRF.parse resources Case1Words
-
 
                   Expect.equal actual expected "unexpected result") ]

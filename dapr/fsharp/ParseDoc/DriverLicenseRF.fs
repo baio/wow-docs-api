@@ -78,7 +78,7 @@ let parseRegionOfBirthEn (str: string) =
     let m = regex.Match str
     iimg m 1
 
-let isDrivingLicence (str: string) = str.Contains("driving licence")
+let isDrivingLicence (str: string) = str.Contains("driving")
 
 let parse (resources: Resources) words =
     let names = parseNames resources.RuNames words

@@ -47,8 +47,7 @@ let parseExpiryDate str =
 
 
 let parseBirthPlace str =
-    let birthPlace =
-        Regex "место рождения[^а-я]+([а-я\s]+)"
+    let birthPlace = Regex "место рождения[^а-я]+([а-я\s]+)"
 
     let birthPlaceMatch = birthPlace.Match str
     iimg birthPlaceMatch 1
@@ -65,25 +64,36 @@ let parseIssuerRegion (str: string) =
     let m = regex.Match str
     iimg m 1
 
+let isDrivingLicenceOld (str: string) =
+    str.Contains("conduire")
+    && (str.Contains("driving") |> not)
 
 let parse (resources: Resources) words =
-    let names = parseNames resources.RuNames words
-    let namesEn = parseNames resources.EnNames words
 
-    { LastName = names.LastName
-      LastNameEn = namesEn.LastName
-      FirstName = names.FirstName
-      FirstNameEn = namesEn.FirstName
-      MiddleName = names.MiddleName
-      MiddleNameEn = namesEn.MiddleName
-      Identifier = parseNumber words
-      Issuer = null
-      IssuerEn = null
-      IssueDate = parseIssueDate words
-      ExpiryDate = parseExpiryDate words
-      DateOfBirth = parseBirthDate words
-      RegionOfBirth = parseBirthPlace words
-      RegionOfBirthEn = null
-      IssuerRegion = parseIssuerRegion words
-      IssuerRegionEn = null
-      Categories = null }: DriverLicenseRF
+    let f = isDrivingLicenceOld words
+
+    if f then
+        let names = parseNames resources.RuNames words
+
+        let namesEn = parseNames resources.EnNames words
+
+        { LastName = names.LastName
+          LastNameEn = namesEn.LastName
+          FirstName = names.FirstName
+          FirstNameEn = namesEn.FirstName
+          MiddleName = names.MiddleName
+          MiddleNameEn = namesEn.MiddleName
+          Identifier = parseNumber words
+          Issuer = null
+          IssuerEn = null
+          IssueDate = parseIssueDate words
+          ExpiryDate = parseExpiryDate words
+          DateOfBirth = parseBirthDate words
+          RegionOfBirth = parseBirthPlace words
+          RegionOfBirthEn = null
+          IssuerRegion = parseIssuerRegion words
+          IssuerRegionEn = null
+          Categories = null }: DriverLicenseRF
+        |> Some
+    else
+        None
