@@ -10,6 +10,7 @@
     <Compile Include="Sample.fs" />
     <Compile Include="PassportRF.fs" />
     <Compile Include="ForeignPassportRF.fs" />
+    <Compile Include="DriverLicenseRF.fs" />
     <Compile Include="DriverLicenseOldRF.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>

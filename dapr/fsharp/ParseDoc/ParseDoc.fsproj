@@ -18,6 +18,7 @@
     <Compile Include="RegexHelpers.fs" />
     <Compile Include="PassportRF.fs" />
     <Compile Include="DriverLicenseOldRF.fs" />
+    <Compile Include="DriverLicenseRF.fs" />
     <Compile Include="ForeignPassportRF.fs" />
     <Compile Include="ParseDocHandler.fs" />
     <Compile Include="ParseDoc.fs" />

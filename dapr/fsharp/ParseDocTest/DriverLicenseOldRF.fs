@@ -12,7 +12,7 @@ let tests =
     let resources = loadResources ()
 
     testList
-        "DriverLicenseRF"
+        "DriverLicenseOldRF"
         [ testCase
               "case 1"
               (fun _ ->
